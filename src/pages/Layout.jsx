@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
+
 import Cookies from "js-cookie";
+// src/components/sidebar/Sidebar.jsx
+
+import { SideBar } from "../components/sidebar/sidebar";
+
 // import { apiRequests } from "../shared/api/apiRequests";
 // import { setUserData, setUserPicture, setSubPrice } from "../shared/store/main";
 
@@ -29,12 +34,7 @@ const LayoutPage = (props) => {
         // }
         // setLoading(false);
 
-        return (
-          <div>
-            <h1>Привет, мир!</h1>
-            <p>Это мой первый проект на React!</p>
-          </div>
-        );
+        return false;
       } else {
         navigate("/auth");
       }
@@ -49,6 +49,12 @@ const LayoutPage = (props) => {
   return (
     <>
       <Outlet />
+      <div style={{ display: "flex" }}>
+        <SideBar />
+        <div style={{ flex: 1, padding: "20px" }}>
+          <h1>Контент страницы</h1>
+        </div>
+      </div>
     </>
   );
 };
