@@ -6,27 +6,28 @@ export const apiRequests = {
     login: async (body) => {
       return axiosInstance.post("/auth/login", body);
     },
-    editData: async (body) => {
-      return axiosInstance.put("/user/profile-edit", body);
-    },
-    updatePicture: async (data) => {
-      return axiosInstance.postForm("/files/upload?document_type=avatar", data);
-    },
-    updatePassword: async (body) => {
-      return axiosInstance.patch("/user/password-edit", body);
-    },
-    getPicture: async (avatarId) => {
-      return axiosInstance.get(`/files/avatar/${avatarId}`, {
-        responseType: "blob",
+  },
+  stats: {
+    general: async () => {
+      return axiosInstance.get("/stats/general", {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("accessToken")}`,
+        },
       });
     },
-    trips: async () => {
-      return axiosInstance.get(
-        `/trips/get-trips?categories=roller_skates&categories=skateboard&categories=bike&categories=electric_scooters&categories=scooters&categories=unicycle`,
-        {
-          limit: 100,
-        }
-      );
+  },
+  servers: {
+    all: async (page, limit) => {
+      return axiosInstance.get(`/servers/all?page=${page}&limit=${limit}`);
+    },
+    add: async (body) => {
+      return axiosInstance.post("/servers/add", body);
+    },
+    edit: async (body) => {
+      return axiosInstance.put(`/servers/update/${body._id}`, body);
+    },
+    delete: async (server_id) => {
+      return axiosInstance.delete(`/servers/delete/${server_id}`);
     },
   },
 };

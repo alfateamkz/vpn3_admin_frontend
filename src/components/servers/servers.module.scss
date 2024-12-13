@@ -1,0 +1,57 @@
+.serversTableContainer {
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+
+  h2 {
+    margin-bottom: 10px;
+  }
+
+  .serversTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    button {
+      margin-right: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #ddd;
+      }
+    }
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    button {
+      padding: 5px 10px;
+      margin: 0 5px;
+      cursor: pointer;
+
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+    }
+
+    span {
+      margin: 0 10px;
+    }
+  }
+}

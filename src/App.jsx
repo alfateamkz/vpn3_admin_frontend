@@ -15,6 +15,7 @@ import "./App.scss";
 
 import { Route, Routes } from "react-router-dom";
 import { LoginPage } from "./pages/login/login.jsx";
+import { ServersPage } from "./pages/servers/servers.jsx";
 
 import LayoutPage from "./pages/Layout.jsx";
 
@@ -24,6 +25,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LayoutPage />}></Route>
         <Route path={"/auth"} element={<LoginPage />} />
+        <Route path={"/servers"} element={<ServersPage />} />
       </Routes>
     </>
   );
