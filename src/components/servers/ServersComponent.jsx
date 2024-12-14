@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styles from "./Servers.module.scss";
+import styles from "./ServersComponent.module.scss";
 
 import { CreateServerModal } from "../modals/CreateServerModal";
 
@@ -146,7 +146,7 @@ const ServersTable = ({ getServers, onEdit, onDelete, onSave, onCreate }) => {
                     onChange={(e) => handleChange(e, "connect_link")}
                   />
                 ) : (
-                  server.connect_link.slice(0, 20) + "..." // Скрытие длинной ссылки
+                  server.connect_link.slice(0, 40) + "..." // Скрытие длинной ссылки
                 )}
               </td>
               <td>
@@ -157,7 +157,13 @@ const ServersTable = ({ getServers, onEdit, onDelete, onSave, onCreate }) => {
                     onChange={(e) => handleChange(e, "board_url")}
                   />
                 ) : (
-                  server.board_url
+                  <a
+                    href={server.board_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {server.board_url}
+                  </a>
                 )}
               </td>
               <td>
