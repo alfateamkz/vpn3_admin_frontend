@@ -5,7 +5,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 // src/components/sidebar/Sidebar.jsx
 
-import { SideBar } from "../components/sidebar/sidebar";
+import { SideBar } from "../components/sidebar/SidebarComponent";
 
 // import { apiRequests } from "../shared/api/apiRequests";
 // import { setUserData, setUserPicture, setSubPrice } from "../shared/store/main";
