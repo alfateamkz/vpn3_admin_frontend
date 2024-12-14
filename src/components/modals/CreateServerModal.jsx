@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./CreateServerModal.scss";
+import "./ModalStyles.scss";
 
 export const CreateServerModal = ({ isOpen, onClose, onCreate }) => {
   const [formData, setFormData] = useState({
@@ -8,7 +8,7 @@ export const CreateServerModal = ({ isOpen, onClose, onCreate }) => {
     board_url: "",
     board_login: "",
     board_password: "",
-    status: "deactivated", // По умолчанию deactivated
+    status: "actived", // По умолчанию actived
   });
 
   const [errors, setErrors] = useState({});
@@ -103,7 +103,7 @@ export const CreateServerModal = ({ isOpen, onClose, onCreate }) => {
               value={formData.status}
               onChange={handleChange}
             >
-              <option value="activated">Активный</option>
+              <option value="actived">Активный</option>
               <option value="deactivated">Не активный</option>
             </select>
             {errors.status && <span className="error">{errors.status}</span>}
