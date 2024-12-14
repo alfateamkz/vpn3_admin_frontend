@@ -2,8 +2,8 @@ import { Outlet } from "react-router-dom";
 
 import { apiRequests } from "../../shared/api/apiRequests";
 
-import { SideBar } from "../../components/sidebar/sidebar";
-import ServersTable from "../../components/servers/servers";
+import { SideBar } from "../../components/sidebar/SidebarComponent";
+import ServersTable from "../../components/servers/ServersComponent";
 
 const Servers = () => {
   const getServers = async (page, limit) => {
@@ -53,6 +53,21 @@ const Servers = () => {
     console.log("Сохранение:", editedServer);
   };
 
+  const handleAdd = async (newServer) => {
+    await apiRequests.servers
+      .add(newServer)
+      .then((res) => {
+        return res.data;
+      })
+      .catch((e) => {
+        const detail = e.response.data.detail;
+        if (e.response.code === 400) {
+          alert(detail);
+        }
+      });
+    console.log("Создание:", newServer);
+  };
+
   return (
     <div>
       <ServersTable
@@ -60,6 +75,7 @@ const Servers = () => {
         onEdit={handleEdit}
         onDelete={handleDelete}
         onSave={handleSave}
+        onCreate={handleAdd}
       />
     </div>
   );
