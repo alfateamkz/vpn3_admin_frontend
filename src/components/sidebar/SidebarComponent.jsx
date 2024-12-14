@@ -1,7 +1,17 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
-import styles from "./Sidebar.module.scss";
+import styles from "./SidebarComponent.module.scss";
+
+const menuItems = [
+  "Серверы",
+  "Статистика",
+  "Пользователи",
+  "Платежи",
+  "Настройки",
+  "Выход",
+];
 
 export const SideBar = () => {
   const [activeItem, setActiveItem] = useState("Серверы"); // Активный пункт меню
@@ -15,25 +25,28 @@ export const SideBar = () => {
     if (item === "Статистика") {
       navigate("/");
     }
+    if (item === "Выход") {
+      Cookies.remove("accessToken");
+      Cookies.remove("refreshToken");
+      navigate("/auth");
+    }
     setActiveItem(item);
   };
 
   return (
     <div className={styles.sidebar}>
       <ul className={styles.menu}>
-        {["Серверы", "Статистика", "Пользователи", "Платежи", "Настройки"].map(
-          (item) => (
-            <li
-              key={item}
-              className={
-                styles.menuItem + ` ${activeItem === item ? "active" : ""}`
-              }
-              onClick={() => handleItemClick(item)}
-            >
-              {item}
-            </li>
-          )
-        )}
+        {menuItems.map((item) => (
+          <li
+            key={item}
+            className={
+              styles.menuItem + ` ${activeItem === item ? "active" : ""}`
+            }
+            onClick={() => handleItemClick(item)}
+          >
+            {item}
+          </li>
+        ))}
       </ul>
     </div>
   );
