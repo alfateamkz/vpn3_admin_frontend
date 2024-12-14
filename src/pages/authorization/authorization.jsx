@@ -33,7 +33,7 @@ export const AuthorizationPage = () => {
         Cookies.set("accessToken", res.data.access_token);
         Cookies.set("refreshToken", res.data.refresh_token);
         dispatch(setUserData({ ...res.data.user }));
-        navigate("/");
+        navigate("/servers");
       })
       .catch((e) => {
         const detail = e.response.data.detail;
