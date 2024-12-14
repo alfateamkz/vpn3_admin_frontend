@@ -51,9 +51,9 @@ const LayoutPage = (props) => {
       <Outlet />
       <div style={{ display: "flex" }}>
         <SideBar />
-        <div style={{ flex: 1, padding: "20px" }}>
+        {/* <div style={{ flex: 1, padding: "20px" }}>
           <h1>Контент страницы</h1>
-        </div>
+        </div> */}
       </div>
     </>
   );

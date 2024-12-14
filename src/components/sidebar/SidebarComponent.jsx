@@ -6,15 +6,15 @@ import styles from "./SidebarComponent.module.scss";
 
 const menuItems = [
   "Серверы",
-  "Статистика",
+  "Подписки",
   "Пользователи",
-  "Платежи",
+  "Статистика",
   "Настройки",
   "Выход",
 ];
 
-export const SideBar = () => {
-  const [activeItem, setActiveItem] = useState("Серверы"); // Активный пункт меню
+export const SideBar = (pageName) => {
+  const [activeItem, setActiveItem] = useState(pageName); // Активный пункт меню
 
   const navigate = useNavigate();
 
@@ -23,7 +23,7 @@ export const SideBar = () => {
       navigate("/servers");
     }
     if (item === "Статистика") {
-      navigate("/");
+      navigate("/stats");
     }
     if (item === "Выход") {
       Cookies.remove("accessToken");
