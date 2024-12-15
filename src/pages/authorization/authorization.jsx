@@ -74,14 +74,14 @@ export const AuthorizationPage = () => {
             </button>
           </div>
 
+          <button onClick={handleSubmit} className={"blue-button"}>
+            Войти
+          </button>
+
           {/* <Link className={styles.resetPassword} to={"/reset_password"}>
             Сбросить пароль
           </Link> */}
         </div>
-
-        <button onClick={handleSubmit} className={"blue-button"}>
-          Войти
-        </button>
       </div>
     </div>
   );
