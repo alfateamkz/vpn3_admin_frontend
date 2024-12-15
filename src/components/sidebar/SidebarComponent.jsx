@@ -5,10 +5,10 @@ import Cookies from "js-cookie";
 import styles from "./SidebarComponent.module.scss";
 
 const menuItems = [
+  { text: "Статистика", path: "/stats" },
   { text: "Серверы", path: "/servers" },
   { text: "Подписки", path: "/subs" },
   { text: "Пользователи", path: "/users" },
-  { text: "Статистика", path: "/stats" },
   { text: "Настройки", path: "/settings" },
   { text: "Выход", path: "/auth" },
 ];
