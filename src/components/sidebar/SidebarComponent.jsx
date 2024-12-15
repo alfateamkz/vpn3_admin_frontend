@@ -22,6 +22,9 @@ export const SideBar = (pageName) => {
     if (item === "Серверы") {
       navigate("/servers");
     }
+    if (item === "Подписки") {
+      navigate("/subs");
+    }
     if (item === "Статистика") {
       navigate("/stats");
     }
