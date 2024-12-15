@@ -33,7 +33,7 @@ export const UsersTable = ({ getUsers }) => {
 
   return (
     <div className="users-table-container">
-      <h2>Таблица пользователей</h2>
+      <h2>Пользователи</h2>
       <p>Всего записей: {totalCount}</p>
       {/* Поле для поиска */}
       <div className="search-bar">
