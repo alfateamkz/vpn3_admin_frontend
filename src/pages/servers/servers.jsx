@@ -69,7 +69,7 @@ const Servers = () => {
   };
 
   return (
-    <div>
+    <div className="content">
       <ServersTable
         getServers={getServers}
         onEdit={handleEdit}

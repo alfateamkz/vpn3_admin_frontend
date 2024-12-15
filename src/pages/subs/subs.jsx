@@ -69,7 +69,7 @@ const Subs = () => {
   };
 
   return (
-    <div>
+    <div className="content">
       <SubsTable
         getData={getData}
         onEdit={handleEdit}

@@ -20,7 +20,7 @@ const Users = () => {
   };
 
   return (
-    <div>
+    <div className="content">
       <UsersTable getUsers={getData} />
     </div>
   );
