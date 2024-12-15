@@ -105,11 +105,11 @@ const ServersTable = ({ getServers, onEdit, onDelete, onSave, onCreate }) => {
 
   return (
     <div className={styles.serversTableContainer}>
-      <h2>Список серверов</h2>
+      <h2>Серверы</h2>
       <div className={styles.serversHeader}>
         <p>Всего записей: {servers.count}</p>
         <button onClick={handleOpenModal} className="blue-button">
-          Добавить сервер
+          Добавить
         </button>
       </div>
       <table className={styles.serversTable}>
