@@ -25,6 +25,9 @@ export const SideBar = (pageName) => {
     if (item === "Подписки") {
       navigate("/subs");
     }
+    if (item === "Пользователи") {
+      navigate("/users");
+    }
     if (item === "Статистика") {
       navigate("/stats");
     }
