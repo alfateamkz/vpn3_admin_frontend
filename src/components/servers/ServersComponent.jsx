@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./ServersComponent.module.scss";
 
 import { CreateServerModal } from "../modals/CreateServerModal";
+import { PaginationControls } from "../pagination/PaginationComponent";
 
 const statuses = {
   deactivated: "Не активный",
@@ -14,6 +15,7 @@ const ServersTable = ({ getServers, onEdit, onDelete, onSave, onCreate }) => {
   const [editedData, setEditedData] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10); // Количество записей на странице
+  const [totalCount, setTotalCount] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -21,6 +23,7 @@ const ServersTable = ({ getServers, onEdit, onDelete, onSave, onCreate }) => {
       try {
         const data = await getServers(currentPage, limit);
         setServers(data); // Обновляем состояние серверов
+        setTotalCount(data.count);
       } catch (error) {
         console.error("Ошибка при загрузке данных:", error);
       }
@@ -39,12 +42,25 @@ const ServersTable = ({ getServers, onEdit, onDelete, onSave, onCreate }) => {
     setEditableRow(null);
   };
 
+  // Обработка создания сервера
+  const handleCreateServer = async (newServer) => {
+    try {
+      await onCreate(newServer); // Отправляем данные на создание сервера
+      const data = await getServers(currentPage, limit); // Refetch данных после сохранения
+      setTotalCount(data.count);
+      setServers(data); // Обновляем состояние серверов
+    } catch (error) {
+      console.error("Ошибка при создании сервера:", error);
+    }
+  };
+
   // Обработка сохранения изменений
   const handleSave = async (index) => {
     try {
       await onSave(editedData); // Отправляем измененные данные на бэкенд
       const data = await getServers(currentPage, limit); // Refetch данных после сохранения
       setServers(data); // Обновляем состояние серверов
+      setTotalCount(data.count);
       setEditableRow(null);
     } catch (error) {
       console.error("Ошибка при сохранении данных:", error);
@@ -56,11 +72,13 @@ const ServersTable = ({ getServers, onEdit, onDelete, onSave, onCreate }) => {
     try {
       await onDelete(server_id); // Отправляем запрос на удаление
       const data = await getServers(currentPage, limit); // Refetch данных после сохранения
+      setTotalCount(data.count);
       setServers(data); // Обновляем состояние серверов
     } catch (error) {
       console.error("Ошибка при удалении данных:", error);
     }
   };
+
   // Обработка изменения полей
   const handleChange = (e, key) => {
     setEditedData({
@@ -87,27 +105,11 @@ const ServersTable = ({ getServers, onEdit, onDelete, onSave, onCreate }) => {
     setIsModalOpen(false);
   };
 
-  // Обработка создания сервера
-  const handleCreateServer = async (newServer) => {
-    try {
-      await onCreate(newServer); // Отправляем данные на создание сервера
-      const data = await getServers(currentPage, limit); // Refetch данных после сохранения
-      setServers(data); // Обновляем состояние серверов
-    } catch (error) {
-      console.error("Ошибка при создании сервера:", error);
-    }
-  };
-
-  // Пагинация
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
-  };
-
   return (
     <div className={styles.serversTableContainer}>
       <h2>Серверы</h2>
       <div className={styles.serversHeader}>
-        <p>Всего записей: {servers.count}</p>
+        <p>Всего записей: {totalCount}</p>
         <button onClick={handleOpenModal} className="blue-button">
           Добавить
         </button>
@@ -226,21 +228,13 @@ const ServersTable = ({ getServers, onEdit, onDelete, onSave, onCreate }) => {
       </table>
 
       {/* Пагинация */}
-      <div className={styles.pagination}>
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Предыдущая
-        </button>
-        <span>Страница {currentPage}</span>
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={servers.documents.length < limit}
-        >
-          Следующая
-        </button>
-      </div>
+      <PaginationControls
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        limit={limit}
+        setLimit={setLimit}
+        totalCount={totalCount}
+      />
 
       <CreateServerModal
         isOpen={isModalOpen}

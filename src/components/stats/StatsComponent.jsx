@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import { PaginationControls } from "../pagination/PaginationComponent";
+
 import "./StatsComponent.scss";
 
 const statuses = {
@@ -18,6 +20,7 @@ export const StatsTable = ({ getData }) => {
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [totalCount, setTotalCount] = useState(0);
   const [filterType, setFilterType] = useState("all");
 
   // Загрузка данных при монтировании и изменении параметров
@@ -26,6 +29,7 @@ export const StatsTable = ({ getData }) => {
       try {
         const data = await getData(currentPage, limit, filterType);
         setStats(data);
+        setTotalCount(data.count_orders);
       } catch (error) {
         console.error("Ошибка при загрузке данных:", error);
       }
@@ -82,7 +86,7 @@ export const StatsTable = ({ getData }) => {
         </button>
       </div>
 
-      <p>Количество платежей: {stats.count_orders} </p>
+      <p>Всего записей: {totalCount} </p>
 
       <table className="payments-table">
         <thead>
@@ -109,21 +113,13 @@ export const StatsTable = ({ getData }) => {
         </tbody>
       </table>
 
-      <div className="pagination">
-        <button
-          onClick={() => setCurrentPage(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Предыдущая
-        </button>
-        <span>Страница {currentPage}</span>
-        <button
-          onClick={() => setCurrentPage(currentPage + 1)}
-          disabled={stats.orders.length < limit}
-        >
-          Следующая
-        </button>
-      </div>
+      <PaginationControls
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        limit={limit}
+        setLimit={setLimit}
+        totalCount={totalCount}
+      />
     </div>
   );
 };

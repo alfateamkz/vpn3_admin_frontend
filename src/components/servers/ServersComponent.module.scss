@@ -56,25 +56,4 @@
       }
     }
   }
-
-  .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    button {
-      padding: 5px 10px;
-      margin: 0 5px;
-      cursor: pointer;
-
-      &:disabled {
-        cursor: not-allowed;
-        opacity: 0.5;
-      }
-    }
-
-    span {
-      margin: 0 10px;
-    }
-  }
 }

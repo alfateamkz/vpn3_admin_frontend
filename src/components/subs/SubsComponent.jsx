@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./SubsComponent.module.scss";
 
 import { CreateSubModal } from "../modals/CreateSubModal";
+import { PaginationControls } from "../pagination/PaginationComponent";
 
 const statuses = {
   deactivated: "Не активный",
@@ -14,6 +15,7 @@ const SubsTable = ({ getData, onEdit, onDelete, onSave, onCreate }) => {
   const [editedData, setEditedData] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10); // Количество записей на странице
+  const [totalCount, setTotalCount] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -21,6 +23,7 @@ const SubsTable = ({ getData, onEdit, onDelete, onSave, onCreate }) => {
       try {
         const data = await getData(currentPage, limit);
         setItems(data); // Обновляем состояние серверов
+        setTotalCount(data.count_orders);
       } catch (error) {
         console.error("Ошибка при загрузке данных:", error);
       }
@@ -39,12 +42,25 @@ const SubsTable = ({ getData, onEdit, onDelete, onSave, onCreate }) => {
     setEditableRow(null);
   };
 
+  // Обработка создания сервера
+  const handleCreateSub = async (newData) => {
+    try {
+      await onCreate(newData); // Отправляем данные на создание сервера
+      const data = await getData(currentPage, limit); // Refetch данных после сохранения
+      setTotalCount(data.count_orders);
+      setItems(data); // Обновляем состояние серверов
+    } catch (error) {
+      console.error("Ошибка при создании сервера:", error);
+    }
+  };
+
   // Обработка сохранения изменений
   const handleSave = async (index) => {
     try {
       await onSave(editedData); // Отправляем измененные данные на бэкенд
       const data = await getData(currentPage, limit); // Refetch данных после сохранения
       setItems(data); // Обновляем состояние серверов
+      setTotalCount(data.count_orders);
       setEditableRow(null);
     } catch (error) {
       console.error("Ошибка при сохранении данных:", error);
@@ -57,6 +73,7 @@ const SubsTable = ({ getData, onEdit, onDelete, onSave, onCreate }) => {
       await onDelete(item_id); // Отправляем запрос на удаление
       const data = await getData(currentPage, limit); // Refetch данных после сохранения
       setItems(data); // Обновляем состояние серверов
+      setTotalCount(data.count_orders);
     } catch (error) {
       console.error("Ошибка при удалении данных:", error);
     }
@@ -85,22 +102,6 @@ const SubsTable = ({ getData, onEdit, onDelete, onSave, onCreate }) => {
   // Обработка закрытия модального окна
   const handleCloseModal = () => {
     setIsModalOpen(false);
-  };
-
-  // Обработка создания сервера
-  const handleCreateSub = async (newData) => {
-    try {
-      await onCreate(newData); // Отправляем данные на создание сервера
-      const data = await getData(currentPage, limit); // Refetch данных после сохранения
-      setItems(data); // Обновляем состояние серверов
-    } catch (error) {
-      console.error("Ошибка при создании сервера:", error);
-    }
-  };
-
-  // Пагинация
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
   };
 
   return (
@@ -184,21 +185,13 @@ const SubsTable = ({ getData, onEdit, onDelete, onSave, onCreate }) => {
       </table>
 
       {/* Пагинация */}
-      <div className={styles.pagination}>
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Предыдущая
-        </button>
-        <span>Страница {currentPage}</span>
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={items.documents.length < limit}
-        >
-          Следующая
-        </button>
-      </div>
+      <PaginationControls
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        limit={limit}
+        setLimit={setLimit}
+        totalCount={totalCount}
+      />
 
       <CreateSubModal
         isOpen={isModalOpen}
