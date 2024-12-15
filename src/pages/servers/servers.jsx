@@ -86,7 +86,7 @@ export const ServersPage = () => {
     <>
       <Outlet />
       <div style={{ display: "flex" }}>
-        <SideBar pageName="Серверы" />
+        <SideBar />
         <Servers />
       </div>
     </>

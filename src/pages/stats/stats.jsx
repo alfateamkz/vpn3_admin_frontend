@@ -23,7 +23,7 @@ export const StatsPage = () => {
     <>
       <Outlet />
       <div style={{ display: "flex" }}>
-        <SideBar pageName="Статистика" />
+        <SideBar />
         <StatsTable getData={getData} />
       </div>
     </>

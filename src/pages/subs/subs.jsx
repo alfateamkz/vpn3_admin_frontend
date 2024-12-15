@@ -86,7 +86,7 @@ export const SubsPage = () => {
     <>
       <Outlet />
       <div style={{ display: "flex" }}>
-        <SideBar pageName="Подписки" />
+        <SideBar />
         <Subs />
       </div>
     </>

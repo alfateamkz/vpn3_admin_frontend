@@ -1,42 +1,39 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
 
 import styles from "./SidebarComponent.module.scss";
 
 const menuItems = [
-  "Серверы",
-  "Подписки",
-  "Пользователи",
-  "Статистика",
-  "Настройки",
-  "Выход",
+  { text: "Серверы", path: "/servers" },
+  { text: "Подписки", path: "/subs" },
+  { text: "Пользователи", path: "/users" },
+  { text: "Статистика", path: "/stats" },
+  { text: "Настройки", path: "/settings" },
+  { text: "Выход", path: "/auth" },
 ];
 
-export const SideBar = (pageName) => {
-  const [activeItem, setActiveItem] = useState(pageName); // Активный пункт меню
-
+export const SideBar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [activeItem, setActiveItem] = useState("");
+
+  // Устанавливаем активный пункт меню при монтировании компонента
+  useEffect(() => {
+    const currentPath = location.pathname;
+    const activeMenuItem = menuItems.find((item) => item.path === currentPath);
+    if (activeMenuItem) {
+      setActiveItem(activeMenuItem.text);
+    }
+  }, [location.pathname]);
 
   const handleItemClick = (item) => {
-    if (item === "Серверы") {
-      navigate("/servers");
-    }
-    if (item === "Подписки") {
-      navigate("/subs");
-    }
-    if (item === "Пользователи") {
-      navigate("/users");
-    }
-    if (item === "Статистика") {
-      navigate("/stats");
-    }
-    if (item === "Выход") {
+    if (item.text === "Выход") {
       Cookies.remove("accessToken");
       Cookies.remove("refreshToken");
-      navigate("/auth");
     }
-    setActiveItem(item);
+    setActiveItem(item.text);
+    navigate(item.path);
   };
 
   return (
@@ -44,13 +41,13 @@ export const SideBar = (pageName) => {
       <ul className={styles.menu}>
         {menuItems.map((item) => (
           <li
-            key={item}
-            className={
-              styles.menuItem + ` ${activeItem === item ? "active" : ""}`
-            }
+            key={item.text}
+            className={`${styles.menuItem} ${
+              activeItem === item.text ? styles.active : ""
+            }`}
             onClick={() => handleItemClick(item)}
           >
-            {item}
+            {item.text}
           </li>
         ))}
       </ul>

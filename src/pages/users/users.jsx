@@ -31,7 +31,7 @@ export const UsersPage = () => {
     <>
       <Outlet />
       <div style={{ display: "flex" }}>
-        <SideBar pageName="Подписки" />
+        <SideBar />
         <Users />
       </div>
     </>
