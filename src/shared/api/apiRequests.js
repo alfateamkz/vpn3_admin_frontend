@@ -8,12 +8,15 @@ export const apiRequests = {
     },
   },
   stats: {
-    general: async () => {
-      return axiosInstance.get("/stats/general", {
-        headers: {
-          Authorization: `Bearer ${Cookies.get("accessToken")}`,
-        },
-      });
+    orders: async (page, limit, type) => {
+      return axiosInstance.get(
+        `/stats/orders?page=${page}&limit=${limit}&type=${type}`,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("accessToken")}`,
+          },
+        }
+      );
     },
   },
   servers: {
