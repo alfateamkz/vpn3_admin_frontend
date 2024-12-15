@@ -2,7 +2,7 @@ import Cookies from "js-cookie";
 import { axiosInstance } from "./axiosInstance.js";
 
 export const apiRequests = {
-  user: {
+  auth: {
     login: async (body) => {
       return axiosInstance.post("/auth/login", body);
     },

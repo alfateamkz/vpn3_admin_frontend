@@ -24,7 +24,7 @@ export const AuthorizationPage = () => {
   };
 
   const handleSubmit = async () => {
-    await apiRequests.user
+    await apiRequests.auth
       .login({
         email,
         password,
