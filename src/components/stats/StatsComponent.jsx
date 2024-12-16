@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from "react";
 
 import { PaginationControls } from "../pagination/PaginationComponent";
+import { PaymentsTable } from "../payments/PaymentsComponent";
 
 import "./StatsComponent.scss";
-
-const statuses = {
-  FINISHED: "Завершено",
-  PENDING: "Ожидание",
-  CANCELED: "Оменено",
-};
-const types = { bonus: "Бонусный", money: "Реальный" };
 
 export const StatsTable = ({ getData }) => {
   const [stats, setStats] = useState({
@@ -88,30 +82,7 @@ export const StatsTable = ({ getData }) => {
 
       <p>Всего записей: {totalCount} </p>
 
-      <table className="payments-table">
-        <thead>
-          <tr>
-            <th>Статус</th>
-            <th>Тестовый</th>
-            <th>Тип</th>
-            <th>Сумма</th>
-            <th>Описание</th>
-            <th>Дата создания</th>
-          </tr>
-        </thead>
-        <tbody>
-          {stats.orders.map((order) => (
-            <tr key={order._id}>
-              <td>{statuses[order.status]}</td>
-              <td>{order.testing ? "Да" : "Нет"}</td>
-              <td>{types[order.type]}</td>
-              <td>{order.amount} ₽</td>
-              <td>{order.description}</td>
-              <td>{new Date(order.created_at).toLocaleString()}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <PaymentsTable payments={stats.orders} />
 
       <PaginationControls
         currentPage={currentPage}
