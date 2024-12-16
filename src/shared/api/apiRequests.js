@@ -79,8 +79,8 @@ export const apiRequests = {
     edit: async (body) => {
       return axiosInstance.put(`/users/one/${body._id}`, body);
     },
-    pushBalance: async (body) => {
-      return axiosInstance.post(`/users/push-balance/${body._id}`, body);
+    pushBalance: async (_id, body) => {
+      return axiosInstance.post(`/users/push-balance/${_id}`, body);
     },
   },
 };

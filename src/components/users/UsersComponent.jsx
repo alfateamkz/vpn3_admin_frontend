@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom"; // Для навигации
-import "./UsersTable.scss";
-import { PaginationControls } from "../pagination/PaginationComponent";
 
-export const UsersTable = ({ getUsers }) => {
+import "./Users.scss";
+import { PaginationControls } from "../pagination/PaginationComponent";
+import { UsersTable } from "./UsersTable";
+
+export const UsersComponent = ({ getUsers, pushBalance }) => {
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -31,6 +32,18 @@ export const UsersTable = ({ getUsers }) => {
     setCurrentPage(1); // Сбрасываем страницу на 1 при изменении поиска
   };
 
+  const handleAddBalance = async (userId, amount) => {
+    try {
+      await pushBalance(userId, amount);
+      // После успешного пополнения обновляем данные
+      const updatedData = await getUsers(currentPage, limit, search);
+      setUsers(updatedData.documents);
+      setTotalCount(updatedData.count);
+    } catch (error) {
+      console.error("Ошибка при пополнении баланса:", error);
+    }
+  };
+
   return (
     <div className="users-table-container">
       <h2>Пользователи</h2>
@@ -45,36 +58,7 @@ export const UsersTable = ({ getUsers }) => {
         />
       </div>
 
-      <table className="users-table">
-        <thead>
-          <tr>
-            <th>TG ID</th>
-            <th>TG username</th>
-            <th>Имя</th>
-            <th>Фамилия</th>
-            <th>Премиум</th>
-            <th>Окончание подписки</th>
-            <th>Баланс</th>
-            <th>Дата создания</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr key={user._id}>
-              <td>
-                <Link to={`/users/${user._id}`}>{user.tg_id}</Link>
-              </td>
-              <td>{user.username}</td>
-              <td>{user.first_name}</td>
-              <td>{user.last_name || "—"}</td>
-              <td>{user.is_premium ? "Да" : "Нет"}</td>
-              <td>{new Date(user.sub_end_date).toLocaleString()}</td>
-              <td>{user.balance}</td>
-              <td>{new Date(user.created_at).toLocaleString()}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <UsersTable users={users} onAddBalance={handleAddBalance} />
 
       <PaginationControls
         currentPage={currentPage}
