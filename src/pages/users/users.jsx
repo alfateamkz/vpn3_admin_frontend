@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import { apiRequests } from "../../shared/api/apiRequests";
 
 import { SideBar } from "../../components/sidebar/SidebarComponent";
-import { UsersTable } from "../../components/users/UsersComponent";
+import { UsersComponent } from "../../components/users/UsersComponent";
 
 const Users = () => {
   const getData = async (page, limit, search) => {
@@ -19,9 +19,18 @@ const Users = () => {
     }
   };
 
+  const pushBalance = async (userId, amount) => {
+    try {
+      await apiRequests.user.pushBalance(userId, { push_balance: amount });
+      console.log("Баланс успешно пополнен");
+    } catch (error) {
+      console.error("Ошибка при пополнении баланса:", error);
+    }
+  };
+
   return (
     <div className="content">
-      <UsersTable getUsers={getData} />
+      <UsersComponent getUsers={getData} pushBalance={pushBalance} />
     </div>
   );
 };
