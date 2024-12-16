@@ -8,6 +8,7 @@ import { SubsPage } from "./pages/subs/subs.jsx";
 import { StatsPage } from "./pages/stats/stats.jsx";
 import { UsersPage } from "./pages/users/users.jsx";
 import { UsersCardPage } from "./pages/users/usersCard.jsx";
+import { SettingsPage } from "./pages/settings/setting.jsx";
 
 import LayoutPage from "./pages/Layout.jsx";
 
@@ -22,6 +23,7 @@ function App() {
           <Route path="/stats" element={<StatsPage />} />
           <Route path="/users" element={<UsersPage />} />
           <Route path="/users/:userId" element={<UsersCardPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
         </Route>
         <Route path="/auth" element={<LoginPage />} />
       </Routes>

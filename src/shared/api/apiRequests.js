@@ -101,4 +101,15 @@ export const apiRequests = {
       });
     },
   },
+  settings: {
+    all: async () => {
+      return axiosInstance.get("/settings/all");
+    },
+    edit: async (body) => {
+      return axiosInstance.put("/settings/update", body);
+    },
+    editPassword: async (body) => {
+      return axiosInstance.put("/settings/edit-password", body);
+    },
+  },
 };
