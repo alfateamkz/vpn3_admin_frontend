@@ -1,0 +1,30 @@
+.payments-table-with-filters {
+  padding: 90px 20px;
+  font-family: Arial, sans-serif;
+
+  .header-bar {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .filters {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+
+    button {
+      padding: 10px 20px;
+      margin: 0 5px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background-color: #f0f0f0;
+      font-size: 16px;
+
+      &.active {
+        background-color: #007bff;
+        color: white;
+      }
+    }
+  }
+}

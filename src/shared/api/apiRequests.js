@@ -83,4 +83,22 @@ export const apiRequests = {
       return axiosInstance.post(`/users/push-balance/${_id}`, body);
     },
   },
+  payments: {
+    all: async (page, limit, type, user_id = null) => {
+      const params = {
+        page,
+        limit,
+        type,
+      };
+
+      // Добавляем user_id только если он указан
+      if (user_id !== null) {
+        params.user_id = user_id;
+      }
+
+      return axiosInstance.get("/payments/all", {
+        params,
+      });
+    },
+  },
 };
