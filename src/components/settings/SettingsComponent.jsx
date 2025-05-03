@@ -6,6 +6,7 @@ const settingKeys = {
   referal_lifesplan: "Время жизни реферала",
   payout_percentage: "Процент выплаты рефералу",
   trial_period: "Длительность пробного периода",
+  moderate_mode: "Режим модерации",
 };
 
 const unitNames = {
@@ -13,6 +14,7 @@ const unitNames = {
   months: "Месяцы",
   percentage: "Проценты",
   days: "Дни",
+  bool: "Да/Нет",
 };
 
 export const SettingsComponent = ({
@@ -57,8 +59,10 @@ export const SettingsComponent = ({
     try {
       await editSettings({ key, value: editedSettings[key] });
       fetchSettings(); // Обновляем настройки после сохранения
+      alert("Успешно сохранено!"); // Добавляем уведомление
     } catch (e) {
       console.error("Не удалось сохранить настройку", e);
+      alert("Ошибка при сохранении!" + e);
     }
   };
 
@@ -85,6 +89,40 @@ export const SettingsComponent = ({
     }
   };
 
+  const renderInputField = (setting) => {
+    if (setting.unit === "bool") {
+      // Нормализуем значение к boolean (поддерживает true, 'true', 1, '1')
+      const currentValue = Boolean(
+        editedSettings[setting.key] === true ||
+          editedSettings[setting.key] === "true" ||
+          editedSettings[setting.key] === 1 ||
+          editedSettings[setting.key] === "1"
+      );
+
+      return (
+        <select
+          value={currentValue.toString()} // "true" или "false"
+          onChange={(e) => {
+            // Преобразуем строку в boolean
+            const newValue = e.target.value === "true";
+            handleSettingChange(setting.key, newValue);
+          }}
+        >
+          <option value="true">Да</option>
+          <option value="false">Нет</option>
+        </select>
+      );
+    }
+
+    return (
+      <input
+        type="text"
+        value={editedSettings[setting.key] || ""}
+        onChange={(e) => handleSettingChange(setting.key, e.target.value)}
+      />
+    );
+  };
+
   return (
     <div className="contentSettings">
       <h2>Настройки</h2>
@@ -101,15 +139,7 @@ export const SettingsComponent = ({
           {settings.map((setting) => (
             <tr key={setting._id}>
               <td>{settingKeys[setting.key]}</td>
-              <td>
-                <input
-                  type="text"
-                  value={editedSettings[setting.key] || ""}
-                  onChange={(e) =>
-                    handleSettingChange(setting.key, e.target.value)
-                  }
-                />
-              </td>
+              <td>{renderInputField(setting)}</td>
               <td>{unitNames[setting.unit]}</td>
               <td>
                 <button onClick={() => handleSaveSetting(setting.key)}>
