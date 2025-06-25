@@ -7,6 +7,7 @@ const settingKeys = {
   payout_percentage: "Процент выплаты рефералу",
   trial_period: "Длительность пробного периода",
   moderate_mode: "Режим модерации",
+  allow: "Разрешённые версии",
 };
 
 const unitNames = {
@@ -15,6 +16,7 @@ const unitNames = {
   percentage: "Проценты",
   days: "Дни",
   bool: "Да/Нет",
+  list: "Список значений",
 };
 
 export const SettingsComponent = ({
@@ -28,6 +30,7 @@ export const SettingsComponent = ({
   const [oldPassword, setOldPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [newListItem, setNewListItem] = useState(""); // Для добавления новых элементов в список
 
   const fetchSettings = useCallback(async () => {
     try {
@@ -53,6 +56,28 @@ export const SettingsComponent = ({
       ...prev,
       [key]: value,
     }));
+  };
+
+  const handleAddListItem = (key) => {
+    const currentValues = Array.isArray(editedSettings[key])
+      ? editedSettings[key]
+      : [];
+
+    if (newListItem.trim() && !currentValues.includes(newListItem.trim())) {
+      handleSettingChange(key, [...currentValues, newListItem.trim()]);
+      setNewListItem("");
+    }
+  };
+
+  const handleRemoveListItem = (key, itemToRemove) => {
+    const currentValues = Array.isArray(editedSettings[key])
+      ? editedSettings[key]
+      : [];
+
+    handleSettingChange(
+      key,
+      currentValues.filter((item) => item !== itemToRemove)
+    );
   };
 
   const handleSaveSetting = async (key) => {
@@ -91,7 +116,6 @@ export const SettingsComponent = ({
 
   const renderInputField = (setting) => {
     if (setting.unit === "bool") {
-      // Нормализуем значение к boolean (поддерживает true, 'true', 1, '1')
       const currentValue = Boolean(
         editedSettings[setting.key] === true ||
           editedSettings[setting.key] === "true" ||
@@ -101,9 +125,8 @@ export const SettingsComponent = ({
 
       return (
         <select
-          value={currentValue.toString()} // "true" или "false"
+          value={currentValue.toString()}
           onChange={(e) => {
-            // Преобразуем строку в boolean
             const newValue = e.target.value === "true";
             handleSettingChange(setting.key, newValue);
           }}
@@ -111,6 +134,41 @@ export const SettingsComponent = ({
           <option value="true">Да</option>
           <option value="false">Нет</option>
         </select>
+      );
+    }
+
+    if (setting.unit === "list") {
+      const currentValues = Array.isArray(editedSettings[setting.key])
+        ? editedSettings[setting.key]
+        : [];
+
+      return (
+        <div>
+          <div style={{ marginBottom: "10px" }}>
+            {currentValues.map((item) => (
+              <div
+                key={item}
+                style={{ display: "flex", alignItems: "center", gap: "5px" }}
+              >
+                <span>{item}</span>
+                <button onClick={() => handleRemoveListItem(setting.key, item)}>
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+          <div style={{ display: "flex", gap: "5px" }}>
+            <input
+              type="text"
+              value={newListItem}
+              onChange={(e) => setNewListItem(e.target.value)}
+              placeholder="Новое значение"
+            />
+            <button onClick={() => handleAddListItem(setting.key)}>
+              + Добавить
+            </button>
+          </div>
+        </div>
       );
     }
 
