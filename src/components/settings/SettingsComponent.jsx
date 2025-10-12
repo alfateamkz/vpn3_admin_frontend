@@ -8,6 +8,7 @@ const settingKeys = {
   trial_period: "Длительность пробного периода",
   moderate_mode: "Режим модерации",
   allow: "Разрешённые версии",
+  support_username: "Аккаунт техподдержки",
 };
 
 const unitNames = {
@@ -17,6 +18,7 @@ const unitNames = {
   days: "Дни",
   bool: "Да/Нет",
   list: "Список значений",
+  username: "Telegram-username",
 };
 
 export const SettingsComponent = ({
@@ -31,6 +33,20 @@ export const SettingsComponent = ({
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [newListItem, setNewListItem] = useState(""); // Для добавления новых элементов в список
+  const [alerts, setAlerts] = useState({
+    "Падение сервера": false,
+    "Превышение нагрузки": false,
+    "Резкий отток пользователей": false,
+    "Новый платёж": false,
+    "Cбой API": false,
+  });
+
+  const handleCheckboxChange = (alertName) => {
+    setAlerts((prev) => ({
+      ...prev,
+      [alertName]: !prev[alertName],
+    }));
+  };
 
   const fetchSettings = useCallback(async () => {
     try {
@@ -208,6 +224,32 @@ export const SettingsComponent = ({
           ))}
         </tbody>
       </table>
+
+      <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
+        <h3 style={{ marginBottom: "20px", color: "#333" }}>Алерты телеграм</h3>
+        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+          {Object.keys(alerts).map((alert) => (
+            <label
+              key={alert}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                cursor: "pointer",
+                padding: "2px 0",
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={alerts[alert]}
+                onChange={() => handleCheckboxChange(alert)}
+                style={{ width: "16px", height: "16px" }}
+              />
+              <span>{alert}</span>
+            </label>
+          ))}
+        </div>
+      </div>
 
       <h2>Смена пароля</h2>
       <div className="password-form">
