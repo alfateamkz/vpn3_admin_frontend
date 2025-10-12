@@ -82,6 +82,17 @@ export const apiRequests = {
     pushBalance: async (_id, body) => {
       return axiosInstance.post(`/users/push-balance/${_id}`, body);
     },
+    logs: async (page, limit, user_id) => {
+      const params = {
+        page,
+        limit,
+        user_id,
+      };
+
+      return axiosInstance.get("/users/connect-logs", {
+        params,
+      });
+    },
   },
   payments: {
     all: async (page, limit, type, user_id = null) => {

@@ -19,6 +19,37 @@ const UsersCard = () => {
     }
   };
 
+  const getLogs = async (page, limit, userId) => {
+    try {
+      const response = await apiRequests.user.logs(page, limit, userId);
+      return response.data;
+    } catch (e) {
+      const detail = e.response?.data?.detail;
+      if (e.response?.status === 400) {
+        alert(detail);
+      }
+      throw e;
+    }
+  };
+
+  const getPayments = async (page, limit, type, user_id) => {
+    try {
+      const response = await apiRequests.payments.all(
+        page,
+        limit,
+        type,
+        user_id
+      );
+      return response.data;
+    } catch (e) {
+      const detail = e.response?.data?.detail;
+      if (e.response?.status === 400) {
+        alert(detail);
+      }
+      throw e;
+    }
+  };
+
   const getUsers = async (page, limit, search, referal_id) => {
     try {
       const response = await apiRequests.user.all(
@@ -46,31 +77,14 @@ const UsersCard = () => {
     }
   };
 
-  const getPayments = async (page, limit, type, user_id) => {
-    try {
-      const response = await apiRequests.payments.all(
-        page,
-        limit,
-        type,
-        user_id
-      );
-      return response.data;
-    } catch (e) {
-      const detail = e.response?.data?.detail;
-      if (e.response?.status === 400) {
-        alert(detail);
-      }
-      throw e;
-    }
-  };
-
   return (
     <div className="content">
       <UserCardComponent
         getUser={getUser}
+        getLogs={getLogs}
+        getPayments={getPayments}
         getUsers={getUsers}
         pushBalance={pushBalance}
-        getPayments={getPayments}
       />
     </div>
   );

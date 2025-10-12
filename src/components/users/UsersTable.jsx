@@ -49,7 +49,11 @@ export const UsersTable = ({ users, onAddBalance }) => {
               <td>{user.first_name}</td>
               <td>{user.last_name || "—"}</td>
               <td>{user.is_premium ? "Да" : "Нет"}</td>
-              <td>{new Date(user.sub_end_date).toLocaleString()}</td>
+              <td>
+                {user.sub_end_date
+                  ? new Date(user.sub_end_date).toLocaleString()
+                  : "-"}
+              </td>
               <td>{user.balance}</td>
               <td>{new Date(user.created_at).toLocaleString()}</td>
               <td>
