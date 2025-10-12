@@ -5,7 +5,7 @@ import { CreateServerModal } from "../modals/CreateServerModal";
 import { PaginationControls } from "../pagination/PaginationComponent";
 
 const statuses = {
-  deactivated: "Не активный",
+  inactived: "Не активный",
   actived: "Активный",
 };
 
