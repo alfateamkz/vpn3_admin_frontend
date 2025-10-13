@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./ServersComponent.module.scss";
+import { formatBytes } from "../../shared/utils/formatBytes";
 
 import { CreateServerModal } from "../modals/CreateServerModal";
 import { PaginationControls } from "../pagination/PaginationComponent";
@@ -7,6 +8,7 @@ import { PaginationControls } from "../pagination/PaginationComponent";
 const statuses = {
   inactived: "Не активный",
   actived: "Активный",
+  error: "Ошибка",
 };
 
 const ServersTable = ({ getServers, onEdit, onDelete, onSave, onCreate }) => {
@@ -118,11 +120,13 @@ const ServersTable = ({ getServers, onEdit, onDelete, onSave, onCreate }) => {
         <thead>
           <tr>
             <th>Страна</th>
-            <th>Ссылка на подключение</th>
+            {/* <th>Ссылка на подключение</th> */}
             <th>URL панели</th>
             <th>Логин</th>
             <th>Пароль</th>
             <th>Статус</th>
+            <th>Выгружено</th>
+            <th>Загружено</th>
             <th>Действия</th>
           </tr>
         </thead>
@@ -140,7 +144,7 @@ const ServersTable = ({ getServers, onEdit, onDelete, onSave, onCreate }) => {
                   server.country
                 )}
               </td>
-              <td>
+              {/* <td>
                 {editableRow === index ? (
                   <input
                     type="text"
@@ -150,7 +154,7 @@ const ServersTable = ({ getServers, onEdit, onDelete, onSave, onCreate }) => {
                 ) : (
                   server.connect_link.slice(0, 40) + "..." // Скрытие длинной ссылки
                 )}
-              </td>
+              </td> */}
               <td>
                 {editableRow === index ? (
                   <input
@@ -197,11 +201,17 @@ const ServersTable = ({ getServers, onEdit, onDelete, onSave, onCreate }) => {
                     onChange={handleStatusChange}
                   >
                     <option value="actived">Активный</option>
-                    <option value="deactivated">Не активный</option>
+                    <option value="inactived">Не активный</option>
                   </select>
                 ) : (
                   statuses[server.status]
                 )}
+              </td>
+              <td>
+                {server.inbound?.up ? formatBytes(server.inbound.up) : ""}
+              </td>
+              <td>
+                {server.inbound?.down ? formatBytes(server.inbound.down) : ""}
               </td>
               <td>
                 {editableRow === index ? (
