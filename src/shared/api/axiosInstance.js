@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-export const axiosInstance = axios.create({
+const axiosInstance = axios.create({
     baseURL: `${process.env.REACT_APP_URL}`,
     headers: {
         "Content-Type": "application/json",
@@ -38,8 +38,12 @@ axiosInstance.interceptors.response.use(function (response) {
 }, function (error) {
     console.error(`[API Error] ${error.response?.status} - ${error.message}`)
     
+    // Исключаем эндпоинт refresh и login из обработки 401, чтобы избежать рекурсии
+    const isRefreshEndpoint = error.config?.url?.includes('/auth/refresh')
+    const isLoginEndpoint = error.config?.url?.includes('/auth/login')
+    
     // Проверяем статус код ошибки
-    if (error.response?.status === 401) {
+    if (error.response?.status === 401 && !isRefreshEndpoint && !isLoginEndpoint) {
         const isRefreshingUpdate = Cookies.get('refresher') || false;
         const refreshToken = Cookies.get('refreshToken')
         
@@ -91,7 +95,8 @@ axiosInstance.interceptors.response.use(function (response) {
                             Authorization: 'Bearer ' + token
                         }
                     }
-                    resolve(axios(config))
+                    // Используем axiosInstance вместо axios для применения всех перехватчиков
+                    resolve(axiosInstance(config))
                 } else {
                     reject(error)
                 }
@@ -101,3 +106,5 @@ axiosInstance.interceptors.response.use(function (response) {
 
     return Promise.reject(error);
 })
+
+export { axiosInstance };
