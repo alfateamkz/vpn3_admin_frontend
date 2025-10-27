@@ -12,6 +12,7 @@ export const UserCardComponent = ({
   getPayments,
   getUsers,
   pushBalance,
+  getDevices,
 }) => {
   const { userId } = useParams(); // Получаем userId из URL
   const [user, setUser] = useState(null);
@@ -25,6 +26,8 @@ export const UserCardComponent = ({
   const [currentRefPage, setCurrentRefPage] = useState(1);
   const [limitRefPage, setLimitRef] = useState(10);
   const [totalCountRef, setTotalCountRef] = useState(0);
+  
+  const [devices, setDevices] = useState([]);
 
   // Загрузка данных пользователя
   useEffect(() => {
@@ -61,10 +64,22 @@ export const UserCardComponent = ({
         console.error("Ошибка при загрузке рефералов:", error);
       }
     };
+    
+    const fetchDevices = async () => {
+      if (getDevices) {
+        try {
+          const data = await getDevices(userId, 1, 100);
+          setDevices(data.devices || []);
+        } catch (error) {
+          console.error("Ошибка при загрузке устройств:", error);
+        }
+      }
+    };
 
     fetchUser();
     fetchLogs();
     fetchReferrals();
+    fetchDevices();
   }, [
     userId,
     getUser,
@@ -75,6 +90,7 @@ export const UserCardComponent = ({
     search,
     currentRefPage,
     limitRefPage,
+    getDevices,
   ]);
 
   const handleAddBalance = async (referalId, amount) => {
@@ -188,6 +204,40 @@ export const UserCardComponent = ({
         setLimit={setLimitRef}
         totalCount={totalCountRef}
       />
+      
+      {/* Список устройств */}
+      {devices.length > 0 && (
+        <div className="users-table-container">
+          <div className="header-bar">
+            <h3>Устройства</h3>
+            <p>Всего устройств: {devices.length}</p>
+          </div>
+          <table className="devices-table">
+            <thead>
+              <tr>
+                <th>Платформа</th>
+                <th>Модель</th>
+                <th>Страна</th>
+                <th>Последняя активность</th>
+              </tr>
+            </thead>
+            <tbody>
+              {devices.map((device) => (
+                <tr key={device.id}>
+                  <td>{device.platform || "—"}</td>
+                  <td>{device.model || "—"}</td>
+                  <td>{device.country || "Unknown"}</td>
+                  <td>
+                    {device.last_activity
+                      ? new Date(device.last_activity).toLocaleDateString("ru-RU")
+                      : "—"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };

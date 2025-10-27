@@ -9,6 +9,8 @@ const menuItems = [
   { text: "Серверы", path: "/servers" },
   { text: "Подписки", path: "/subs" },
   { text: "Пользователи", path: "/users" },
+  { text: "Рефералы", path: "/referals" },
+  { text: "Устройства", path: "/devices" },
   { text: "Настройки", path: "/settings" },
   { text: "Выход", path: "/auth" },
 ];

@@ -1,6 +1,7 @@
 .users-table-container {
   padding: 20px;
   font-family: Arial, sans-serif;
+  margin-bottom: 30px;
 
   h2 {
     margin-bottom: 20px;
@@ -8,6 +9,44 @@
   .header-bar {
     display: flex;
     justify-content: space-between;
+    margin-bottom: 15px;
+  }
+  
+  .devices-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    thead {
+      background: #4CAF50;
+      color: white;
+
+      th {
+        padding: 12px;
+        text-align: left;
+        font-weight: 600;
+        font-size: 14px;
+      }
+    }
+
+    tbody {
+      tr {
+        &:nth-child(even) {
+          background: #f9f9f9;
+        }
+
+        &:hover {
+          background: #f0f0f0;
+        }
+      }
+
+      td {
+        padding: 12px;
+        border-bottom: 1px solid #ddd;
+        font-size: 14px;
+      }
+    }
   }
 
   .search-bar {

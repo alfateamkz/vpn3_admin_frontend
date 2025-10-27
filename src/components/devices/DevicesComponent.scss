@@ -1,0 +1,127 @@
+.devices-container {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  h2 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  .search-bar {
+    margin-bottom: 20px;
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+
+      &:focus {
+        outline: none;
+        border-color: #4CAF50;
+      }
+    }
+  }
+
+  .no-data {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+    font-size: 16px;
+  }
+}
+
+.devices-table-container {
+  overflow-x: auto;
+  margin-bottom: 20px;
+
+  .devices-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    thead {
+      background: #4CAF50;
+      color: white;
+
+      th {
+        padding: 12px;
+        text-align: left;
+        font-weight: 600;
+        font-size: 14px;
+      }
+    }
+
+    tbody {
+      tr {
+        &:nth-child(even) {
+          background: #f9f9f9;
+        }
+
+        &:hover {
+          background: #f0f0f0;
+        }
+      }
+
+      td {
+        padding: 12px;
+        border-bottom: 1px solid #ddd;
+        font-size: 14px;
+
+        .user-info {
+          strong {
+            color: #333;
+          }
+
+          .username {
+            display: block;
+            font-size: 12px;
+            color: #666;
+          }
+        }
+
+        .platform-cell {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          .platform-icon {
+            font-size: 20px;
+          }
+
+          .platform-name {
+            text-transform: capitalize;
+          }
+        }
+
+        .country-badge {
+          padding: 4px 8px;
+          border-radius: 4px;
+          background: #e3f2fd;
+          color: #1976d2;
+          font-size: 12px;
+          font-weight: 600;
+        }
+
+        .ip-address {
+          font-family: monospace;
+          color: #666;
+          font-size: 13px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .devices-container {
+    padding: 10px;
+
+    .devices-table-container {
+      overflow-x: scroll;
+    }
+  }
+}

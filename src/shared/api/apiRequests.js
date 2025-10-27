@@ -156,4 +156,19 @@ export const apiRequests = {
       return axiosInstance.get(`/referals/referals/${referal_id}/details`);
     },
   },
+  devices: {
+    list: async (user_id = null, page = 1, limit = 50) => {
+      const params = { page, limit };
+      if (user_id !== null) {
+        params.user_id = user_id;
+      }
+      return axiosInstance.get("/devices/admin/list", { params });
+    },
+    listByUser: async (userId) => {
+      return axiosInstance.get(`/devices/list`);
+    },
+    delete: async (device_id) => {
+      return axiosInstance.delete(`/devices/${device_id}`);
+    },
+  },
 };

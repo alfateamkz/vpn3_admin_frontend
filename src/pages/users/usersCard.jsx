@@ -76,6 +76,19 @@ const UsersCard = () => {
       console.error("Ошибка при пополнении баланса:", error);
     }
   };
+  
+  const getDevices = async (user_id, page, limit) => {
+    try {
+      const response = await apiRequests.devices.list(user_id, page, limit);
+      return response.data;
+    } catch (e) {
+      const detail = e.response?.data?.detail;
+      if (e.response?.status === 400) {
+        alert(detail);
+      } else console.log(detail);
+      throw e;
+    }
+  };
 
   return (
     <div className="content">
@@ -85,6 +98,7 @@ const UsersCard = () => {
         getPayments={getPayments}
         getUsers={getUsers}
         pushBalance={pushBalance}
+        getDevices={getDevices}
       />
     </div>
   );
