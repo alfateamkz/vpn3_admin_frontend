@@ -4,14 +4,27 @@ import Cookies from "js-cookie";
 export const axiosInstance = axios.create({
     baseURL: `${process.env.REACT_APP_URL}`,
     headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Cache-Control": "no-cache, no-store, must-revalidate",
+        "Pragma": "no-cache",
+        "Expires": "0"
     },
+    timeout: 30000, // 30 секунд
 });
 
 axiosInstance.interceptors.request.use(function (config) {
     const token = Cookies.get('accessToken')
     config.headers.Authorization = `Bearer ${token}`
-
+    
+    // Добавляем timestamp для предотвращения кеширования
+    if (config.params) {
+        config.params._t = Date.now()
+    } else {
+        config.params = { _t: Date.now() }
+    }
+    
+    console.log(`[API Request] ${config.method?.toUpperCase()} ${config.url}`)
+    
     return config;
 }, function (error) {
     return Promise.reject(error);
@@ -20,8 +33,10 @@ axiosInstance.interceptors.request.use(function (config) {
 let requestsToRefresh = []
 
 axiosInstance.interceptors.response.use(function (response) {
+    console.log(`[API Response] ${response.config.method?.toUpperCase()} ${response.config.url} - ${response.status}`)
     return response;
 }, function (error) {
+    console.error(`[API Error] ${error.response?.status} - ${error.message}`)
     const isRefreshingUpdate = Cookies.get('refresher') || false;
     const refreshToken = Cookies.get('refreshToken')
 
