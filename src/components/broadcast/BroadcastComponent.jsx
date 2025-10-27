@@ -49,6 +49,13 @@ export const BroadcastComponent = () => {
       return;
     }
 
+    // Проверяем размер файла (максимум 10MB)
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    if (photo.size > maxSize) {
+      alert(`Файл слишком большой! Максимальный размер: ${(maxSize / 1024 / 1024).toFixed(0)}MB`);
+      return;
+    }
+
     setLoading(true);
     try {
       const result = await apiRequests.broadcast.sendWithPhoto(
