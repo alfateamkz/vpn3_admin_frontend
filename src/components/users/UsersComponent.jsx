@@ -73,6 +73,35 @@ export const UsersComponent = ({ getUsers, pushBalance }) => {
     }
   };
 
+  const handleRemovePremium = async (userId) => {
+    try {
+      await apiRequests.user.removePremium(userId);
+      // Обновляем данные
+      const updatedData = await getUsers(currentPage, limit, search);
+      setUsers(updatedData.documents);
+      setTotalCount(updatedData.count);
+      alert("Премиум подписка снята");
+    } catch (error) {
+      console.error("Ошибка при снятии премиума:", error);
+      alert("Ошибка при снятии премиум подписки");
+    }
+  };
+
+  const handleRemoveBalance = async (userId, amount) => {
+    try {
+      await apiRequests.user.removeBalance(userId, amount);
+      // Обновляем данные
+      const updatedData = await getUsers(currentPage, limit, search);
+      setUsers(updatedData.documents);
+      setTotalCount(updatedData.count);
+      alert("Баланс списан");
+    } catch (error) {
+      console.error("Ошибка при списании баланса:", error);
+      const errorMsg = error.response?.data?.detail || "Ошибка при списании баланса";
+      alert(errorMsg);
+    }
+  };
+
   return (
     <div className="users-table-container">
       <h2>Пользователи</h2>
@@ -87,12 +116,14 @@ export const UsersComponent = ({ getUsers, pushBalance }) => {
         />
       </div>
 
-      <UsersTable 
-        users={users} 
-        onAddBalance={handleAddBalance}
-        onBlockUser={handleBlockUser}
-        onUnblockUser={handleUnblockUser}
-      />
+              <UsersTable 
+                users={users} 
+                onAddBalance={handleAddBalance}
+                onBlockUser={handleBlockUser}
+                onUnblockUser={handleUnblockUser}
+                onRemovePremium={handleRemovePremium}
+                onRemoveBalance={handleRemoveBalance}
+              />
 
       <PaginationControls
         currentPage={currentPage}

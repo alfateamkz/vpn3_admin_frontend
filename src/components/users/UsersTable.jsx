@@ -4,7 +4,7 @@ import "./Users.scss";
 
 import { AddBalanceModal } from "../modals/AddBalanceModal";
 
-export const UsersTable = ({ users, onAddBalance, onBlockUser, onUnblockUser }) => {
+export const UsersTable = ({ users, onAddBalance, onBlockUser, onUnblockUser, onRemovePremium, onRemoveBalance }) => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -32,6 +32,21 @@ export const UsersTable = ({ users, onAddBalance, onBlockUser, onUnblockUser }) 
   const handleUnblock = async (user) => {
     if (window.confirm(`Разблокировать пользователя ${user.first_name} ${user.last_name || ""}?`)) {
       await onUnblockUser(user._id);
+    }
+  };
+
+  const handleRemovePremium = async (user) => {
+    if (window.confirm(`Снять премиум подписку у ${user.first_name} ${user.last_name || ""}?`)) {
+      await onRemovePremium(user._id);
+    }
+  };
+
+  const handleRemoveBalance = async (user) => {
+    const amount = prompt(`Введите сумму для списания с баланса пользователя ${user.first_name}:`);
+    if (amount && !isNaN(amount) && amount > 0) {
+      if (window.confirm(`Списать ${amount} рублей с баланса ${user.first_name}?`)) {
+        await onRemoveBalance(user._id, parseInt(amount));
+      }
     }
   };
 
@@ -79,6 +94,14 @@ export const UsersTable = ({ users, onAddBalance, onBlockUser, onUnblockUser }) 
                   <button onClick={() => handleAddBalance(user)} title="Пополнить баланс">
                     💰
                   </button>
+                  <button onClick={() => handleRemoveBalance(user)} style={{ background: "#ffc107" }} title="Списать баланс">
+                    ➖
+                  </button>
+                  {user.is_premium && (
+                    <button onClick={() => handleRemovePremium(user)} style={{ background: "#ff9800" }} title="Снять премиум">
+                      ⭐
+                    </button>
+                  )}
                   {user.blocked ? (
                     <button onClick={() => handleUnblock(user)} style={{ background: "#28a745" }} title="Разблокировать">
                       🔓

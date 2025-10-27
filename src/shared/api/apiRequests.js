@@ -113,6 +113,14 @@ export const apiRequests = {
     unblock: async (user_id) => {
       return axiosInstance.put(`/users/unblock/${user_id}`);
     },
+    removePremium: async (user_id) => {
+      return axiosInstance.put(`/users/remove-premium/${user_id}`);
+    },
+    removeBalance: async (user_id, amount) => {
+      return axiosInstance.put(`/users/remove-balance/${user_id}`, null, {
+        params: { amount }
+      });
+    },
   },
   payments: {
     all: async (page, limit, type, user_id = null) => {
