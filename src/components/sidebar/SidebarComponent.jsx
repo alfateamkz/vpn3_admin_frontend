@@ -11,6 +11,9 @@ const menuItems = [
   { text: "Пользователи", path: "/users" },
   { text: "Рефералы", path: "/referals" },
   { text: "Устройства", path: "/devices" },
+  { text: "Рассылка", path: "/broadcast" },
+  { text: "IP Белый список", path: "/ip-whitelist" },
+  { text: "Логи действий", path: "/admin-actions" },
   { text: "Настройки", path: "/settings" },
   { text: "Выход", path: "/auth" },
 ];

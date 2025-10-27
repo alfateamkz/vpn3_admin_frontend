@@ -4,7 +4,7 @@ import "./Users.scss";
 
 import { AddBalanceModal } from "../modals/AddBalanceModal";
 
-export const UsersTable = ({ users, onAddBalance }) => {
+export const UsersTable = ({ users, onAddBalance, onBlockUser, onUnblockUser }) => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -23,6 +23,18 @@ export const UsersTable = ({ users, onAddBalance }) => {
     setIsModalOpen(false);
   };
 
+  const handleBlock = async (user) => {
+    if (window.confirm(`Заблокировать пользователя ${user.first_name} ${user.last_name || ""}?`)) {
+      await onBlockUser(user._id);
+    }
+  };
+
+  const handleUnblock = async (user) => {
+    if (window.confirm(`Разблокировать пользователя ${user.first_name} ${user.last_name || ""}?`)) {
+      await onUnblockUser(user._id);
+    }
+  };
+
   return (
     <div>
       <table className="users-table">
@@ -33,6 +45,7 @@ export const UsersTable = ({ users, onAddBalance }) => {
             <th>Имя</th>
             <th>Фамилия</th>
             <th>Премиум</th>
+            <th>Статус</th>
             <th>Окончание подписки</th>
             <th>Баланс</th>
             <th>Дата создания</th>
@@ -50,6 +63,11 @@ export const UsersTable = ({ users, onAddBalance }) => {
               <td>{user.last_name || "—"}</td>
               <td>{user.is_premium ? "Да" : "Нет"}</td>
               <td>
+                <span className={user.blocked ? "status-blocked" : "status-active"}>
+                  {user.blocked ? "🚫 Заблокирован" : "✅ Активен"}
+                </span>
+              </td>
+              <td>
                 {user.sub_end_date
                   ? new Date(user.sub_end_date).toLocaleString()
                   : "-"}
@@ -57,9 +75,20 @@ export const UsersTable = ({ users, onAddBalance }) => {
               <td>{user.balance}</td>
               <td>{new Date(user.created_at).toLocaleString()}</td>
               <td>
-                <button onClick={() => handleAddBalance(user)}>
-                  Пополнить баланс
-                </button>
+                <div style={{ display: "flex", gap: "5px" }}>
+                  <button onClick={() => handleAddBalance(user)}>
+                    💰 Пополнить
+                  </button>
+                  {user.blocked ? (
+                    <button onClick={() => handleUnblock(user)} style={{ background: "#28a745" }}>
+                      🔓 Разблокировать
+                    </button>
+                  ) : (
+                    <button onClick={() => handleBlock(user)} style={{ background: "#dc3545" }}>
+                      🚫 Заблокировать
+                    </button>
+                  )}
+                </div>
               </td>
             </tr>
           ))}

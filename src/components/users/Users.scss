@@ -6,6 +6,16 @@
   h2 {
     margin-bottom: 20px;
   }
+
+  .status-blocked {
+    color: #dc3545;
+    font-weight: bold;
+  }
+
+  .status-active {
+    color: #28a745;
+    font-weight: bold;
+  }
   .header-bar {
     display: flex;
     justify-content: space-between;

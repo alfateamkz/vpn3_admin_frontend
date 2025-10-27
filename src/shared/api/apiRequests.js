@@ -107,6 +107,12 @@ export const apiRequests = {
         params,
       });
     },
+    block: async (user_id) => {
+      return axiosInstance.put(`/users/block/${user_id}`);
+    },
+    unblock: async (user_id) => {
+      return axiosInstance.put(`/users/unblock/${user_id}`);
+    },
   },
   payments: {
     all: async (page, limit, type, user_id = null) => {
@@ -169,6 +175,60 @@ export const apiRequests = {
     },
     delete: async (device_id) => {
       return axiosInstance.delete(`/devices/${device_id}`);
+    },
+  },
+  adminActions: {
+    list: async (page = 1, limit = 50, filters = {}) => {
+      const params = { page, limit, ...filters };
+      return axiosInstance.get("/auth/actions", { params });
+    },
+  },
+  broadcast: {
+    send: async (text, photoUrl, userIds, activeOnly) => {
+      return axiosInstance.post("/broadcast/send", {
+        text,
+        photo_url: photoUrl,
+        user_ids: userIds,
+        active_only: activeOnly,
+      });
+    },
+    sendWithPhoto: async (text, photo, userIds, activeOnly) => {
+      const formData = new FormData();
+      formData.append("text", text);
+      formData.append("photo", photo);
+      if (userIds) {
+        userIds.forEach((id) => formData.append("user_ids", id));
+      }
+      formData.append("active_only", activeOnly);
+      return axiosInstance.post("/broadcast/send-photo", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    },
+  },
+  ipWhitelist: {
+    add: async (ipAddress, description) => {
+      return axiosInstance.post("/ip-whitelist/add", {
+        ip_address: ipAddress,
+        description,
+      });
+    },
+    remove: async (ipAddress) => {
+      return axiosInstance.delete(`/ip-whitelist/remove/${ipAddress}`);
+    },
+    list: async (page = 1, limit = 50) => {
+      return axiosInstance.get("/ip-whitelist/list", {
+        params: { page, limit },
+      });
+    },
+    toggle: async (ipAddress, isActive) => {
+      return axiosInstance.put(`/ip-whitelist/toggle/${ipAddress}`, {
+        is_active: isActive,
+      });
+    },
+    check: async (ipAddress) => {
+      return axiosInstance.get(`/ip-whitelist/check/${ipAddress}`);
     },
   },
 };

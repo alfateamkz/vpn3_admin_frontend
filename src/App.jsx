@@ -11,6 +11,9 @@ import { UsersCardPage } from "./pages/users/usersCard.jsx";
 import { SettingsPage } from "./pages/settings/setting.jsx";
 import { ReferalsPage } from "./pages/referals/referals.jsx";
 import { DevicesPage } from "./pages/devices/devices.jsx";
+import { BroadcastPage } from "./pages/broadcast/broadcast.jsx";
+import { IPWhitelistPage } from "./pages/ipWhitelist/ipWhitelist.jsx";
+import { AdminActionsPage } from "./pages/adminActions/adminActions.jsx";
 
 import LayoutPage from "./pages/Layout.jsx";
 
@@ -27,6 +30,9 @@ function App() {
           <Route path="/users/:userId" element={<UsersCardPage />} />
           <Route path="/referals" element={<ReferalsPage />} />
           <Route path="/devices" element={<DevicesPage />} />
+          <Route path="/broadcast" element={<BroadcastPage />} />
+          <Route path="/ip-whitelist" element={<IPWhitelistPage />} />
+          <Route path="/admin-actions" element={<AdminActionsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
         </Route>
         <Route path="/auth" element={<LoginPage />} />

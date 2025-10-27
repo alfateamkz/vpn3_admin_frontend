@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import "./Users.scss";
 import { PaginationControls } from "../pagination/PaginationComponent";
 import { UsersTable } from "./UsersTable";
+import { apiRequests } from "../../shared/api/apiRequests";
 
 export const UsersComponent = ({ getUsers, pushBalance }) => {
   const [users, setUsers] = useState([]);
@@ -44,6 +45,34 @@ export const UsersComponent = ({ getUsers, pushBalance }) => {
     }
   };
 
+  const handleBlockUser = async (userId) => {
+    try {
+      await apiRequests.user.block(userId);
+      // Обновляем данные
+      const updatedData = await getUsers(currentPage, limit, search);
+      setUsers(updatedData.documents);
+      setTotalCount(updatedData.count);
+      alert("Пользователь заблокирован");
+    } catch (error) {
+      console.error("Ошибка при блокировке:", error);
+      alert("Ошибка при блокировке пользователя");
+    }
+  };
+
+  const handleUnblockUser = async (userId) => {
+    try {
+      await apiRequests.user.unblock(userId);
+      // Обновляем данные
+      const updatedData = await getUsers(currentPage, limit, search);
+      setUsers(updatedData.documents);
+      setTotalCount(updatedData.count);
+      alert("Пользователь разблокирован");
+    } catch (error) {
+      console.error("Ошибка при разблокировке:", error);
+      alert("Ошибка при разблокировке пользователя");
+    }
+  };
+
   return (
     <div className="users-table-container">
       <h2>Пользователи</h2>
@@ -58,7 +87,12 @@ export const UsersComponent = ({ getUsers, pushBalance }) => {
         />
       </div>
 
-      <UsersTable users={users} onAddBalance={handleAddBalance} />
+      <UsersTable 
+        users={users} 
+        onAddBalance={handleAddBalance}
+        onBlockUser={handleBlockUser}
+        onUnblockUser={handleUnblockUser}
+      />
 
       <PaginationControls
         currentPage={currentPage}

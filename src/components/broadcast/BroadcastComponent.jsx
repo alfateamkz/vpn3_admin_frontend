@@ -1,0 +1,152 @@
+import React, { useState } from "react";
+import "./BroadcastComponent.scss";
+import { apiRequests } from "../../shared/api/apiRequests";
+
+export const BroadcastComponent = () => {
+  const [text, setText] = useState("");
+  const [photoUrl, setPhotoUrl] = useState("");
+  const [photo, setPhoto] = useState(null);
+  const [activeOnly, setActiveOnly] = useState(true);
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const handleSendText = async () => {
+    if (!text) {
+      alert("Введите текст сообщения");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const result = await apiRequests.broadcast.send(
+        text,
+        photoUrl || null,
+        selectedUsers.length > 0 ? selectedUsers : null,
+        activeOnly
+      );
+
+      alert(`Рассылка завершена! Отправлено: ${result.sent}, Ошибок: ${result.failed}`);
+      setText("");
+      setPhotoUrl("");
+    } catch (error) {
+      console.error("Ошибка при рассылке:", error);
+      alert("Ошибка при отправке рассылки");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSendWithPhoto = async () => {
+    if (!text) {
+      alert("Введите текст сообщения");
+      return;
+    }
+
+    if (!photo) {
+      alert("Выберите фото");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const result = await apiRequests.broadcast.sendWithPhoto(
+        text,
+        photo,
+        selectedUsers.length > 0 ? selectedUsers : null,
+        activeOnly
+      );
+
+      alert(`Рассылка с фото завершена! Отправлено: ${result.sent}, Ошибок: ${result.failed}`);
+      setText("");
+      setPhoto(null);
+    } catch (error) {
+      console.error("Ошибка при рассылке с фото:", error);
+      alert("Ошибка при отправке рассылки");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="broadcast-container">
+      <h2>📧 Массовая рассылка</h2>
+
+      <div className="broadcast-form">
+        <div className="form-section">
+          <label>Текст сообщения:</label>
+          <textarea
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder="Введите текст для рассылки"
+            rows={6}
+          />
+        </div>
+
+        <div className="form-section">
+          <label>Ссылка на фото (опционально):</label>
+          <input
+            type="text"
+            value={photoUrl}
+            onChange={(e) => setPhotoUrl(e.target.value)}
+            placeholder="https://example.com/photo.jpg"
+          />
+        </div>
+
+        <div className="form-section">
+          <label>
+            <input
+              type="checkbox"
+              checked={activeOnly}
+              onChange={(e) => setActiveOnly(e.target.checked)}
+            />
+            Только пользователи с активной подпиской
+          </label>
+        </div>
+
+        <div className="form-section">
+          <label>Выбрать пользователей (опционально):</label>
+          <input
+            type="text"
+            placeholder="Введите ID пользователей через запятую (1,2,3)"
+            onChange={(e) =>
+              setSelectedUsers(
+                e.target.value
+                  .split(",")
+                  .map((id) => id.trim())
+                  .filter(Boolean)
+              )
+            }
+          />
+          {selectedUsers.length > 0 && (
+            <p className="info">Выбрано пользователей: {selectedUsers.length}</p>
+          )}
+          <p className="hint">
+            Оставьте пустым для рассылки всем пользователям
+          </p>
+        </div>
+
+        <div className="form-actions">
+          <button onClick={handleSendText} disabled={loading}>
+            {loading ? "Отправка..." : "📨 Отправить текст"}
+          </button>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setPhoto(e.target.files[0])}
+            style={{ display: "none" }}
+            id="photo-input"
+          />
+          <label htmlFor="photo-input" className="file-button">
+            {photo ? `📎 ${photo.name}` : "📎 Выбрать фото"}
+          </label>
+          {photo && (
+            <button onClick={handleSendWithPhoto} disabled={loading}>
+              {loading ? "Отправка..." : "📸 Отправить с фото"}
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+

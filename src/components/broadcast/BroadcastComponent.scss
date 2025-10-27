@@ -1,0 +1,93 @@
+.broadcast-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+
+  h2 {
+    margin-bottom: 20px;
+  }
+
+  .broadcast-form {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .form-section {
+    margin-bottom: 20px;
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+      font-family: Arial, sans-serif;
+    }
+
+    input[type="checkbox"] {
+      margin-right: 8px;
+    }
+
+    .info {
+      color: #28a745;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .hint {
+      color: #6c757d;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 30px;
+
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+
+      &:hover:not(:disabled) {
+        background: #0056b3;
+      }
+
+      &:disabled {
+        background: #6c757d;
+        cursor: not-allowed;
+      }
+    }
+
+    .file-button {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      display: inline-block;
+
+      &:hover {
+        background: #218838;
+      }
+    }
+  }
+}
+
