@@ -5,16 +5,12 @@ import { apiRequests } from "../../shared/api/apiRequests";
 export const IPWhitelistComponent = () => {
   const [ipList, setIpList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [limit] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [ipAddress, setIpAddress] = useState("");
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    fetchData();
-  }, [currentPage, limit]);
 
   const fetchData = async () => {
     setLoading(true);
@@ -30,6 +26,11 @@ export const IPWhitelistComponent = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage, limit]);
 
   const handleAddIP = async () => {
     if (!ipAddress) {

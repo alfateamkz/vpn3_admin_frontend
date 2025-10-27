@@ -5,7 +5,7 @@ import { apiRequests } from "../../shared/api/apiRequests";
 export const AdminActionsComponent = () => {
   const [actions, setActions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [limit, setLimit] = useState(50);
+  const [limit] = useState(50);
   const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [filters, setFilters] = useState({
@@ -13,10 +13,6 @@ export const AdminActionsComponent = () => {
     target_type: "",
     admin_id: "",
   });
-
-  useEffect(() => {
-    fetchData();
-  }, [currentPage, limit, filters]);
 
   const fetchData = async () => {
     setLoading(true);
@@ -31,6 +27,11 @@ export const AdminActionsComponent = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage, limit, filters]);
 
   const handleFilterChange = (key, value) => {
     setFilters((prev) => ({ ...prev, [key]: value }));

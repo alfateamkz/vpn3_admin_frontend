@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import placeholder_picture from ".././images/placeholder_user.png";
 
 const initialState = {
   token: "",

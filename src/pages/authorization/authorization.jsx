@@ -3,11 +3,9 @@ import { useState } from "react";
 import { apiRequests } from "../../shared/api/apiRequests";
 import Cookies from "js-cookie";
 import { setUserData } from "../../shared/store/main";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import passwordIco from "../../shared/images/password.svg";
-
-const emailRegex = /.+@.+\.[A-Za-z]+$/;
 
 export const AuthorizationPage = () => {
   const [email, setEmail] = useState("");
