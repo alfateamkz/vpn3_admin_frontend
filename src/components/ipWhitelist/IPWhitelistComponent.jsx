@@ -24,7 +24,8 @@ export const IPWhitelistComponent = () => {
       setTotalCount(data.total || 0);
     } catch (error) {
       console.error("Ошибка при загрузке данных:", error);
-      alert("Ошибка при загрузке списка IP");
+      const errorMessage = error.response?.data?.detail || error.message || "Ошибка при загрузке списка IP";
+      alert(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -46,7 +47,8 @@ export const IPWhitelistComponent = () => {
       fetchData();
     } catch (error) {
       console.error("Ошибка при добавлении IP:", error);
-      alert("Ошибка при добавлении IP");
+      const errorMessage = error.response?.data?.detail || error.message || "Ошибка при добавлении IP";
+      alert(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -64,7 +66,8 @@ export const IPWhitelistComponent = () => {
       fetchData();
     } catch (error) {
       console.error("Ошибка при удалении IP:", error);
-      alert("Ошибка при удалении IP");
+      const errorMessage = error.response?.data?.detail || error.message || "Ошибка при удалении IP";
+      alert(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -77,7 +80,8 @@ export const IPWhitelistComponent = () => {
       fetchData();
     } catch (error) {
       console.error("Ошибка при изменении статуса IP:", error);
-      alert("Ошибка при изменении статуса IP");
+      const errorMessage = error.response?.data?.detail || error.message || "Ошибка при изменении статуса IP";
+      alert(errorMessage);
     } finally {
       setLoading(false);
     }

@@ -37,6 +37,8 @@ axiosInstance.interceptors.response.use(function (response) {
     return response;
 }, function (error) {
     console.error(`[API Error] ${error.response?.status} - ${error.message}`)
+    console.error('Error details:', error.response?.data)
+    console.error('Error config:', error.config?.url)
     
     // Исключаем эндпоинт refresh и login из обработки 401, чтобы избежать рекурсии
     const isRefreshEndpoint = error.config?.url?.includes('/auth/refresh')
@@ -104,6 +106,14 @@ axiosInstance.interceptors.response.use(function (response) {
         })
     }
 
+    // Обрабатываем другие ошибки (500, 404, etc.)
+    // Не перенаправляем на авторизацию, просто отображаем ошибку
+    if (error.response?.status >= 500) {
+        console.error('Server error:', error.response.status);
+        // Серверные ошибки не должны вызывать редирект
+        return Promise.reject(error);
+    }
+    
     return Promise.reject(error);
 })
 

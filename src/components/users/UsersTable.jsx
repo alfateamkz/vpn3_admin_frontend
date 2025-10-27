@@ -75,17 +75,17 @@ export const UsersTable = ({ users, onAddBalance, onBlockUser, onUnblockUser }) 
               <td>{user.balance}</td>
               <td>{new Date(user.created_at).toLocaleString()}</td>
               <td>
-                <div style={{ display: "flex", gap: "5px" }}>
-                  <button onClick={() => handleAddBalance(user)}>
-                    💰 Пополнить
+                <div style={{ display: "flex", gap: "3px", flexWrap: "wrap" }}>
+                  <button onClick={() => handleAddBalance(user)} title="Пополнить баланс">
+                    💰
                   </button>
                   {user.blocked ? (
-                    <button onClick={() => handleUnblock(user)} style={{ background: "#28a745" }}>
-                      🔓 Разблокировать
+                    <button onClick={() => handleUnblock(user)} style={{ background: "#28a745" }} title="Разблокировать">
+                      🔓
                     </button>
                   ) : (
-                    <button onClick={() => handleBlock(user)} style={{ background: "#dc3545" }}>
-                      🚫 Заблокировать
+                    <button onClick={() => handleBlock(user)} style={{ background: "#dc3545" }} title="Заблокировать">
+                      🚫
                     </button>
                   )}
                 </div>
