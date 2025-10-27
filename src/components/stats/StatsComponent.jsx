@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 
 import { PaginationControls } from "../pagination/PaginationComponent";
 import { PaymentsTable } from "../payments/PaymentsComponent";
+import { MetricsComponent } from "./MetricsComponent";
 
 import "./StatsComponent.scss";
 
-export const StatsTable = ({ getData }) => {
+export const StatsTable = ({ getData, getMetricsData }) => {
   const [stats, setStats] = useState({
     count_users: 0,
     active_subs: 0,
@@ -16,6 +17,7 @@ export const StatsTable = ({ getData }) => {
   const [limit, setLimit] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
   const [filterType, setFilterType] = useState("all");
+  const [activeTab, setActiveTab] = useState("stats");
 
   // Загрузка данных при монтировании и изменении параметров
   useEffect(() => {
@@ -41,6 +43,29 @@ export const StatsTable = ({ getData }) => {
   return (
     <div className="payments-stats-container">
       <h2>Статистика</h2>
+      
+      {/* Вкладки */}
+      <div className="tabs">
+        <button
+          className={activeTab === "stats" ? "active" : ""}
+          onClick={() => setActiveTab("stats")}
+        >
+          Общая статистика
+        </button>
+        <button
+          className={activeTab === "metrics" ? "active" : ""}
+          onClick={() => setActiveTab("metrics")}
+        >
+          Метрики (DAU/WAU/MAU)
+        </button>
+      </div>
+
+      {activeTab === "metrics" && getMetricsData && (
+        <MetricsComponent getMetrics={getMetricsData} />
+      )}
+
+      {activeTab === "stats" && (
+        <>
       <div className="stats-summary">
         <div className="stat-item">
           <h3>Количество пользователей</h3>
@@ -91,6 +116,8 @@ export const StatsTable = ({ getData }) => {
         setLimit={setLimit}
         totalCount={totalCount}
       />
+      </>
+      )}
     </div>
   );
 };

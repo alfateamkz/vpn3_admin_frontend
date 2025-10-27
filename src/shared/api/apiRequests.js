@@ -17,6 +17,20 @@ export const apiRequests = {
         },
       });
     },
+    metrics: async (days = 30) => {
+      return axiosInstance.get("/stats/metrics", {
+        params: {
+          days,
+        },
+      });
+    },
+    installations: async (days = 30) => {
+      return axiosInstance.get("/stats/installations", {
+        params: {
+          days,
+        },
+      });
+    },
   },
   servers: {
     all: async (page, limit) => {
@@ -121,6 +135,25 @@ export const apiRequests = {
     },
     editPassword: async (body) => {
       return axiosInstance.put("/settings/edit-password", body);
+    },
+  },
+  referals: {
+    list: async (page = 1, limit = 10, user_id = null) => {
+      const params = {
+        page,
+        limit,
+      };
+      if (user_id !== null) {
+        params.user_id = user_id;
+      }
+      return axiosInstance.get("/referals/referals", { params });
+    },
+    stats: async (user_id = null) => {
+      const params = user_id ? { user_id } : {};
+      return axiosInstance.get("/referals/referals/stats", { params });
+    },
+    details: async (referal_id) => {
+      return axiosInstance.get(`/referals/referals/${referal_id}/details`);
     },
   },
 };
