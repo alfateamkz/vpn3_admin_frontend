@@ -25,12 +25,14 @@ export const BroadcastComponent = () => {
         activeOnly
       );
 
-      alert(`Рассылка завершена! Отправлено: ${result.sent}, Ошибок: ${result.failed}`);
+      const resultData = result.data || result;
+      alert(`Рассылка завершена!\nВсего: ${resultData.total_users}\nОтправлено: ${resultData.sent}\nОшибок: ${resultData.failed}`);
       setText("");
       setPhotoUrl("");
     } catch (error) {
       console.error("Ошибка при рассылке:", error);
-      alert("Ошибка при отправке рассылки");
+      const errorMsg = error.response?.data?.detail || error.message || "Ошибка при отправке рассылки";
+      alert(`Ошибка: ${errorMsg}`);
     } finally {
       setLoading(false);
     }
@@ -56,12 +58,14 @@ export const BroadcastComponent = () => {
         activeOnly
       );
 
-      alert(`Рассылка с фото завершена! Отправлено: ${result.sent}, Ошибок: ${result.failed}`);
+      const resultData = result.data || result;
+      alert(`Рассылка с фото завершена!\nВсего: ${resultData.total_users}\nОтправлено: ${resultData.sent}\nОшибок: ${resultData.failed}`);
       setText("");
       setPhoto(null);
     } catch (error) {
       console.error("Ошибка при рассылке с фото:", error);
-      alert("Ошибка при отправке рассылки");
+      const errorMsg = error.response?.data?.detail || error.message || "Ошибка при отправке рассылки";
+      alert(`Ошибка: ${errorMsg}`);
     } finally {
       setLoading(false);
     }

@@ -40,12 +40,13 @@ axiosInstance.interceptors.response.use(function (response) {
     console.error('Error details:', error.response?.data)
     console.error('Error config:', error.config?.url)
     
-    // Исключаем эндпоинт refresh и login из обработки 401, чтобы избежать рекурсии
+    // Исключаем эндпоинт refresh, login и broadcast из обработки 401, чтобы избежать рекурсии
     const isRefreshEndpoint = error.config?.url?.includes('/auth/refresh')
     const isLoginEndpoint = error.config?.url?.includes('/auth/login')
+    const isBroadcastEndpoint = error.config?.url?.includes('/broadcast')
     
     // Проверяем статус код ошибки
-    if (error.response?.status === 401 && !isRefreshEndpoint && !isLoginEndpoint) {
+    if (error.response?.status === 401 && !isRefreshEndpoint && !isLoginEndpoint && !isBroadcastEndpoint) {
         const isRefreshingUpdate = Cookies.get('refresher') || false;
         const refreshToken = Cookies.get('refreshToken')
         
@@ -106,14 +107,17 @@ axiosInstance.interceptors.response.use(function (response) {
         })
     }
 
-    // Обрабатываем другие ошибки (500, 404, etc.)
-    // Не перенаправляем на авторизацию, просто отображаем ошибку
+    // Обрабатываем серверные ошибки (500+)
     if (error.response?.status >= 500) {
         console.error('Server error:', error.response.status);
-        // Серверные ошибки не должны вызывать редирект
+        console.error('Request URL:', error.config?.url);
+        // Серверные ошибки не должны вызывать редирект или очистку токенов
+        // Просто возвращаем ошибку
         return Promise.reject(error);
     }
     
+    // Для всех остальных ошибок (404, 422, etc.) просто возвращаем
+    // Не перенаправляем на авторизацию и не очищаем токены
     return Promise.reject(error);
 })
 
