@@ -87,3 +87,60 @@
     }
   }
 }
+
+.errorMessage {
+  background: #ffebee;
+  color: #c62828;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border-left: 4px solid #c62828;
+  font-family: GteDisplayBold;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.ipInfoCard {
+  background: #e3f2fd;
+  border: 1px solid #2196f3;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 15px;
+  
+  h4 {
+    color: #1976d2;
+    font-family: GteDisplayBold;
+    font-size: 16px;
+    margin: 0 0 10px 0;
+  }
+  
+  p {
+    color: #1565c0;
+    font-family: GteDisplayLight;
+    font-size: 14px;
+    margin: 8px 0;
+    line-height: 1.4;
+  }
+  
+  .ipInfoDetails {
+    margin-top: 15px;
+    
+    strong {
+      color: #1976d2;
+      font-family: GteDisplayBold;
+      font-size: 14px;
+    }
+    
+    ul {
+      margin: 8px 0 0 20px;
+      padding: 0;
+      
+      li {
+        color: #1565c0;
+        font-family: GteDisplayLight;
+        font-size: 13px;
+        margin: 4px 0;
+        line-height: 1.3;
+      }
+    }
+  }
+}

@@ -21,8 +21,17 @@ export const IPWhitelistComponent = () => {
       setTotalCount(data.total || 0);
     } catch (error) {
       console.error("Ошибка при загрузке данных:", error);
-      const errorMessage = error.response?.data?.detail || error.message || "Ошибка при загрузке списка IP";
-      alert(errorMessage);
+      
+      if (error.response?.status === 403) {
+        const errorMessage = error.response?.data?.detail || "Доступ запрещен";
+        alert(`Ошибка доступа: ${errorMessage}`);
+        // Если это ошибка IP, показываем пустой список
+        setIpList([]);
+        setTotalCount(0);
+      } else {
+        const errorMessage = error.response?.data?.detail || error.message || "Ошибка при загрузке списка IP";
+        alert(errorMessage);
+      }
     } finally {
       setLoading(false);
     }
@@ -185,6 +194,13 @@ export const IPWhitelistComponent = () => {
           ))}
         </tbody>
       </table>
+
+      {ipList.length === 0 && !loading && (
+        <div className="empty-state">
+          <p>📋 Список IP адресов пуст</p>
+          <p>Добавьте IP адреса в белый список для управления доступом к админ-панели</p>
+        </div>
+      )}
 
       <div className="pagination-info">
         <p>Страница {currentPage} из {Math.ceil(totalCount / limit)}</p>

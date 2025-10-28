@@ -11,6 +11,8 @@ export const AuthorizationPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isVisiblePass, setVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [showIPInfo, setShowIPInfo] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -22,6 +24,9 @@ export const AuthorizationPage = () => {
   };
 
   const handleSubmit = async () => {
+    setErrorMessage("");
+    setShowIPInfo(false);
+    
     await apiRequests.auth
       .login({
         email,
@@ -34,9 +39,14 @@ export const AuthorizationPage = () => {
         navigate("/stats");
       })
       .catch((e) => {
-        const detail = e.response.data.detail;
-        if (e.response.code === 400) {
-          alert(detail);
+        const detail = e.response?.data?.detail || "Ошибка входа";
+        
+        if (e.response?.status === 403 && detail.includes("IP адрес")) {
+          // Показываем информацию об IP
+          setShowIPInfo(true);
+          setErrorMessage(detail);
+        } else {
+          setErrorMessage(detail);
         }
       });
   };
@@ -75,6 +85,28 @@ export const AuthorizationPage = () => {
           <button onClick={handleSubmit} className={"blue-button"}>
             Войти
           </button>
+
+          {errorMessage && (
+            <div className={styles.errorMessage}>
+              {errorMessage}
+            </div>
+          )}
+
+          {showIPInfo && (
+            <div className={styles.ipInfoCard}>
+              <h4>🔐 Информация о доступе</h4>
+              <p>Ваш IP адрес не находится в белом списке администраторов.</p>
+              <p>Для получения доступа обратитесь к администратору системы.</p>
+              <div className={styles.ipInfoDetails}>
+                <strong>Что это означает:</strong>
+                <ul>
+                  <li>Система использует IP-белый список для безопасности</li>
+                  <li>Только IP-адреса из списка могут получить доступ к админ-панели</li>
+                  <li>Ваш IP должен быть добавлен администратором</li>
+                </ul>
+              </div>
+            </div>
+          )}
 
           {/* <Link className={styles.resetPassword} to={"/reset_password"}>
             Сбросить пароль
