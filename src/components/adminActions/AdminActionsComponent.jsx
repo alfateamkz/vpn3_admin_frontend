@@ -16,13 +16,25 @@ export const AdminActionsComponent = () => {
 
   const fetchData = async () => {
     setLoading(true);
+    console.log("🔄 Загружаем логи действий администраторов...");
     try {
-      const data = await apiRequests.adminActions.list(currentPage, limit, filters);
+      const response = await apiRequests.adminActions.list(currentPage, limit, filters);
+      console.log("✅ Логи действий получены:", response);
+      
+      // Данные находятся в response.data.data, а не в response.data
+      const data = response.data.data || response.data;
+      console.log("📊 Список действий:", data.actions);
+      console.log("📈 Общее количество:", data.total);
+      
       setActions(data.actions || []);
       setTotalCount(data.total || 0);
     } catch (error) {
-      console.error("Ошибка при загрузке логов:", error);
+      console.error("❌ Ошибка при загрузке логов:", error);
+      console.error("📋 Детали ошибки:", error.response?.data);
+      console.error("🔢 Статус ошибки:", error.response?.status);
       alert("Ошибка при загрузке логов действий");
+      setActions([]);
+      setTotalCount(0);
     } finally {
       setLoading(false);
     }
