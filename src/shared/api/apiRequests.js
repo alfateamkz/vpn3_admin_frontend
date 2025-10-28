@@ -217,9 +217,15 @@ export const apiRequests = {
   },
   ipWhitelist: {
     add: async (ipAddress, description) => {
-      return axiosInstance.post("/ip-whitelist/add", {
-        ip_address: ipAddress,
-        description,
+      const formData = new FormData();
+      formData.append("ip_address", ipAddress);
+      if (description) {
+        formData.append("description", description);
+      }
+      return axiosInstance.post("/ip-whitelist/add", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
     },
     remove: async (ipAddress) => {
@@ -231,8 +237,12 @@ export const apiRequests = {
       });
     },
     toggle: async (ipAddress, isActive) => {
-      return axiosInstance.put(`/ip-whitelist/toggle/${ipAddress}`, {
-        is_active: isActive,
+      const formData = new FormData();
+      formData.append("is_active", isActive);
+      return axiosInstance.put(`/ip-whitelist/toggle/${ipAddress}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
     },
     check: async (ipAddress) => {

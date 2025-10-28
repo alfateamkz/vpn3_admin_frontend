@@ -49,10 +49,10 @@ export const BroadcastComponent = () => {
       return;
     }
 
-    // Проверяем размер файла (максимум 10MB)
-    const maxSize = 10 * 1024 * 1024; // 10MB
+    // Проверяем размер файла (максимум 5MB для безопасности)
+    const maxSize = 5 * 1024 * 1024; // 5MB
     if (photo.size > maxSize) {
-      alert(`Файл слишком большой! Максимальный размер: ${(maxSize / 1024 / 1024).toFixed(0)}MB`);
+      alert(`Файл слишком большой! Максимальный размер: ${(maxSize / 1024 / 1024).toFixed(0)}MB. Пожалуйста, сожмите изображение.`);
       return;
     }
 
@@ -71,7 +71,13 @@ export const BroadcastComponent = () => {
       setPhoto(null);
     } catch (error) {
       console.error("Ошибка при рассылке с фото:", error);
-      const errorMsg = error.response?.data?.detail || error.message || "Ошибка при отправке рассылки";
+      let errorMsg = error.response?.data?.detail || error.message || "Ошибка при отправке рассылки";
+      
+      // Специальная обработка ошибки 413
+      if (error.response?.status === 413) {
+        errorMsg = "Файл слишком большой! Максимальный размер на сервере: 20MB. Выберите файл меньшего размера или сожмите изображение.";
+      }
+      
       alert(`Ошибка: ${errorMsg}`);
     } finally {
       setLoading(false);
