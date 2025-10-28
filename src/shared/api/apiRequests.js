@@ -236,6 +236,9 @@ export const apiRequests = {
         params: { page, limit },
       });
     },
+    publicList: async () => {
+      return axiosInstance.get("/ip-whitelist/public/list");
+    },
     toggle: async (ipAddress, isActive) => {
       const formData = new FormData();
       formData.append("is_active", isActive);

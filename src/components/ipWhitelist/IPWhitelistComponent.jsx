@@ -14,24 +14,22 @@ export const IPWhitelistComponent = () => {
 
   const fetchData = async () => {
     setLoading(true);
+    console.log("🔄 Загружаем данные IP whitelist...");
     try {
       const data = await apiRequests.ipWhitelist.list(currentPage, limit);
-      console.log("IP Whitelist data:", data); // Отладочная информация
+      console.log("✅ IP Whitelist data получены:", data);
+      console.log("📊 IP список:", data.ips);
+      console.log("📈 Общее количество:", data.total);
       setIpList(data.ips || []);
       setTotalCount(data.total || 0);
     } catch (error) {
-      console.error("Ошибка при загрузке данных:", error);
-      
-      if (error.response?.status === 403) {
-        const errorMessage = error.response?.data?.detail || "Доступ запрещен";
-        alert(`Ошибка доступа: ${errorMessage}`);
-        // Если это ошибка IP, показываем пустой список
-        setIpList([]);
-        setTotalCount(0);
-      } else {
-        const errorMessage = error.response?.data?.detail || error.message || "Ошибка при загрузке списка IP";
-        alert(errorMessage);
-      }
+      console.error("❌ Ошибка при загрузке данных:", error);
+      console.error("📋 Детали ошибки:", error.response?.data);
+      console.error("🔢 Статус ошибки:", error.response?.status);
+      const errorMessage = error.response?.data?.detail || error.message || "Ошибка при загрузке списка IP";
+      alert(errorMessage);
+      setIpList([]);
+      setTotalCount(0);
     } finally {
       setLoading(false);
     }

@@ -1,5 +1,5 @@
 import styles from "./authorization.module.scss";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { apiRequests } from "../../shared/api/apiRequests";
 import Cookies from "js-cookie";
 import { setUserData } from "../../shared/store/main";
@@ -13,6 +13,7 @@ export const AuthorizationPage = () => {
   const [isVisiblePass, setVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [showIPInfo, setShowIPInfo] = useState(false);
+  const [whitelistedIPs, setWhitelistedIPs] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -22,6 +23,20 @@ export const AuthorizationPage = () => {
     //   setEmail(value);
     // }
   };
+
+  // Загружаем список разрешенных IP при загрузке страницы
+  useEffect(() => {
+    const loadWhitelistedIPs = async () => {
+      try {
+        const data = await apiRequests.ipWhitelist.publicList();
+        setWhitelistedIPs(data.ips || []);
+      } catch (error) {
+        console.log("Не удалось загрузить список IP:", error);
+      }
+    };
+    
+    loadWhitelistedIPs();
+  }, []);
 
   const handleSubmit = async () => {
     setErrorMessage("");
@@ -97,6 +112,21 @@ export const AuthorizationPage = () => {
               <h4>🔐 Информация о доступе</h4>
               <p>Ваш IP адрес не находится в белом списке администраторов.</p>
               <p>Для получения доступа обратитесь к администратору системы.</p>
+              
+              {whitelistedIPs.length > 0 && (
+                <div className={styles.allowedIPs}>
+                  <strong>Разрешенные IP адреса:</strong>
+                  <ul>
+                    {whitelistedIPs.map((ip, index) => (
+                      <li key={index}>
+                        {ip.ip_address}
+                        {ip.description && <span> - {ip.description}</span>}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              
               <div className={styles.ipInfoDetails}>
                 <strong>Что это означает:</strong>
                 <ul>

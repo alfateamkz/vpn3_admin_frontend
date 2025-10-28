@@ -143,4 +143,42 @@
       }
     }
   }
+
+  .allowedIPs {
+    margin: 15px 0;
+    padding: 12px;
+    background: #f0f8ff;
+    border-radius: 6px;
+    border-left: 3px solid #2196f3;
+    
+    strong {
+      color: #1976d2;
+      font-family: GteDisplayBold;
+      font-size: 14px;
+      display: block;
+      margin-bottom: 8px;
+    }
+    
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      
+      li {
+        color: #1565c0;
+        font-family: GteDisplayLight;
+        font-size: 13px;
+        margin: 4px 0;
+        padding: 4px 8px;
+        background: white;
+        border-radius: 4px;
+        border: 1px solid #e3f2fd;
+        
+        span {
+          color: #666;
+          font-style: italic;
+        }
+      }
+    }
+  }
 }
