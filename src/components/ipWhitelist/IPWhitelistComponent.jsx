@@ -16,10 +16,14 @@ export const IPWhitelistComponent = () => {
     setLoading(true);
     console.log("🔄 Загружаем данные IP whitelist...");
     try {
-      const data = await apiRequests.ipWhitelist.list(currentPage, limit);
-      console.log("✅ IP Whitelist data получены:", data);
+      const response = await apiRequests.ipWhitelist.list(currentPage, limit);
+      console.log("✅ IP Whitelist response получен:", response);
+      
+      // Данные находятся в response.data.data, а не в response.data
+      const data = response.data.data || response.data;
       console.log("📊 IP список:", data.ips);
       console.log("📈 Общее количество:", data.total);
+      
       setIpList(data.ips || []);
       setTotalCount(data.total || 0);
     } catch (error) {
