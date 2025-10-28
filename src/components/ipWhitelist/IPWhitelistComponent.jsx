@@ -16,6 +16,7 @@ export const IPWhitelistComponent = () => {
     setLoading(true);
     try {
       const data = await apiRequests.ipWhitelist.list(currentPage, limit);
+      console.log("IP Whitelist data:", data); // Отладочная информация
       setIpList(data.ips || []);
       setTotalCount(data.total || 0);
     } catch (error) {
@@ -45,7 +46,9 @@ export const IPWhitelistComponent = () => {
       setIsModalOpen(false);
       setIpAddress("");
       setDescription("");
-      fetchData();
+      // Принудительно обновляем данные
+      setCurrentPage(1);
+      await fetchData();
     } catch (error) {
       console.error("Ошибка при добавлении IP:", error);
       const errorMessage = error.response?.data?.detail || error.message || "Ошибка при добавлении IP";
