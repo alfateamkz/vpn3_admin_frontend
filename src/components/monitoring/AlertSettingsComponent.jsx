@@ -44,11 +44,11 @@ const AlertSettingsComponent = () => {
     setSettings({ ...settings, [key]: value });
   };
 
-  const handleToggleAdmin = (adminId) => {
+  const handleToggleAdmin = (tgId) => {
     const currentIds = settings?.notification_admin_ids || [];
-    const newIds = currentIds.includes(adminId)
-      ? currentIds.filter((id) => id !== adminId)
-      : [...currentIds, adminId];
+    const newIds = currentIds.includes(tgId)
+      ? currentIds.filter((id) => id !== tgId)
+      : [...currentIds, tgId];
     handleChange("notification_admin_ids", newIds);
   };
 
@@ -293,31 +293,87 @@ const AlertSettingsComponent = () => {
           </div>
 
           <div className={styles.adminList}>
-            <label>Администраторы для получения уведомлений:</label>
-            <div className={styles.adminCheckboxes}>
-              {admins.map((admin) => {
-                const adminId = admin._id ? String(admin._id) : admin.id;
-                return (
-                  <label key={adminId} className={styles.adminCheckbox}>
-                    <input
-                      type="checkbox"
-                      checked={
-                        settings.notification_admin_ids?.includes(adminId) || false
-                      }
-                      onChange={() => handleToggleAdmin(adminId)}
-                      disabled={!settings.telegram_notifications_enabled}
-                    />
-                    <span>
-                      {admin.full_name || admin.email || adminId}
-                      {admin.tg_id && ` (TG: ${admin.tg_id})`}
-                    </span>
-                  </label>
-                );
-              })}
-            </div>
-            {admins.length === 0 && (
-              <p className={styles.noAdmins}>Администраторы не найдены</p>
+            <label>Администраторы для получения уведомлений (Telegram ID):</label>
+            
+            {/* Список администраторов из БД с Telegram ID */}
+            {admins.filter((admin) => admin.tg_id).length > 0 && (
+              <div className={styles.adminCheckboxes}>
+                {admins
+                  .filter((admin) => admin.tg_id)
+                  .map((admin) => {
+                    const tgId = String(admin.tg_id);
+                    return (
+                      <label key={tgId} className={styles.adminCheckbox}>
+                        <input
+                          type="checkbox"
+                          checked={
+                            settings.notification_admin_ids?.includes(tgId) || false
+                          }
+                          onChange={() => handleToggleAdmin(tgId)}
+                          disabled={!settings.telegram_notifications_enabled}
+                        />
+                        <span>
+                          {admin.full_name || admin.email || `Admin ${admin._id || admin.id}`}
+                          <span className={styles.tgId}> (TG ID: {tgId})</span>
+                        </span>
+                      </label>
+                    );
+                  })}
+              </div>
             )}
+            
+            {/* Показываем Telegram ID, которые были добавлены вручную, но нет в списке администраторов */}
+            {settings.notification_admin_ids && settings.notification_admin_ids.length > 0 && (
+              <div className={styles.selectedIds}>
+                {settings.notification_admin_ids
+                  .filter((tgId) => {
+                    // Проверяем, есть ли этот Telegram ID среди администраторов
+                    return !admins.some((admin) => String(admin.tg_id) === String(tgId));
+                  })
+                  .map((tgId) => (
+                    <div key={tgId} className={styles.selectedIdItem}>
+                      <span className={styles.tgId}>TG ID: {tgId}</span>
+                      <button
+                        type="button"
+                        onClick={() => handleToggleAdmin(tgId)}
+                        className={styles.removeButton}
+                        disabled={!settings.telegram_notifications_enabled}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+              </div>
+            )}
+            
+            {admins.filter((admin) => admin.tg_id).length === 0 && 
+             (!settings.notification_admin_ids || settings.notification_admin_ids.length === 0) && (
+              <p className={styles.noAdmins}>
+                Нет администраторов с Telegram ID. Добавьте Telegram ID в профиль администратора или введите вручную ниже.
+              </p>
+            )}
+            {/* Поле для ручного ввода Telegram ID */}
+            <div className={styles.manualInput}>
+              <label>
+                Добавить Telegram ID вручную:
+                <input
+                  type="text"
+                  placeholder="Например: 123456789"
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter" && e.target.value) {
+                      const tgId = e.target.value.trim();
+                      const currentIds = settings?.notification_admin_ids || [];
+                      if (!currentIds.includes(tgId) && /^\d+$/.test(tgId)) {
+                        handleChange("notification_admin_ids", [...currentIds, tgId]);
+                        e.target.value = "";
+                      }
+                    }
+                  }}
+                  disabled={!settings.telegram_notifications_enabled}
+                />
+              </label>
+              <small>Введите Telegram ID и нажмите Enter для добавления</small>
+            </div>
           </div>
         </div>
 

@@ -10,6 +10,7 @@ const menuItems = [
   { text: "Подписки", path: "/subs" },
   { text: "Пользователи", path: "/users" },
   { text: "Рефералы", path: "/referals" },
+  { text: "Платежи", path: "/payment-logs" },
   { text: "Устройства", path: "/devices" },
   { text: "Рассылка", path: "/broadcast" },
   { text: "IP Белый список", path: "/ip-whitelist" },

@@ -167,6 +167,13 @@ export const apiRequests = {
     log: async (logId) => {
       return axiosInstance.get(`/payments/logs/${logId}`);
     },
+    refund: async (orderId, paymentId, amount = null) => {
+      return axiosInstance.post("/payments/refund", {
+        order_id: orderId,
+        payment_id: paymentId,
+        amount: amount,
+      });
+    },
   },
   settings: {
     all: async () => {

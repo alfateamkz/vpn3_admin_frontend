@@ -133,6 +133,12 @@
       span {
         font-size: 14px;
         color: #666;
+
+        .tgId {
+          font-weight: 600;
+          color: #6db1f3;
+          font-family: monospace;
+        }
       }
 
       &:has(input:disabled) {
@@ -146,6 +152,96 @@
       color: #999;
       font-size: 14px;
       text-align: center;
+    }
+
+    .selectedIds {
+      margin-top: 16px;
+      padding: 12px;
+      background: #f0f7ff;
+      border: 1px solid #6db1f3;
+      border-radius: 6px;
+
+      .selectedIdItem {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px;
+        margin-bottom: 6px;
+        background: #fff;
+        border-radius: 4px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        .tgId {
+          font-family: monospace;
+          font-weight: 600;
+          color: #6db1f3;
+        }
+
+        .removeButton {
+          padding: 4px 8px;
+          background: #f44336;
+          color: #fff;
+          border: none;
+          border-radius: 4px;
+          font-size: 12px;
+          cursor: pointer;
+          transition: background-color 0.2s;
+
+          &:hover:not(:disabled) {
+            background: #d32f2f;
+          }
+
+          &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+          }
+        }
+      }
+    }
+
+    .manualInput {
+      margin-top: 16px;
+      padding: 12px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+
+      label {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #333;
+
+        input[type="text"] {
+          padding: 8px 12px;
+          border: 1px solid #ddd;
+          border-radius: 6px;
+          font-size: 14px;
+          font-family: monospace;
+
+          &:focus {
+            outline: none;
+            border-color: #6db1f3;
+          }
+
+          &:disabled {
+            background: #f5f5f5;
+            cursor: not-allowed;
+            opacity: 0.6;
+          }
+        }
+
+        small {
+          font-size: 12px;
+          color: #999;
+          font-weight: normal;
+        }
+      }
     }
   }
 

@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { PaginationControls } from "../pagination/PaginationComponent";
 import { PaymentsTable } from "../payments/PaymentsComponent";
 import { MetricsComponent } from "./MetricsComponent";
-import PaymentLogsComponent from "../payments/PaymentLogsComponent";
 
 import "./StatsComponent.scss";
 
@@ -59,20 +58,10 @@ export const StatsTable = ({ getData, getMetricsData }) => {
         >
           Метрики (DAU/WAU/MAU)
         </button>
-        <button
-          className={activeTab === "logs" ? "active" : ""}
-          onClick={() => setActiveTab("logs")}
-        >
-          Логи платежей
-        </button>
       </div>
 
       {activeTab === "metrics" && getMetricsData && (
         <MetricsComponent getMetrics={getMetricsData} />
-      )}
-
-      {activeTab === "logs" && (
-        <PaymentLogsComponent />
       )}
 
       {activeTab === "stats" && (
