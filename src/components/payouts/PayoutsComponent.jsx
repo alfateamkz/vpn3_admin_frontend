@@ -30,6 +30,7 @@ const PayoutsComponent = () => {
 
   useEffect(() => {
     fetchPayouts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, limit, statusFilter]);
 
   const fetchPayouts = async () => {
@@ -52,7 +53,7 @@ const PayoutsComponent = () => {
   };
 
   const handleApprove = async (payoutId) => {
-    if (!confirm("Одобрить заявку на вывод?")) {
+    if (!window.confirm("Одобрить заявку на вывод?")) {
       return;
     }
 
@@ -78,7 +79,7 @@ const PayoutsComponent = () => {
       return;
     }
 
-    if (!confirm("Отклонить заявку на вывод?")) {
+    if (!window.confirm("Отклонить заявку на вывод?")) {
       return;
     }
 

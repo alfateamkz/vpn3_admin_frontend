@@ -1,13 +1,17 @@
-import React from "react";
-import LayoutPage from "../../components/layout/LayoutPage";
+import { Outlet } from "react-router-dom";
+import { SideBar } from "../../components/sidebar/SidebarComponent";
 import PayoutsComponent from "../../components/payouts/PayoutsComponent";
 
-const PayoutsPage = () => {
+export const PayoutsPage = () => {
   return (
-    <LayoutPage>
-      <PayoutsComponent />
-    </LayoutPage>
+    <>
+      <Outlet />
+      <div style={{ display: "flex" }}>
+        <SideBar />
+        <div className="content">
+          <PayoutsComponent />
+        </div>
+      </div>
+    </>
   );
 };
-
-export default PayoutsPage;

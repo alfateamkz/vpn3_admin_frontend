@@ -16,7 +16,7 @@ import { IPWhitelistPage } from "./pages/ipWhitelist/ipWhitelist.jsx";
 import { AdminActionsPage } from "./pages/adminActions/adminActions.jsx";
 import { MonitoringPage } from "./pages/monitoring/monitoring.jsx";
 import { PaymentLogsPage } from "./pages/paymentLogs/paymentLogs.jsx";
-import PayoutsPage from "./pages/payouts/payouts.jsx";
+import { PayoutsPage } from "./pages/payouts/payouts.jsx";
 
 import LayoutPage from "./pages/Layout.jsx";
 
