@@ -14,6 +14,7 @@ const menuItems = [
   { text: "Рассылка", path: "/broadcast" },
   { text: "IP Белый список", path: "/ip-whitelist" },
   { text: "Логи действий", path: "/admin-actions" },
+  { text: "Мониторинг", path: "/monitoring" },
   { text: "Настройки", path: "/settings" },
   { text: "Выход", path: "/auth" },
 ];

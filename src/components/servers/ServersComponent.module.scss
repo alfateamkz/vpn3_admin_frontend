@@ -9,24 +9,44 @@
   .serversHeader {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 20px 0;
 
-    // p {
-    //   margin: none;
-    //   padding: none;
-    // }
+    p {
+      margin: 0;
+      padding: 0;
+    }
+
+    .headerButtons {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
 
     button {
-      width: 15%;
-      padding: 14px 0;
+      padding: 10px 20px;
       text-align: center;
-      color: #000;
+      color: #fff;
       background: #6db1f3;
-      font-size: 16px;
-      line-height: 16px;
-      font-family: GteDisplayBold;
+      font-size: 14px;
+      line-height: 1.4;
+      font-family: inherit;
+      font-weight: 600;
       border-radius: 30px;
-      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 0.3s;
+      min-width: fit-content;
+
+      &:hover:not(:disabled) {
+        background: #5a9fd9;
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
     }
   }
 

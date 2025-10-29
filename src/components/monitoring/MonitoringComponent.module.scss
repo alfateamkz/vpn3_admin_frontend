@@ -1,0 +1,38 @@
+.monitoringContainer {
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+
+  .tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+    border-bottom: 2px solid #e0e0e0;
+
+    .tab {
+      padding: 12px 24px;
+      background: transparent;
+      border: none;
+      border-bottom: 3px solid transparent;
+      font-size: 16px;
+      font-weight: 600;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-bottom: -2px;
+
+      &:hover {
+        color: #6db1f3;
+      }
+
+      &.active {
+        color: #6db1f3;
+        border-bottom-color: #6db1f3;
+      }
+    }
+  }
+
+  .content {
+    width: 100%;
+  }
+}

@@ -7,6 +7,11 @@ export const apiRequests = {
       return axiosInstance.post("/auth/login", body);
     },
   },
+  admins: {
+    list: async () => {
+      return axiosInstance.get("/auth/admins");
+    },
+  },
   stats: {
     orders: async (page, limit, type) => {
       return axiosInstance.get("/stats/orders", {
@@ -261,6 +266,33 @@ export const apiRequests = {
     },
     check: async (ipAddress) => {
       return axiosInstance.get(`/ip-whitelist/check/${ipAddress}`);
+    },
+  },
+  monitoring: {
+    alerts: async (page = 1, limit = 50, status = null, alertType = null, severity = null) => {
+      const params = { page, limit };
+      if (status) params.status = status;
+      if (alertType) params.alert_type = alertType;
+      if (severity) params.severity = severity;
+      return axiosInstance.get("/monitoring/alerts", { params });
+    },
+    alert: async (alertId) => {
+      return axiosInstance.get(`/monitoring/alerts/${alertId}`);
+    },
+    resolveAlert: async (alertId) => {
+      return axiosInstance.post(`/monitoring/alerts/${alertId}/resolve`);
+    },
+    dismissAlert: async (alertId) => {
+      return axiosInstance.post(`/monitoring/alerts/${alertId}/dismiss`);
+    },
+    settings: async () => {
+      return axiosInstance.get("/monitoring/settings");
+    },
+    updateSettings: async (settings) => {
+      return axiosInstance.put("/monitoring/settings", settings);
+    },
+    check: async () => {
+      return axiosInstance.post("/monitoring/check");
     },
   },
 };

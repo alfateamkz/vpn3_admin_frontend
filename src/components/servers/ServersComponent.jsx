@@ -156,15 +156,14 @@ const ServersTable = ({ getServers, onEdit, onDelete, onSave, onCreate }) => {
       <h2>Серверы</h2>
       <div className={styles.serversHeader}>
         <p>Всего записей: {totalCount}</p>
-        <div style={{ display: "flex", gap: "10px" }}>
+        <div className={styles.headerButtons}>
           <button
             onClick={handleRefreshStats}
-            className="blue-button"
             disabled={refreshingStats}
           >
             {refreshingStats ? "Обновление..." : "🔄 Обновить статистику"}
           </button>
-          <button onClick={handleOpenModal} className="blue-button">
+          <button onClick={handleOpenModal}>
             Добавить
           </button>
         </div>

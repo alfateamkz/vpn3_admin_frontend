@@ -14,6 +14,7 @@ import { DevicesPage } from "./pages/devices/devices.jsx";
 import { BroadcastPage } from "./pages/broadcast/broadcast.jsx";
 import { IPWhitelistPage } from "./pages/ipWhitelist/ipWhitelist.jsx";
 import { AdminActionsPage } from "./pages/adminActions/adminActions.jsx";
+import { MonitoringPage } from "./pages/monitoring/monitoring.jsx";
 
 import LayoutPage from "./pages/Layout.jsx";
 
@@ -33,6 +34,7 @@ function App() {
           <Route path="/broadcast" element={<BroadcastPage />} />
           <Route path="/ip-whitelist" element={<IPWhitelistPage />} />
           <Route path="/admin-actions" element={<AdminActionsPage />} />
+          <Route path="/monitoring" element={<MonitoringPage />} />
           <Route path="/settings" element={<SettingsPage />} />
         </Route>
         <Route path="/auth" element={<LoginPage />} />

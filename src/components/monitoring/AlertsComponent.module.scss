@@ -1,0 +1,243 @@
+.alertsContainer {
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+
+  .alertsHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    h2 {
+      margin: 0;
+    }
+
+    .headerActions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .checkButton {
+      padding: 10px 20px;
+      background: #6db1f3;
+      color: #fff;
+      border: none;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 0.3s;
+
+      &:hover:not(:disabled) {
+        background: #5a9fd9;
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  .filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+
+    select {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+      background: #fff;
+      cursor: pointer;
+
+      &:focus {
+        outline: none;
+        border-color: #6db1f3;
+      }
+    }
+  }
+
+  .loading,
+  .emptyState {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 16px;
+  }
+
+  .alertsList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .alertCard {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s;
+
+    &:hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .alertHeader {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 10px;
+
+      .alertTitle {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex: 1;
+
+        .severityBadge {
+          padding: 4px 12px;
+          border-radius: 20px;
+          color: #fff;
+          font-size: 12px;
+          font-weight: 600;
+          white-space: nowrap;
+        }
+
+        h3 {
+          margin: 0;
+          font-size: 18px;
+          font-weight: 600;
+          color: #333;
+        }
+      }
+
+      .alertMeta {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+
+        .alertType {
+          padding: 4px 12px;
+          background: #f5f5f5;
+          border-radius: 20px;
+          font-size: 12px;
+          color: #666;
+        }
+
+        .statusBadge {
+          padding: 4px 12px;
+          border-radius: 20px;
+          font-size: 12px;
+          font-weight: 600;
+
+          &[data-status="active"] {
+            background: #fff3cd;
+            color: #856404;
+          }
+
+          &[data-status="resolved"] {
+            background: #d4edda;
+            color: #155724;
+          }
+
+          &[data-status="dismissed"] {
+            background: #f8d7da;
+            color: #721c24;
+          }
+        }
+      }
+    }
+
+    .alertBody {
+      margin-bottom: 16px;
+
+      p {
+        margin: 0 0 12px 0;
+        color: #666;
+        line-height: 1.6;
+      }
+
+      .alertDetails {
+        margin-top: 12px;
+        padding: 12px;
+        background: #f9f9f9;
+        border-radius: 6px;
+
+        strong {
+          display: block;
+          margin-bottom: 8px;
+          color: #333;
+        }
+
+        ul {
+          margin: 0;
+          padding-left: 20px;
+
+          li {
+            margin-bottom: 4px;
+            color: #666;
+          }
+        }
+      }
+
+      .affectedUsers {
+        margin-top: 12px;
+        padding: 8px 12px;
+        background: #e3f2fd;
+        border-radius: 6px;
+        color: #1976d2;
+        font-size: 14px;
+      }
+
+      .alertDate {
+        margin-top: 12px;
+        font-size: 12px;
+        color: #999;
+      }
+    }
+
+    .alertActions {
+      display: flex;
+      gap: 10px;
+      padding-top: 16px;
+      border-top: 1px solid #e0e0e0;
+
+      button {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .resolveButton {
+        background: #4caf50;
+        color: #fff;
+
+        &:hover {
+          background: #45a049;
+        }
+      }
+
+      .dismissButton {
+        background: #f44336;
+        color: #fff;
+
+        &:hover {
+          background: #da190b;
+        }
+      }
+    }
+  }
+}
