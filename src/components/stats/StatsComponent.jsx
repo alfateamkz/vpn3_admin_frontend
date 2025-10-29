@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { canViewPayments } from "../../shared/utils/roleUtils";
 
 import { PaginationControls } from "../pagination/PaginationComponent";
 import { PaymentsTable } from "../payments/PaymentsComponent";
@@ -75,16 +76,20 @@ export const StatsTable = ({ getData, getMetricsData }) => {
           <h3>Активные подписки</h3>
           <p>{stats.active_subs}</p>
         </div>
-        <div className="stat-item">
-          <h3>Сумма пополнений</h3>
-          <p>{stats.replenishment_amount}</p>
-        </div>
+        {canViewPayments() && (
+          <div className="stat-item">
+            <h3>Сумма пополнений</h3>
+            <p>{stats.replenishment_amount}</p>
+          </div>
+        )}
       </div>
 
-      <br />
-      <h2>Платежи</h2>
+      {canViewPayments() && (
+        <>
+          <br />
+          <h2>Платежи</h2>
 
-      <div className="filters">
+          <div className="filters">
         <button
           className={filterType === "all" ? "active" : ""}
           onClick={() => handleFilterChange("all")}
@@ -105,18 +110,18 @@ export const StatsTable = ({ getData, getMetricsData }) => {
         </button>
       </div>
 
-      <p>Всего записей: {totalCount} </p>
+          <p>Всего записей: {totalCount} </p>
 
-      <PaymentsTable payments={stats.orders} />
+          <PaymentsTable payments={stats.orders} />
 
-      <PaginationControls
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        limit={limit}
-        setLimit={setLimit}
-        totalCount={totalCount}
-      />
-      </>
+          <PaginationControls
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            limit={limit}
+            setLimit={setLimit}
+            totalCount={totalCount}
+          />
+        </>
       )}
     </div>
   );

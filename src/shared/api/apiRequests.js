@@ -11,6 +11,28 @@ export const apiRequests = {
     list: async () => {
       return axiosInstance.get("/auth/admins");
     },
+    get: async (adminId) => {
+      return axiosInstance.get(`/auth/admins/${adminId}`);
+    },
+    create: async (payload) => {
+      return axiosInstance.post("/auth/admins", payload);
+    },
+    update: async (adminId, payload) => {
+      return axiosInstance.put(`/auth/admins/${adminId}`, payload);
+    },
+    delete: async (adminId) => {
+      return axiosInstance.delete(`/auth/admins/${adminId}`);
+    },
+    roles: async () => {
+      // Возвращает список доступных ролей
+      return Promise.resolve({
+        data: [
+          { value: "admin", label: "Администратор", description: "Полный доступ ко всем функциям системы" },
+          { value: "support", label: "Саппорт", description: "Видит пользователей, может продлевать подписки, но не видит финансы" },
+          { value: "analyst", label: "Аналитик", description: "Только метрики и просмотр данных, без доступа к действиям" },
+        ]
+      });
+    },
   },
   stats: {
     orders: async (page, limit, type) => {
@@ -258,15 +280,16 @@ export const apiRequests = {
     },
   },
   broadcast: {
-    send: async (text, photoUrl, userIds, activeOnly) => {
+    send: async (text, photoUrl, userIds, activeOnly, inactive30Days = false) => {
       return axiosInstance.post("/broadcast/send", {
         text,
         photo_url: photoUrl,
         user_ids: userIds,
         active_only: activeOnly,
+        inactive_30_days: inactive30Days,
       });
     },
-    sendWithPhoto: async (text, photo, userIds, activeOnly) => {
+    sendWithPhoto: async (text, photo, userIds, activeOnly, inactive30Days = false) => {
       const formData = new FormData();
       formData.append("text", text);
       formData.append("photo", photo);
@@ -274,11 +297,48 @@ export const apiRequests = {
         userIds.forEach((id) => formData.append("user_ids", id));
       }
       formData.append("active_only", activeOnly);
+      formData.append("inactive_30_days", inactive30Days);
       return axiosInstance.post("/broadcast/send-photo", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
+    },
+  },
+  export: {
+    statistics: async () => {
+      return axiosInstance.get("/export/statistics");
+    },
+    usersCsv: async () => {
+      return axiosInstance.get("/export/users/csv", {
+        responseType: "blob",
+      });
+    },
+    ordersCsv: async () => {
+      return axiosInstance.get("/export/orders/csv", {
+        responseType: "blob",
+      });
+    },
+    paymentLogsCsv: async (logType = null) => {
+      const params = logType ? { log_type: logType } : {};
+      return axiosInstance.get("/export/payment-logs/csv", {
+        params,
+        responseType: "blob",
+      });
+    },
+    adminLogsCsv: async () => {
+      return axiosInstance.get("/export/admin-logs/csv", {
+        responseType: "blob",
+      });
+    },
+    createBackup: async () => {
+      return axiosInstance.post("/export/backup/create");
+    },
+    listBackups: async () => {
+      return axiosInstance.get("/export/backup/list");
+    },
+    restoreBackup: async (backupFilename) => {
+      return axiosInstance.post(`/export/backup/restore/${backupFilename}`);
     },
   },
   ipWhitelist: {

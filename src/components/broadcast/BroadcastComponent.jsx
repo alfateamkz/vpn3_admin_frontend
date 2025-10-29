@@ -7,6 +7,7 @@ export const BroadcastComponent = () => {
   const [photoUrl, setPhotoUrl] = useState("");
   const [photo, setPhoto] = useState(null);
   const [activeOnly, setActiveOnly] = useState(true);
+  const [inactive30Days, setInactive30Days] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -16,13 +17,20 @@ export const BroadcastComponent = () => {
       return;
     }
 
+    // Проверка взаимоисключающих фильтров
+    if (activeOnly && inactive30Days) {
+      alert("Нельзя одновременно выбрать 'Только активные пользователи' и 'Неактивные 30+ дней'");
+      return;
+    }
+
     setLoading(true);
     try {
       const result = await apiRequests.broadcast.send(
         text,
         photoUrl || null,
         selectedUsers.length > 0 ? selectedUsers : null,
-        activeOnly
+        activeOnly,
+        inactive30Days
       );
 
       const resultData = result.data || result;
@@ -56,13 +64,20 @@ export const BroadcastComponent = () => {
       return;
     }
 
+    // Проверка взаимоисключающих фильтров
+    if (activeOnly && inactive30Days) {
+      alert("Нельзя одновременно выбрать 'Только активные пользователи' и 'Неактивные 30+ дней'");
+      return;
+    }
+
     setLoading(true);
     try {
       const result = await apiRequests.broadcast.sendWithPhoto(
         text,
         photo,
         selectedUsers.length > 0 ? selectedUsers : null,
-        activeOnly
+        activeOnly,
+        inactive30Days
       );
 
       const resultData = result.data || result;
@@ -114,10 +129,30 @@ export const BroadcastComponent = () => {
             <input
               type="checkbox"
               checked={activeOnly}
-              onChange={(e) => setActiveOnly(e.target.checked)}
+              onChange={(e) => {
+                setActiveOnly(e.target.checked);
+                if (e.target.checked) setInactive30Days(false);
+              }}
             />
             Только пользователи с активной подпиской
           </label>
+        </div>
+
+        <div className="form-section">
+          <label>
+            <input
+              type="checkbox"
+              checked={inactive30Days}
+              onChange={(e) => {
+                setInactive30Days(e.target.checked);
+                if (e.target.checked) setActiveOnly(false);
+              }}
+            />
+            Пользователи без подписки за 30+ дней
+          </label>
+          <p className="hint">
+            Рассылка пользователям, которые зарегистрировались ≥30 дней назад и не оформили подписку
+          </p>
         </div>
 
         <div className="form-section">

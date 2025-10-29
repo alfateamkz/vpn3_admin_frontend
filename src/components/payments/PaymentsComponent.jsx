@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { apiRequests } from "../../shared/api/apiRequests";
+import { canViewPayments } from "../../shared/utils/roleUtils";
+import Cookies from "js-cookie";
 import "./Payments.scss";
 
 const statuses = {
@@ -14,6 +16,24 @@ export const PaymentsTable = ({ payments }) => {
   const [paymentId, setPaymentId] = useState("");
   const [refundAmount, setRefundAmount] = useState("");
   const [loading, setLoading] = useState(false);
+  
+  // Проверяем права доступа
+  const hasPaymentAccess = canViewPayments();
+  
+  // Для рефанда нужны права на редактирование платежей (только админ)
+  const canEditPayments = () => {
+    // Проверяем роль из токена
+    try {
+      const token = Cookies.get("accessToken") || localStorage.getItem("accessToken");
+      if (token) {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        return payload.role === "admin";
+      }
+    } catch (e) {
+      // Игнорируем ошибки
+    }
+    return false;
+  };
 
   const handleRefund = async () => {
     if (!refundModal) return;
@@ -53,12 +73,24 @@ export const PaymentsTable = ({ payments }) => {
 
   const canRefund = (order) => {
     // Можно рефандить только завершенные платежи типа "money", которые еще не были рефаннуты
+    // И только если есть права на редактирование платежей (только админ)
+    if (!canEditPayments()) return false;
     return (
       order.status === "FINISHED" &&
       order.type === "money" &&
       order.refund_status !== "refunded"
     );
   };
+  
+  // Если нет доступа к финансовым данным, скрываем таблицу
+  if (!hasPaymentAccess) {
+    return (
+      <div style={{ padding: "40px", textAlign: "center", color: "#666" }}>
+        <h3>У вас нет доступа к финансовым данным</h3>
+        <p>Для просмотра платежей требуется роль администратора</p>
+      </div>
+    );
+  }
 
   return (
     <>

@@ -17,6 +17,8 @@ import { AdminActionsPage } from "./pages/adminActions/adminActions.jsx";
 import { MonitoringPage } from "./pages/monitoring/monitoring.jsx";
 import { PaymentLogsPage } from "./pages/paymentLogs/paymentLogs.jsx";
 import { PayoutsPage } from "./pages/payouts/payouts.jsx";
+import { ExportPage } from "./pages/export/export.jsx";
+import { AdminsPage } from "./pages/admins/admins.jsx";
 
 import LayoutPage from "./pages/Layout.jsx";
 
@@ -39,6 +41,8 @@ function App() {
           <Route path="/monitoring" element={<MonitoringPage />} />
           <Route path="/payment-logs" element={<PaymentLogsPage />} />
           <Route path="/payouts" element={<PayoutsPage />} />
+          <Route path="/export" element={<ExportPage />} />
+          <Route path="/admins" element={<AdminsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
         </Route>
         <Route path="/auth" element={<LoginPage />} />

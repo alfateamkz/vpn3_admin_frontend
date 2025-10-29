@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./PaymentLogsComponent.module.scss";
 import { apiRequests } from "../../shared/api/apiRequests";
 import { PaginationControls } from "../pagination/PaginationComponent";
+import { canViewPayments } from "../../shared/utils/roleUtils";
 
 const logTypeLabels = {
   telegram_payment_created: "Создание Telegram платежа",
@@ -83,6 +84,19 @@ const PaymentLogsComponent = () => {
     if (!dateString) return "—";
     return new Date(dateString).toLocaleString("ru-RU");
   };
+
+  // Проверяем права доступа
+  if (!canViewPayments()) {
+    return (
+      <div className={styles.paymentLogsContainer}>
+        <h2>Логи платежей</h2>
+        <div style={{ padding: "40px", textAlign: "center", color: "#666" }}>
+          <h3>У вас нет доступа к финансовым данным</h3>
+          <p>Для просмотра логов платежей требуется роль администратора или аналитика</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.paymentLogsContainer}>
