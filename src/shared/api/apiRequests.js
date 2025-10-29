@@ -155,6 +155,18 @@ export const apiRequests = {
         params,
       });
     },
+    logs: async (page = 1, limit = 50, logType = null, paymentMethod = null, status = null, userId = null, orderId = null) => {
+      const params = { page, limit };
+      if (logType) params.log_type = logType;
+      if (paymentMethod) params.payment_method = paymentMethod;
+      if (status) params.status = status;
+      if (userId) params.user_id = userId;
+      if (orderId) params.order_id = orderId;
+      return axiosInstance.get("/payments/logs", { params });
+    },
+    log: async (logId) => {
+      return axiosInstance.get(`/payments/logs/${logId}`);
+    },
   },
   settings: {
     all: async () => {
