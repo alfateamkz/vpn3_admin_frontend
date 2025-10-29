@@ -199,14 +199,18 @@ export const apiRequests = {
       if (user_id !== null) {
         params.user_id = user_id;
       }
-      return axiosInstance.get("/referals/referals", { params });
+      const url = "/referals";
+      console.log("[apiRequests.referals.list] URL:", url);
+      return axiosInstance.get(url, { params });
     },
     stats: async (user_id = null) => {
       const params = user_id ? { user_id } : {};
-      return axiosInstance.get("/referals/referals/stats", { params });
+      const url = "/referals/stats";
+      console.log("[apiRequests.referals.stats] URL:", url);
+      return axiosInstance.get(url, { params });
     },
     details: async (referal_id) => {
-      return axiosInstance.get(`/referals/referals/${referal_id}/details`);
+      return axiosInstance.get(`/referals/${referal_id}/details`);
     },
     payout: async (user_id, amount, payment_method, details) => {
       return axiosInstance.post("/referals/payout", {

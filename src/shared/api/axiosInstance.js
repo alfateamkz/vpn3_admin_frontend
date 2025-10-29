@@ -24,6 +24,7 @@ axiosInstance.interceptors.request.use(function (config) {
     }
     
     console.log(`[API Request] ${config.method?.toUpperCase()} ${config.url}`)
+    console.log(`[API Request] Full URL: ${config.baseURL}${config.url}`)
     
     return config;
 }, function (error) {
