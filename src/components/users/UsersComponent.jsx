@@ -4,6 +4,8 @@ import "./Users.scss";
 import { PaginationControls } from "../pagination/PaginationComponent";
 import { UsersTable } from "./UsersTable";
 import { apiRequests } from "../../shared/api/apiRequests";
+import { canViewUsers } from "../../shared/utils/roleUtils";
+import { AccessDenied } from "../common/AccessDenied";
 
 export const UsersComponent = ({ getUsers, pushBalance }) => {
   const [users, setUsers] = useState([]);

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Users.scss";
+import { canEditUsers, canManageBalance } from "../../shared/utils/roleUtils";
 
 import { AddBalanceModal } from "../modals/AddBalanceModal";
 
@@ -91,25 +92,36 @@ export const UsersTable = ({ users, onAddBalance, onBlockUser, onUnblockUser, on
               <td>{new Date(user.created_at).toLocaleString()}</td>
               <td>
                 <div style={{ display: "flex", gap: "3px", flexWrap: "wrap" }}>
-                  <button onClick={() => handleAddBalance(user)} title="Пополнить баланс">
-                    💰
-                  </button>
-                  <button onClick={() => handleRemoveBalance(user)} style={{ background: "#ffc107" }} title="Списать баланс">
-                    ➖
-                  </button>
-                  {user.is_premium && (
-                    <button onClick={() => handleRemovePremium(user)} style={{ background: "#ff9800" }} title="Снять премиум">
-                      ⭐
-                    </button>
+                  {canManageBalance() && (
+                    <>
+                      <button onClick={() => handleAddBalance(user)} title="Пополнить баланс">
+                        💰
+                      </button>
+                      <button onClick={() => handleRemoveBalance(user)} style={{ background: "#ffc107" }} title="Списать баланс">
+                        ➖
+                      </button>
+                    </>
                   )}
-                  {user.blocked ? (
-                    <button onClick={() => handleUnblock(user)} style={{ background: "#28a745" }} title="Разблокировать">
-                      🔓
-                    </button>
-                  ) : (
-                    <button onClick={() => handleBlock(user)} style={{ background: "#dc3545" }} title="Заблокировать">
-                      🚫
-                    </button>
+                  {canEditUsers() && (
+                    <>
+                      {user.is_premium && (
+                        <button onClick={() => handleRemovePremium(user)} style={{ background: "#ff9800" }} title="Снять премиум">
+                          ⭐
+                        </button>
+                      )}
+                      {user.blocked ? (
+                        <button onClick={() => handleUnblock(user)} style={{ background: "#28a745" }} title="Разблокировать">
+                          🔓
+                        </button>
+                      ) : (
+                        <button onClick={() => handleBlock(user)} style={{ background: "#dc3545" }} title="Заблокировать">
+                          🚫
+                        </button>
+                      )}
+                    </>
+                  )}
+                  {!canEditUsers() && !canManageBalance() && (
+                    <span style={{ color: "#999", fontSize: "11px" }}>Нет доступа</span>
                   )}
                 </div>
               </td>
