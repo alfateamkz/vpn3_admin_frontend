@@ -99,3 +99,18 @@ export const canManageAdmins = () => {
   return checkPermission(getUserRole(), "admins.create");
 };
 
+// Проверка доступа к просмотру пользователей
+export const canViewUsers = () => {
+  return checkPermission(getUserRole(), "users.view");
+};
+
+// Проверка доступа к редактированию пользователей
+export const canEditUsers = () => {
+  return checkPermission(getUserRole(), "users.edit");
+};
+
+// Проверка доступа к управлению балансом пользователей
+export const canManageBalance = () => {
+  return checkPermission(getUserRole(), "users.balance");
+};
+
