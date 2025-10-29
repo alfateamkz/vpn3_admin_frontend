@@ -1,0 +1,292 @@
+.payoutsContainer {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  h2 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+}
+
+.filters {
+  margin-bottom: 20px;
+
+  select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background: white;
+    cursor: pointer;
+
+    &:hover {
+      border-color: #999;
+    }
+  }
+}
+
+.loading,
+.emptyState {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+.payoutsTable {
+  overflow-x: auto;
+  margin-bottom: 20px;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    thead {
+      background: #f5f5f5;
+
+      th {
+        padding: 12px;
+        text-align: left;
+        font-weight: 600;
+        color: #333;
+        border-bottom: 2px solid #ddd;
+      }
+    }
+
+    tbody {
+      tr {
+        &:hover {
+          background: #f9f9f9;
+        }
+
+        td {
+          padding: 12px;
+          border-bottom: 1px solid #eee;
+        }
+      }
+    }
+  }
+}
+
+.amount {
+  font-weight: 600;
+  color: #2196f3;
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.detailsButton,
+.approveButton {
+  padding: 6px 12px;
+  margin-right: 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.detailsButton {
+  background: #2196f3;
+  color: white;
+
+  &:hover:not(:disabled) {
+    background: #1976d2;
+  }
+}
+
+.approveButton {
+  background: #4caf50;
+  color: white;
+
+  &:hover:not(:disabled) {
+    background: #45a049;
+  }
+}
+
+.rejectButton {
+  background: #f44336;
+  color: white;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s;
+
+  &:hover:not(:disabled) {
+    background: #da190b;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.processedBy {
+  font-size: 12px;
+  color: #666;
+}
+
+.rejectionReason {
+  font-size: 12px;
+  color: #f44336;
+  cursor: help;
+}
+
+.smallText {
+  font-size: 12px;
+  color: #666;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background: white;
+  border-radius: 8px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+
+  h3 {
+    margin: 0;
+    color: #333;
+  }
+
+  button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      color: #333;
+    }
+  }
+}
+
+.modalBody {
+  padding: 20px;
+}
+
+.detailRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+
+  strong {
+    color: #333;
+    min-width: 150px;
+  }
+
+  span {
+    color: #666;
+    text-align: right;
+    flex: 1;
+  }
+}
+
+.details {
+  word-break: break-all;
+  max-width: 300px;
+}
+
+.sourceBadge {
+  display: inline-block;
+  padding: 4px 8px;
+  background: #e3f2fd;
+  color: #1976d2;
+  border-radius: 4px;
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+.modalActions {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.rejectSection {
+  display: flex;
+  gap: 8px;
+
+  .rejectInput {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+
+    &:focus {
+      outline: none;
+      border-color: #f44336;
+    }
+  }
+}
+
+.cancelButton {
+  padding: 8px 16px;
+  background: #f5f5f5;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+
+  &:hover:not(:disabled) {
+    background: #e0e0e0;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

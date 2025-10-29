@@ -18,8 +18,11 @@ export const PaymentsTable = ({ payments }) => {
   const handleRefund = async () => {
     if (!refundModal) return;
     
-    if (!paymentId.trim()) {
-      alert("Введите Payment ID от YooKassa");
+    // Если payment_id не указан, но есть сохраненный telegram_payment_id, используем его
+    const finalPaymentId = paymentId.trim() || refundModal.telegram_payment_id || null;
+    
+    if (!finalPaymentId) {
+      alert("Введите Payment ID от YooKassa или убедитесь, что он сохранен в заказе");
       return;
     }
 
@@ -28,7 +31,7 @@ export const PaymentsTable = ({ payments }) => {
       const amount = refundAmount ? parseFloat(refundAmount) : null;
       const response = await apiRequests.payments.refund(
         refundModal._id,
-        paymentId.trim(),
+        finalPaymentId || null, // Передаем null если пусто, бэкенд использует сохраненный
         amount
       );
       
@@ -119,15 +122,29 @@ export const PaymentsTable = ({ payments }) => {
               
               <div className="form-group">
                 <label>
-                  Payment ID от YooKassa <span style={{ color: "red" }}>*</span>
+                  Payment ID от YooKassa
+                  {refundModal.telegram_payment_id && (
+                    <span style={{ color: "#4CAF50", fontSize: "12px", marginLeft: "8px" }}>
+                      (будет использован сохраненный: {refundModal.telegram_payment_id.substring(0, 20)}...)
+                    </span>
+                  )}
                 </label>
                 <input
                   type="text"
                   value={paymentId}
                   onChange={(e) => setPaymentId(e.target.value)}
-                  placeholder="Например: 21740069-000f-50be-b000-0486ffbf45b0"
+                  placeholder={
+                    refundModal.telegram_payment_id
+                      ? `Оставьте пустым для использования автоматически (${refundModal.telegram_payment_id.substring(0, 20)}...)`
+                      : "Например: 21740069-000f-50be-b000-0486ffbf45b0"
+                  }
                   disabled={loading}
                 />
+                <small>
+                  {refundModal.telegram_payment_id
+                    ? "Если оставить пустым, будет использован сохраненный Payment ID из заказа. Иначе укажите Payment ID вручную."
+                    : "Введите Payment ID от YooKassa или убедитесь, что он сохранен в заказе."}
+                </small>
               </div>
               
               <div className="form-group">
@@ -148,7 +165,7 @@ export const PaymentsTable = ({ payments }) => {
               <div className="modal-actions">
                 <button
                   onClick={handleRefund}
-                  disabled={loading || !paymentId.trim()}
+                  disabled={loading || (!paymentId.trim() && !refundModal.telegram_payment_id)}
                   className="submit-button"
                 >
                   {loading ? "Обработка..." : "Создать рефанд"}
