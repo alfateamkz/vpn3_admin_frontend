@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./ServersComponent.module.scss";
 import { formatBytes } from "../../shared/utils/formatBytes";
+import { apiRequests } from "../../shared/api/apiRequests";
 
 import { CreateServerModal } from "../modals/CreateServerModal";
 import { PaginationControls } from "../pagination/PaginationComponent";
@@ -19,6 +20,7 @@ const ServersTable = ({ getServers, onEdit, onDelete, onSave, onCreate }) => {
   const [limit, setLimit] = useState(10); // Количество записей на странице
   const [totalCount, setTotalCount] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [refreshingStats, setRefreshingStats] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,13 +28,55 @@ const ServersTable = ({ getServers, onEdit, onDelete, onSave, onCreate }) => {
         const data = await getServers(currentPage, limit);
         setServers(data); // Обновляем состояние серверов
         setTotalCount(data.count);
+        
+        // Автоматически запускаем обновление статистики в фоне
+        refreshStatsInBackground(data.documents);
       } catch (error) {
         console.error("Ошибка при загрузке данных:", error);
       }
     };
 
     fetchData();
-  }, [currentPage, limit, getServers]); // Зависимости useEffec
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage, limit]); // Зависимости useEffec
+
+  // Обновление статистики в фоне
+  const refreshStatsInBackground = async (serversList) => {
+    // Обновляем статистику только для серверов без кэша или с устаревшими данными
+    const serversToUpdate = serversList.filter(
+      (server) =>
+        server.status === "actived" &&
+        (!server.inbound || server.stats_stale)
+    );
+
+    if (serversToUpdate.length > 0) {
+      try {
+        // Запускаем обновление в фоне (не ждем ответа)
+        apiRequests.servers.refreshStats(null, false).catch((err) => {
+          console.error("Ошибка обновления статистики:", err);
+        });
+      } catch (error) {
+        console.error("Ошибка запуска обновления статистики:", error);
+      }
+    }
+  };
+
+  // Ручное обновление статистики
+  const handleRefreshStats = async () => {
+    setRefreshingStats(true);
+    try {
+      await apiRequests.servers.refreshStats(null, true);
+      // Обновляем данные через небольшую задержку
+      setTimeout(async () => {
+        const data = await getServers(currentPage, limit);
+        setServers(data);
+        setRefreshingStats(false);
+      }, 2000);
+    } catch (error) {
+      console.error("Ошибка обновления статистики:", error);
+      setRefreshingStats(false);
+    }
+  };
 
   // Обработка редактирования строки
   const handleEdit = (index, server) => {
@@ -112,9 +156,18 @@ const ServersTable = ({ getServers, onEdit, onDelete, onSave, onCreate }) => {
       <h2>Серверы</h2>
       <div className={styles.serversHeader}>
         <p>Всего записей: {totalCount}</p>
-        <button onClick={handleOpenModal} className="blue-button">
-          Добавить
-        </button>
+        <div style={{ display: "flex", gap: "10px" }}>
+          <button
+            onClick={handleRefreshStats}
+            className="blue-button"
+            disabled={refreshingStats}
+          >
+            {refreshingStats ? "Обновление..." : "🔄 Обновить статистику"}
+          </button>
+          <button onClick={handleOpenModal} className="blue-button">
+            Добавить
+          </button>
+        </div>
       </div>
       <table className={styles.serversTable}>
         <thead>
@@ -208,10 +261,42 @@ const ServersTable = ({ getServers, onEdit, onDelete, onSave, onCreate }) => {
                 )}
               </td>
               <td>
-                {server.inbound?.up ? formatBytes(server.inbound.up) : ""}
+                {server.inbound?.up ? (
+                  <span
+                    title={
+                      server.stats_stale
+                        ? "Данные могут быть устаревшими"
+                        : ""
+                    }
+                    style={{
+                      opacity: server.stats_stale ? 0.6 : 1,
+                    }}
+                  >
+                    {formatBytes(server.inbound.up)}
+                    {server.stats_stale && " ⚠️"}
+                  </span>
+                ) : (
+                  <span style={{ color: "#999" }}>—</span>
+                )}
               </td>
               <td>
-                {server.inbound?.down ? formatBytes(server.inbound.down) : ""}
+                {server.inbound?.down ? (
+                  <span
+                    title={
+                      server.stats_stale
+                        ? "Данные могут быть устаревшими"
+                        : ""
+                    }
+                    style={{
+                      opacity: server.stats_stale ? 0.6 : 1,
+                    }}
+                  >
+                    {formatBytes(server.inbound.down)}
+                    {server.stats_stale && " ⚠️"}
+                  </span>
+                ) : (
+                  <span style={{ color: "#999" }}>—</span>
+                )}
               </td>
               <td>
                 {editableRow === index ? (

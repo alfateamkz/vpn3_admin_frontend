@@ -50,6 +50,17 @@ export const apiRequests = {
     delete: async (server_id) => {
       return axiosInstance.delete(`/servers/delete/${server_id}`);
     },
+    getStats: async (server_id) => {
+      return axiosInstance.get(`/servers/stats/${server_id}`);
+    },
+    refreshStats: async (server_id = null, force = false) => {
+      return axiosInstance.post("/servers/stats/refresh", null, {
+        params: {
+          server_id: server_id || undefined,
+          force: force,
+        },
+      });
+    },
   },
   subs: {
     all: async (page, limit) => {
