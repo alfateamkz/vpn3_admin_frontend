@@ -208,6 +208,29 @@ export const apiRequests = {
     details: async (referal_id) => {
       return axiosInstance.get(`/referals/referals/${referal_id}/details`);
     },
+    payout: async (user_id, amount, payment_method, details) => {
+      return axiosInstance.post("/referals/payout", {
+        user_id,
+        amount,
+        payment_method,
+        details,
+      });
+    },
+    payouts: async (status = "all", page = 1, limit = 10) => {
+      const params = { page, limit };
+      if (status !== "all") {
+        params.status = status;
+      }
+      return axiosInstance.get("/referals/payouts", { params });
+    },
+    approvePayout: async (payout_id) => {
+      return axiosInstance.put(`/referals/payouts/${payout_id}/approve`);
+    },
+    rejectPayout: async (payout_id, reason = "Причина не указана") => {
+      return axiosInstance.put(`/referals/payouts/${payout_id}/reject`, null, {
+        params: { reason },
+      });
+    },
   },
   devices: {
     list: async (user_id = null, page = 1, limit = 50) => {

@@ -43,7 +43,7 @@ const PayoutsComponent = () => {
       );
       const data = response.data;
       setPayouts(data.payouts || []);
-      setTotalCount(data.total || 0);
+      setTotalCount(data.count || data.total || 0);
     } catch (error) {
       console.error("Ошибка при загрузке заявок на вывод:", error);
       alert("Ошибка при загрузке заявок на вывод");
