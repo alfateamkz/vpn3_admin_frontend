@@ -67,60 +67,62 @@ export const StatsTable = ({ getData, getMetricsData }) => {
 
       {activeTab === "stats" && (
         <>
-      <div className="stats-summary">
-        <div className="stat-item">
-          <h3>Количество пользователей</h3>
-          <p>{stats.count_users}</p>
-        </div>
-        <div className="stat-item">
-          <h3>Активные подписки</h3>
-          <p>{stats.active_subs}</p>
-        </div>
-        {canViewPayments() && (
-          <div className="stat-item">
-            <h3>Сумма пополнений</h3>
-            <p>{stats.replenishment_amount}</p>
+          <div className="stats-summary">
+            <div className="stat-item">
+              <h3>Количество пользователей</h3>
+              <p>{stats.count_users}</p>
+            </div>
+            <div className="stat-item">
+              <h3>Активные подписки</h3>
+              <p>{stats.active_subs}</p>
+            </div>
+            {canViewPayments() && (
+              <div className="stat-item">
+                <h3>Сумма пополнений</h3>
+                <p>{stats.replenishment_amount}</p>
+              </div>
+            )}
           </div>
-        )}
-      </div>
 
-      {canViewPayments() && (
-        <>
-          <br />
-          <h2>Платежи</h2>
+          {canViewPayments() && (
+            <>
+              <br />
+              <h2>Платежи</h2>
 
-          <div className="filters">
-        <button
-          className={filterType === "all" ? "active" : ""}
-          onClick={() => handleFilterChange("all")}
-        >
-          Все
-        </button>
-        <button
-          className={filterType === "bonus" ? "active" : ""}
-          onClick={() => handleFilterChange("bonus")}
-        >
-          Бонусы
-        </button>
-        <button
-          className={filterType === "money" ? "active" : ""}
-          onClick={() => handleFilterChange("money")}
-        >
-          Деньги
-        </button>
-      </div>
+              <div className="filters">
+                <button
+                  className={filterType === "all" ? "active" : ""}
+                  onClick={() => handleFilterChange("all")}
+                >
+                  Все
+                </button>
+                <button
+                  className={filterType === "bonus" ? "active" : ""}
+                  onClick={() => handleFilterChange("bonus")}
+                >
+                  Бонусы
+                </button>
+                <button
+                  className={filterType === "money" ? "active" : ""}
+                  onClick={() => handleFilterChange("money")}
+                >
+                  Деньги
+                </button>
+              </div>
 
-          <p>Всего записей: {totalCount} </p>
+              <p>Всего записей: {totalCount} </p>
 
-          <PaymentsTable payments={stats.orders} />
+              <PaymentsTable payments={stats.orders} />
 
-          <PaginationControls
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            limit={limit}
-            setLimit={setLimit}
-            totalCount={totalCount}
-          />
+              <PaginationControls
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                limit={limit}
+                setLimit={setLimit}
+                totalCount={totalCount}
+              />
+            </>
+          )}
         </>
       )}
     </div>
