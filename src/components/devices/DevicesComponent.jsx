@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { PaginationControls } from "../pagination/PaginationComponent";
 import { DevicesTable } from "./DevicesTable";
+import { apiRequests } from "../../shared/api/apiRequests";
 import "./DevicesComponent.scss";
 
 export const DevicesComponent = ({ getDevices }) => {
@@ -30,6 +31,24 @@ export const DevicesComponent = ({ getDevices }) => {
     setCurrentPage(1);
   };
 
+  const handleDeleteDevice = async (deviceId) => {
+    if (!window.confirm("Вы уверены, что хотите удалить это устройство?")) {
+      return;
+    }
+
+    try {
+      await apiRequests.devices.delete(deviceId);
+      // Обновляем список устройств после удаления
+      const data = await getDevices(userSearch, currentPage, limit);
+      setDevices(data.devices);
+      setTotalCount(data.count);
+      alert("Устройство успешно удалено");
+    } catch (error) {
+      console.error("Ошибка при удалении устройства:", error);
+      alert(error.response?.data?.detail || "Ошибка при удалении устройства");
+    }
+  };
+
   return (
     <div className="devices-container">
       <h2>Устройства пользователей</h2>
@@ -46,7 +65,7 @@ export const DevicesComponent = ({ getDevices }) => {
 
       <p>Всего устройств: {totalCount}</p>
 
-      <DevicesTable devices={devices} />
+      <DevicesTable devices={devices} onDelete={handleDeleteDevice} />
 
       <PaginationControls
         currentPage={currentPage}

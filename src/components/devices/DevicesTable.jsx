@@ -1,6 +1,6 @@
 import React from "react";
 
-export const DevicesTable = ({ devices }) => {
+export const DevicesTable = ({ devices, onDelete }) => {
   if (!devices || devices.length === 0) {
     return <div className="no-data">Нет устройств</div>;
   }
@@ -33,6 +33,7 @@ export const DevicesTable = ({ devices }) => {
             <th>IP</th>
             <th>Последняя активность</th>
             <th>Создано</th>
+            <th>Действия</th>
           </tr>
         </thead>
         <tbody>
@@ -61,6 +62,15 @@ export const DevicesTable = ({ devices }) => {
               <td className="ip-address">{device.ip_address || "—"}</td>
               <td>{formatDate(device.last_activity)}</td>
               <td>{formatDate(device.created_at)}</td>
+              <td>
+                <button
+                  className="delete-btn"
+                  onClick={() => onDelete(device.id)}
+                  title="Удалить устройство"
+                >
+                  🗑️
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>

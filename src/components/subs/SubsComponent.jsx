@@ -22,15 +22,15 @@ const SubsTable = ({ getData, onEdit, onDelete, onSave, onCreate }) => {
     const fetchData = async () => {
       try {
         const data = await getData(currentPage, limit);
-        setItems(data); // Обновляем состояние серверов
-        setTotalCount(data.count_orders);
+        setItems(data); // Обновляем состояние подписок
+        setTotalCount(data.count || data.documents?.length || 0);
       } catch (error) {
         console.error("Ошибка при загрузке данных:", error);
       }
     };
 
     fetchData();
-  }, [currentPage, limit, getData]); // Зависимости useEffec
+  }, [currentPage, limit, getData]); // Зависимости useEffect
 
   // Обработка редактирования строки
   const handleEdit = (index, item) => {

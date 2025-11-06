@@ -270,7 +270,7 @@ export const apiRequests = {
       return axiosInstance.get(`/devices/list`);
     },
     delete: async (device_id) => {
-      return axiosInstance.delete(`/devices/${device_id}`);
+      return axiosInstance.delete(`/devices/admin/${device_id}`);
     },
   },
   adminActions: {
