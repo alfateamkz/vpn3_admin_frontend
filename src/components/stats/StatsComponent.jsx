@@ -45,8 +45,12 @@ export const StatsTable = ({ getData, getMetricsData }) => {
       try {
         setLoadingGeography(true);
         const metricsData = await getMetricsData(30);
+        console.log("📊 Данные метрик получены:", metricsData);
         if (metricsData && metricsData.geography) {
+          console.log("🌍 Данные географии:", metricsData.geography);
           setGeography(metricsData.geography);
+        } else {
+          console.log("⚠️ География не найдена в данных метрик");
         }
       } catch (error) {
         console.error("Ошибка при загрузке географии:", error);
@@ -110,27 +114,29 @@ export const StatsTable = ({ getData, getMetricsData }) => {
           {/* География */}
           {loadingGeography ? (
             <div className="geography-loading">Загрузка географии...</div>
-          ) : geography && (
+          ) : (
             <div className="geography-section">
               <h3>Географическое распределение</h3>
-              <div className="geography-stats-summary">
-                <div className="geography-stat-item">
-                  <span className="geography-label">Всего стран:</span>
-                  <span className="geography-value">
-                    {geography.total_countries || 
-                     (geography.users_by_country ? geography.users_by_country.length : 0) || 0}
-                  </span>
-                </div>
-                <div className="geography-stat-item">
-                  <span className="geography-label">Всего пользователей:</span>
-                  <span className="geography-value">
-                    {geography.total_users || 
-                     (geography.users_by_country ? geography.users_by_country.reduce((sum, item) => sum + (item.users || 0), 0) : 0) || 0}
-                  </span>
-                </div>
-              </div>
-              
-              {geography.users_by_country && geography.users_by_country.length > 0 && (
+              {geography ? (
+                <>
+                  <div className="geography-stats-summary">
+                    <div className="geography-stat-item">
+                      <span className="geography-label">Всего стран:</span>
+                      <span className="geography-value">
+                        {geography.total_countries || 
+                         (geography.users_by_country ? geography.users_by_country.length : 0) || 0}
+                      </span>
+                    </div>
+                    <div className="geography-stat-item">
+                      <span className="geography-label">Всего пользователей:</span>
+                      <span className="geography-value">
+                        {geography.total_users || 
+                         (geography.users_by_country ? geography.users_by_country.reduce((sum, item) => sum + (item.users || 0), 0) : 0) || 0}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  {geography.users_by_country && geography.users_by_country.length > 0 && (
                 <div className="geography-table-wrapper">
                   <h4>Распределение пользователей по странам</h4>
                   <table className="geography-table-simple">
@@ -194,9 +200,13 @@ export const StatsTable = ({ getData, getMetricsData }) => {
                 </div>
               )}
               
-              {(!geography.users_by_country || geography.users_by_country.length === 0) && 
-               (!geography.devices_by_country || geography.devices_by_country.length === 0) && (
-                <p className="geography-no-data">Нет данных о географическом распределении</p>
+                  {(!geography.users_by_country || geography.users_by_country.length === 0) && 
+                   (!geography.devices_by_country || geography.devices_by_country.length === 0) && (
+                    <p className="geography-no-data">Нет данных о географическом распределении</p>
+                  )}
+                </>
+              ) : (
+                <p className="geography-no-data">Загрузка данных географии...</p>
               )}
             </div>
           )}
