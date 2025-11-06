@@ -271,17 +271,19 @@ export const AdminsComponent = () => {
                     </option>
                   ))}
                 </select>
-                <small>{roles.find((r) => r.value === formData.role)?.description}</small>
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={formData.is_active}
-                  onChange={(e) =>
-                    setFormData({ ...formData, is_active: e.target.checked })
-                  }
-                />
-                Активен
+                <div className={styles.roleDescriptionRow}>
+                  <small>{roles.find((r) => r.value === formData.role)?.description}</small>
+                  <label className={styles.checkboxLabel}>
+                    <input
+                      type="checkbox"
+                      checked={formData.is_active}
+                      onChange={(e) =>
+                        setFormData({ ...formData, is_active: e.target.checked })
+                      }
+                    />
+                    Активен
+                  </label>
+                </div>
               </label>
               <label>
                 Telegram ID (для уведомлений)
@@ -362,17 +364,19 @@ export const AdminsComponent = () => {
                     </option>
                   ))}
                 </select>
-                <small>{roles.find((r) => r.value === formData.role)?.description}</small>
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={formData.is_active}
-                  onChange={(e) =>
-                    setFormData({ ...formData, is_active: e.target.checked })
-                  }
-                />
-                Активен
+                <div className={styles.roleDescriptionRow}>
+                  <small>{roles.find((r) => r.value === formData.role)?.description}</small>
+                  <label className={styles.checkboxLabel}>
+                    <input
+                      type="checkbox"
+                      checked={formData.is_active}
+                      onChange={(e) =>
+                        setFormData({ ...formData, is_active: e.target.checked })
+                      }
+                    />
+                    Активен
+                  </label>
+                </div>
               </label>
               <label>
                 Telegram ID (для уведомлений)

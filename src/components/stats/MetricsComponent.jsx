@@ -114,66 +114,76 @@ export const MetricsComponent = ({ getMetrics }) => {
       </div>
 
       {/* География */}
-      {metrics.geography && metrics.geography.users_by_country && metrics.geography.users_by_country.length > 0 && (
+      {metrics.geography && (
         <div className="metrics-section">
           <h3>Географическое распределение</h3>
           <div className="geography-container">
             <div className="geography-stats">
               <div className="metric-card">
                 <div className="metric-label">Всего стран</div>
-                <div className="metric-value">{metrics.geography.total_countries || metrics.geography.users_by_country.length}</div>
+                <div className="metric-value">
+                  {metrics.geography.total_countries || 
+                   (metrics.geography.users_by_country ? metrics.geography.users_by_country.length : 0) || 0}
+                </div>
                 <div className="metric-subtitle">Страны с активными пользователями</div>
               </div>
               <div className="metric-card">
                 <div className="metric-label">Всего пользователей</div>
                 <div className="metric-value">
-                  {metrics.geography.total_users || metrics.geography.users_by_country.reduce((sum, item) => sum + item.users, 0)}
+                  {metrics.geography.total_users || 
+                   (metrics.geography.users_by_country ? metrics.geography.users_by_country.reduce((sum, item) => sum + (item.users || 0), 0) : 0) || 0}
                 </div>
                 <div className="metric-subtitle">Активных пользователей по странам</div>
               </div>
             </div>
+            
+            {/* Распределение пользователей по странам */}
             <div className="geography-table-container">
               <h4>Распределение пользователей по странам</h4>
-              <table className="geography-table">
-                <thead>
-                  <tr>
-                    <th>Страна</th>
-                    <th>Пользователей</th>
-                    <th>Доля</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {metrics.geography.users_by_country.map((item, index) => {
-                    const totalUsers = metrics.geography.total_users || metrics.geography.users_by_country.reduce((sum, i) => sum + i.users, 0);
-                    const percentage = totalUsers > 0 ? ((item.users / totalUsers) * 100).toFixed(1) : 0;
-                    return (
-                      <tr key={index}>
-                        <td>
-                          <span className="country-name">{item.country || "Unknown"}</span>
-                        </td>
-                        <td>
-                          <strong>{item.users}</strong>
-                        </td>
-                        <td>
-                          <div className="percentage-bar">
-                            <div 
-                              className="percentage-fill" 
-                              style={{ width: `${percentage}%` }}
-                            ></div>
-                            <span className="percentage-text">{percentage}%</span>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+              {metrics.geography.users_by_country && metrics.geography.users_by_country.length > 0 ? (
+                <table className="geography-table">
+                  <thead>
+                    <tr>
+                      <th>Страна</th>
+                      <th>Пользователей</th>
+                      <th>Доля</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {metrics.geography.users_by_country.map((item, index) => {
+                      const totalUsers = metrics.geography.total_users || metrics.geography.users_by_country.reduce((sum, i) => sum + (i.users || 0), 0);
+                      const percentage = totalUsers > 0 ? ((item.users / totalUsers) * 100).toFixed(1) : 0;
+                      return (
+                        <tr key={index}>
+                          <td>
+                            <span className="country-name">{item.country || "Unknown"}</span>
+                          </td>
+                          <td>
+                            <strong>{item.users || 0}</strong>
+                          </td>
+                          <td>
+                            <div className="percentage-bar">
+                              <div 
+                                className="percentage-fill" 
+                                style={{ width: `${percentage}%` }}
+                              ></div>
+                              <span className="percentage-text">{percentage}%</span>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              ) : (
+                <p className="no-data">Нет данных о распределении пользователей по странам</p>
+              )}
             </div>
             
             {/* Распределение устройств по странам */}
-            {metrics.geography.devices_by_country && metrics.geography.devices_by_country.length > 0 && (
-              <div className="geography-table-container" style={{ marginTop: "20px" }}>
-                <h4>Распределение устройств по странам</h4>
+            <div className="geography-table-container" style={{ marginTop: "20px" }}>
+              <h4>Распределение устройств по странам</h4>
+              {metrics.geography.devices_by_country && metrics.geography.devices_by_country.length > 0 ? (
                 <table className="geography-table">
                   <thead>
                     <tr>
@@ -185,7 +195,7 @@ export const MetricsComponent = ({ getMetrics }) => {
                   </thead>
                   <tbody>
                     {metrics.geography.devices_by_country.map((item, index) => {
-                      const totalDevices = metrics.geography.devices_by_country.reduce((sum, i) => sum + i.devices, 0);
+                      const totalDevices = metrics.geography.devices_by_country.reduce((sum, i) => sum + (i.devices || 0), 0);
                       const percentage = totalDevices > 0 ? ((item.devices / totalDevices) * 100).toFixed(1) : 0;
                       const platforms = item.platforms || {};
                       const platformsList = Object.entries(platforms)
@@ -198,7 +208,7 @@ export const MetricsComponent = ({ getMetrics }) => {
                             <span className="country-name">{item.country || "Unknown"}</span>
                           </td>
                           <td>
-                            <strong>{item.devices}</strong>
+                            <strong>{item.devices || 0}</strong>
                           </td>
                           <td>
                             <span className="platforms-list">{platformsList}</span>
@@ -217,8 +227,10 @@ export const MetricsComponent = ({ getMetrics }) => {
                     })}
                   </tbody>
                 </table>
-              </div>
-            )}
+              ) : (
+                <p className="no-data">Нет данных о распределении устройств по странам</p>
+              )}
+            </div>
           </div>
         </div>
       )}
