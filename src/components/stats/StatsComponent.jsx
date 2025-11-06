@@ -19,6 +19,8 @@ export const StatsTable = ({ getData, getMetricsData }) => {
   const [totalCount, setTotalCount] = useState(0);
   const [filterType, setFilterType] = useState("all");
   const [activeTab, setActiveTab] = useState("stats");
+  const [geography, setGeography] = useState(null);
+  const [loadingGeography, setLoadingGeography] = useState(false);
 
   // Загрузка данных при монтировании и изменении параметров
   useEffect(() => {
@@ -34,6 +36,27 @@ export const StatsTable = ({ getData, getMetricsData }) => {
 
     fetchData();
   }, [currentPage, limit, filterType, getData]);
+
+  // Загрузка географии при монтировании
+  useEffect(() => {
+    const fetchGeography = async () => {
+      if (!getMetricsData) return;
+      
+      try {
+        setLoadingGeography(true);
+        const metricsData = await getMetricsData(30);
+        if (metricsData && metricsData.geography) {
+          setGeography(metricsData.geography);
+        }
+      } catch (error) {
+        console.error("Ошибка при загрузке географии:", error);
+      } finally {
+        setLoadingGeography(false);
+      }
+    };
+
+    fetchGeography();
+  }, [getMetricsData]);
 
   // Обработка изменения фильтра
   const handleFilterChange = (type) => {
@@ -83,6 +106,100 @@ export const StatsTable = ({ getData, getMetricsData }) => {
               </div>
             )}
           </div>
+
+          {/* География */}
+          {loadingGeography ? (
+            <div className="geography-loading">Загрузка географии...</div>
+          ) : geography && (
+            <div className="geography-section">
+              <h3>Географическое распределение</h3>
+              <div className="geography-stats-summary">
+                <div className="geography-stat-item">
+                  <span className="geography-label">Всего стран:</span>
+                  <span className="geography-value">
+                    {geography.total_countries || 
+                     (geography.users_by_country ? geography.users_by_country.length : 0) || 0}
+                  </span>
+                </div>
+                <div className="geography-stat-item">
+                  <span className="geography-label">Всего пользователей:</span>
+                  <span className="geography-value">
+                    {geography.total_users || 
+                     (geography.users_by_country ? geography.users_by_country.reduce((sum, item) => sum + (item.users || 0), 0) : 0) || 0}
+                  </span>
+                </div>
+              </div>
+              
+              {geography.users_by_country && geography.users_by_country.length > 0 && (
+                <div className="geography-table-wrapper">
+                  <h4>Распределение пользователей по странам</h4>
+                  <table className="geography-table-simple">
+                    <thead>
+                      <tr>
+                        <th>Страна</th>
+                        <th>Пользователей</th>
+                        <th>Доля</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {geography.users_by_country.slice(0, 10).map((item, index) => {
+                        const totalUsers = geography.total_users || geography.users_by_country.reduce((sum, i) => sum + (i.users || 0), 0);
+                        const percentage = totalUsers > 0 ? ((item.users / totalUsers) * 100).toFixed(1) : 0;
+                        return (
+                          <tr key={index}>
+                            <td>{item.country || "Unknown"}</td>
+                            <td><strong>{item.users || 0}</strong></td>
+                            <td>{percentage}%</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                  {geography.users_by_country.length > 10 && (
+                    <p className="geography-more">... и еще {geography.users_by_country.length - 10} стран</p>
+                  )}
+                </div>
+              )}
+              
+              {geography.devices_by_country && geography.devices_by_country.length > 0 && (
+                <div className="geography-table-wrapper" style={{ marginTop: "20px" }}>
+                  <h4>Распределение устройств по странам</h4>
+                  <table className="geography-table-simple">
+                    <thead>
+                      <tr>
+                        <th>Страна</th>
+                        <th>Устройств</th>
+                        <th>Платформы</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {geography.devices_by_country.slice(0, 10).map((item, index) => {
+                        const platforms = item.platforms || {};
+                        const platformsList = Object.entries(platforms)
+                          .map(([platform, count]) => `${platform}: ${count}`)
+                          .join(", ") || "—";
+                        return (
+                          <tr key={index}>
+                            <td>{item.country || "Unknown"}</td>
+                            <td><strong>{item.devices || 0}</strong></td>
+                            <td>{platformsList}</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                  {geography.devices_by_country.length > 10 && (
+                    <p className="geography-more">... и еще {geography.devices_by_country.length - 10} стран</p>
+                  )}
+                </div>
+              )}
+              
+              {(!geography.users_by_country || geography.users_by_country.length === 0) && 
+               (!geography.devices_by_country || geography.devices_by_country.length === 0) && (
+                <p className="geography-no-data">Нет данных о географическом распределении</p>
+              )}
+            </div>
+          )}
 
           {canViewPayments() && (
             <>

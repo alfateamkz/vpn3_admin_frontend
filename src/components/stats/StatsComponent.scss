@@ -2,6 +2,112 @@
   padding: 20px;
   font-family: Arial, sans-serif;
 
+  .geography-loading {
+    text-align: center;
+    padding: 20px;
+    color: #007bff;
+  }
+
+  .geography-section {
+    margin-top: 30px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+
+    h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    .geography-stats-summary {
+      display: flex;
+      gap: 30px;
+      margin-bottom: 20px;
+
+      .geography-stat-item {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+
+        .geography-label {
+          font-size: 14px;
+          color: #666;
+        }
+
+        .geography-value {
+          font-size: 24px;
+          font-weight: bold;
+          color: #007bff;
+        }
+      }
+    }
+
+    .geography-table-wrapper {
+      background: white;
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 15px;
+
+      h4 {
+        margin-top: 0;
+        margin-bottom: 15px;
+        color: #333;
+        font-size: 16px;
+      }
+
+      .geography-table-simple {
+        width: 100%;
+        border-collapse: collapse;
+
+        thead {
+          background: #000;
+
+          th {
+            padding: 10px;
+            text-align: left;
+            color: #fff;
+            font-weight: 600;
+            font-size: 14px;
+          }
+        }
+
+        tbody {
+          tr {
+            &:nth-child(even) {
+              background: #f9f9f9;
+            }
+
+            &:hover {
+              background: #f0f0f0;
+            }
+          }
+
+          td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            font-size: 14px;
+          }
+        }
+      }
+
+      .geography-more {
+        margin-top: 10px;
+        text-align: center;
+        color: #666;
+        font-style: italic;
+        font-size: 13px;
+      }
+    }
+
+    .geography-no-data {
+      text-align: center;
+      padding: 20px;
+      color: #999;
+      font-style: italic;
+    }
+  }
+
   h2 {
     margin-bottom: 20px;
   }
