@@ -173,7 +173,7 @@ export const IPWhitelistComponent = () => {
               </td>
               <td>
                 {ip.created_at
-                  ? new Date(ip.created_at).toLocaleString()
+                  ? `${new Date(ip.created_at).toLocaleString()} UTC`
                   : "—"}
               </td>
               <td>

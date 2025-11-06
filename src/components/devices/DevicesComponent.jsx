@@ -9,13 +9,13 @@ export const DevicesComponent = ({ getDevices }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(50);
   const [totalCount, setTotalCount] = useState(0);
-  const [userSearch, setUserSearch] = useState("");
+  const [usernameSearch, setUsernameSearch] = useState("");
 
   // Загрузка данных
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getDevices(userSearch, currentPage, limit);
+        const data = await getDevices(usernameSearch, currentPage, limit);
         setDevices(data.devices);
         setTotalCount(data.count);
       } catch (error) {
@@ -24,10 +24,10 @@ export const DevicesComponent = ({ getDevices }) => {
     };
 
     fetchData();
-  }, [currentPage, limit, userSearch, getDevices]);
+  }, [currentPage, limit, usernameSearch, getDevices]);
 
-  const handleUserSearchChange = (e) => {
-    setUserSearch(e.target.value);
+  const handleUsernameSearchChange = (e) => {
+    setUsernameSearch(e.target.value);
     setCurrentPage(1);
   };
 
@@ -39,7 +39,7 @@ export const DevicesComponent = ({ getDevices }) => {
     try {
       await apiRequests.devices.delete(deviceId);
       // Обновляем список устройств после удаления
-      const data = await getDevices(userSearch, currentPage, limit);
+      const data = await getDevices(usernameSearch, currentPage, limit);
       setDevices(data.devices);
       setTotalCount(data.count);
       alert("Устройство успешно удалено");
@@ -57,13 +57,13 @@ export const DevicesComponent = ({ getDevices }) => {
       <div className="search-bar">
         <input
           type="text"
-          placeholder="ID пользователя для фильтрации (оставьте пустым для всех)"
-          value={userSearch}
-          onChange={handleUserSearchChange}
+          placeholder="Поиск по username пользователя (оставьте пустым для всех)"
+          value={usernameSearch}
+          onChange={handleUsernameSearchChange}
         />
       </div>
 
-      <p>Всего устройств: {totalCount}</p>
+      <p className="devices-count">Всего устройств: <strong>{totalCount}</strong></p>
 
       <DevicesTable devices={devices} onDelete={handleDeleteDevice} />
 

@@ -7,7 +7,7 @@ export const ReferalsTable = ({ referals }) => {
 
   const formatDate = (date) => {
     if (!date) return "—";
-    return new Date(date).toLocaleDateString("ru-RU");
+    return `${new Date(date).toLocaleDateString("ru-RU")} UTC`;
   };
 
   const getStatusBadge = (referal) => {

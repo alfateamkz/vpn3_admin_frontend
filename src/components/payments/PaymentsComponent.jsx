@@ -115,7 +115,7 @@ export const PaymentsTable = ({ payments }) => {
               <td>{types[order.type] || order.type}</td>
               <td>{order.amount} ₽</td>
               <td>{order.description}</td>
-              <td>{new Date(order.created_at).toLocaleString()}</td>
+              <td>{`${new Date(order.created_at).toLocaleString()} UTC`}</td>
               <td>
                 {order.refund_status === "refunded" ? (
                   <span style={{ color: "#4CAF50" }}>✅ Возвращен</span>

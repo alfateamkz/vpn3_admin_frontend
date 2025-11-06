@@ -7,7 +7,7 @@ export const DevicesTable = ({ devices, onDelete }) => {
 
   const formatDate = (date) => {
     if (!date) return "—";
-    return new Date(date).toLocaleDateString("ru-RU");
+    return `${new Date(date).toLocaleDateString("ru-RU")} UTC`;
   };
 
   const getPlatformIcon = (platform) => {

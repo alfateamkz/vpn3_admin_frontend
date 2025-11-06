@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./AdminActionsComponent.scss";
 import { apiRequests } from "../../shared/api/apiRequests";
+import { canEditUsers } from "../../shared/utils/roleUtils";
 
 export const AdminActionsComponent = () => {
   const [actions, setActions] = useState([]);
@@ -63,6 +64,17 @@ export const AdminActionsComponent = () => {
     return success ? "✅" : "❌";
   };
 
+  if (!canEditUsers()) {
+    return (
+      <div className="admin-actions-container">
+        <h2>📊 Логи действий администраторов</h2>
+        <div style={{ padding: "40px", textAlign: "center", color: "#dc3545", fontWeight: "bold", fontSize: "18px" }}>
+          У вас нет доступа к просмотру логов действий администраторов
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="admin-actions-container">
       <h2>📊 Логи действий администраторов</h2>
@@ -118,7 +130,7 @@ export const AdminActionsComponent = () => {
                 <tr key={action.id}>
                   <td>
                     {action.created_at
-                      ? new Date(action.created_at).toLocaleString()
+                      ? `${new Date(action.created_at).toLocaleString()} UTC`
                       : "—"}
                   </td>
                   <td>

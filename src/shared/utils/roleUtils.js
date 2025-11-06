@@ -19,11 +19,10 @@ export const checkPermission = (userRole, permission) => {
       "broadcast.send"
     ],
     support: [
-      "users.view", "users.edit", "users.balance",
+      "users.view",
       "servers.view",
       "subscriptions.view", "subscriptions.edit", "subscriptions.create",
       "stats.view",
-      "logs.view",
       "export.csv",
       "broadcast.send"
     ],
@@ -32,7 +31,6 @@ export const checkPermission = (userRole, permission) => {
       "servers.view",
       "subscriptions.view",
       "stats.view", "stats.export",
-      "logs.view", "logs.export",
       "export.csv"
     ]
   };

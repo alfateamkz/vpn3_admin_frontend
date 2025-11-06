@@ -85,11 +85,11 @@ export const UsersTable = ({ users, onAddBalance, onBlockUser, onUnblockUser, on
               </td>
               <td>
                 {user.sub_end_date
-                  ? new Date(user.sub_end_date).toLocaleString()
+                  ? `${new Date(user.sub_end_date).toLocaleString()} UTC`
                   : "-"}
               </td>
               <td>{user.balance}</td>
-              <td>{new Date(user.created_at).toLocaleString()}</td>
+              <td>{`${new Date(user.created_at).toLocaleString()} UTC`}</td>
               <td>
                 <div style={{ display: "flex", gap: "3px", flexWrap: "wrap" }}>
                   {canManageBalance() && (

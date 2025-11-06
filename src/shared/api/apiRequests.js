@@ -259,10 +259,10 @@ export const apiRequests = {
     },
   },
   devices: {
-    list: async (user_id = null, page = 1, limit = 50) => {
+    list: async (username = null, page = 1, limit = 50) => {
       const params = { page, limit };
-      if (user_id !== null) {
-        params.user_id = user_id;
+      if (username !== null && username.trim() !== "") {
+        params.username = username.trim();
       }
       return axiosInstance.get("/devices/admin/list", { params });
     },

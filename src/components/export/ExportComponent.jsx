@@ -274,7 +274,7 @@ export const ExportComponent = () => {
                     <tr key={backup.filename}>
                       <td>{backup.filename}</td>
                       <td>{backup.size_mb} MB</td>
-                      <td>{new Date(backup.created_at).toLocaleString()}</td>
+                      <td>{`${new Date(backup.created_at).toLocaleString()} UTC`}</td>
                       <td>
                         <button
                           onClick={() => handleRestoreBackup(backup.filename)}

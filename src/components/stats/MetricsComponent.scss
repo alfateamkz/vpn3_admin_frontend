@@ -138,6 +138,114 @@
       }
     }
   }
+
+  .geography-container {
+    .geography-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .geography-table-container {
+      margin-top: 20px;
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+      h4 {
+        margin-bottom: 15px;
+        color: #333;
+      }
+
+      .geography-table {
+        width: 100%;
+        border-collapse: collapse;
+
+        thead {
+          background: #000;
+
+          th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+            color: #fff;
+            border-bottom: 2px solid #333;
+          }
+        }
+
+        tbody {
+          tr {
+            transition: background 0.2s;
+
+            &:hover {
+              background: #f8f9fa;
+            }
+
+            &:last-child {
+              td {
+                border-bottom: none;
+              }
+            }
+          }
+
+          td {
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+            color: #333;
+
+            .country-name {
+              font-weight: 500;
+              color: #000;
+            }
+
+            strong {
+              color: #000;
+              font-weight: 600;
+            }
+
+            .percentage-bar {
+              position: relative;
+              width: 100%;
+              height: 24px;
+              background: #f0f0f0;
+              border-radius: 12px;
+              overflow: hidden;
+
+              .percentage-fill {
+                position: absolute;
+                left: 0;
+                top: 0;
+                height: 100%;
+                background: linear-gradient(90deg, #4CAF50 0%, #45a049 100%);
+                border-radius: 12px;
+                transition: width 0.3s ease;
+              }
+
+            .percentage-text {
+              position: absolute;
+              left: 50%;
+              top: 50%;
+              transform: translate(-50%, -50%);
+              font-size: 12px;
+              font-weight: 600;
+              color: #333;
+              z-index: 1;
+            }
+          }
+
+          .platforms-list {
+            font-size: 12px;
+            color: #666;
+            font-style: italic;
+          }
+        }
+      }
+    }
+  }
 }
 
 @media (max-width: 768px) {

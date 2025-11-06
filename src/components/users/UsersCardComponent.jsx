@@ -5,6 +5,7 @@ import { PaginationControls } from "../pagination/PaginationComponent";
 import { LogsTable } from "./LogsTable";
 import { UsersTable } from "./UsersTable";
 import PaymentsTableWithFilters from "../payments/PaymentsTableWithFilters"; // Импорт компонента таблицы платежей
+import { canEditUsers } from "../../shared/utils/roleUtils";
 
 export const UserCardComponent = ({
   getUser,
@@ -143,36 +144,47 @@ export const UserCardComponent = ({
         </div>
         <div className="info-item">
           <strong>Дата создания:</strong>{" "}
-          {new Date(user.created_at).toLocaleString()}
+          {`${new Date(user.created_at).toLocaleString()} UTC`}
         </div>
         <div className="info-item">
           <strong>Дата обновления:</strong>{" "}
-          {new Date(user.updated_at).toLocaleString()}
+          {`${new Date(user.updated_at).toLocaleString()} UTC`}
         </div>
         <div className="info-item">
           <strong>Окончание подписки:</strong>{" "}
-          {new Date(user.sub_end_date).toLocaleString()}
+          {`${new Date(user.sub_end_date).toLocaleString()} UTC`}
         </div>
         <div className="info-item">
           <strong>Премиум:</strong> {user.is_premium ? "Да" : "Нет"}
         </div>
       </div>
 
-      <div className="users-table-container">
-        <div className="header-bar">
-          <h3>Логи подключений</h3>
-          <p>Всего записей: {totalCount}</p>
-        </div>
-        <LogsTable logs={logs} />
-      </div>
+      {canEditUsers() ? (
+        <>
+          <div className="users-table-container">
+            <div className="header-bar">
+              <h3>Логи подключений</h3>
+              <p>Всего записей: {totalCount}</p>
+            </div>
+            <LogsTable logs={logs} />
+          </div>
 
-      <PaginationControls
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        limit={limit}
-        setLimit={setLimit}
-        totalCount={totalCount}
-      />
+          <PaginationControls
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            limit={limit}
+            setLimit={setLimit}
+            totalCount={totalCount}
+          />
+        </>
+      ) : (
+        <div className="users-table-container">
+          <div className="header-bar">
+            <h3>Логи подключений</h3>
+            <p style={{ color: "#dc3545", fontWeight: "bold" }}>У вас нет доступа к просмотру логов подключений</p>
+          </div>
+        </div>
+      )}
 
       {/* Таблица платежей */}
       {/* <div className="payments-table-container">
@@ -229,7 +241,7 @@ export const UserCardComponent = ({
                   <td>{device.country || "Unknown"}</td>
                   <td>
                     {device.last_activity
-                      ? new Date(device.last_activity).toLocaleDateString("ru-RU")
+                      ? `${new Date(device.last_activity).toLocaleDateString("ru-RU")} UTC`
                       : "—"}
                   </td>
                 </tr>

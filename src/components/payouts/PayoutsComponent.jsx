@@ -102,7 +102,7 @@ const PayoutsComponent = () => {
 
   const formatDate = (dateString) => {
     if (!dateString) return "—";
-    return new Date(dateString).toLocaleString("ru-RU");
+    return `${new Date(dateString).toLocaleString("ru-RU")} UTC`;
   };
 
   return (

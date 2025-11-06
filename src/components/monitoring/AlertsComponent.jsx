@@ -209,7 +209,7 @@ const AlertsComponent = () => {
 
                   {alert.created_at && (
                     <div className={styles.alertDate}>
-                      Создан: {new Date(alert.created_at).toLocaleString("ru-RU")}
+                      Создан: {`${new Date(alert.created_at).toLocaleString("ru-RU")} UTC`}
                     </div>
                   )}
                 </div>

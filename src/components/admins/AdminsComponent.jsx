@@ -16,6 +16,7 @@ export const AdminsComponent = () => {
     full_name: "",
     role: "support",
     is_active: true,
+    telegram_id: "",
   });
 
   useEffect(() => {
@@ -65,6 +66,7 @@ export const AdminsComponent = () => {
         full_name: "",
         role: "support",
         is_active: true,
+        telegram_id: "",
       });
       loadAdmins();
     } catch (error) {
@@ -128,6 +130,7 @@ export const AdminsComponent = () => {
       full_name: admin.full_name || "",
       role: admin.role || "support",
       is_active: admin.is_active !== undefined ? admin.is_active : true,
+      telegram_id: admin.telegram_id || "",
     });
     setShowEditModal(true);
   };
@@ -193,7 +196,7 @@ export const AdminsComponent = () => {
                 </td>
                 <td>
                   {admin.last_login
-                    ? new Date(admin.last_login).toLocaleString()
+                    ? `${new Date(admin.last_login).toLocaleString()} UTC`
                     : "—"}
                 </td>
                 <td>
@@ -280,6 +283,18 @@ export const AdminsComponent = () => {
                 />
                 Активен
               </label>
+              <label>
+                Telegram ID (для уведомлений)
+                <input
+                  type="text"
+                  value={formData.telegram_id}
+                  onChange={(e) =>
+                    setFormData({ ...formData, telegram_id: e.target.value })
+                  }
+                  placeholder="123456789"
+                />
+                <small>ID пользователя Telegram для отправки алертов (оставьте пустым, если не нужны уведомления)</small>
+              </label>
             </div>
             <div className={styles.modalActions}>
               <button onClick={handleCreate} disabled={loading} className={styles.saveButton}>
@@ -358,6 +373,18 @@ export const AdminsComponent = () => {
                   }
                 />
                 Активен
+              </label>
+              <label>
+                Telegram ID (для уведомлений)
+                <input
+                  type="text"
+                  value={formData.telegram_id}
+                  onChange={(e) =>
+                    setFormData({ ...formData, telegram_id: e.target.value })
+                  }
+                  placeholder="123456789"
+                />
+                <small>ID пользователя Telegram для отправки алертов (оставьте пустым, если не нужны уведомления)</small>
               </label>
             </div>
             <div className={styles.modalActions}>

@@ -83,7 +83,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
     thead {
-      background: #4CAF50;
+      background: #000;
       color: white;
 
       th {
@@ -91,6 +91,7 @@
         text-align: left;
         font-weight: 600;
         font-size: 14px;
+        color: #fff;
       }
     }
 

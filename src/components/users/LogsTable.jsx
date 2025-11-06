@@ -16,7 +16,7 @@ export const LogsTable = ({ logs }) => {
             <tr key={log._id}>
               <td>{log._id}</td>
               <td>{log.country}</td>
-              <td>{new Date(log.timestamp).toLocaleString()}</td>
+              <td>{`${new Date(log.timestamp).toLocaleString()} UTC`}</td>
             </tr>
           ))}
         </tbody>
