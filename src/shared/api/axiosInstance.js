@@ -1,8 +1,15 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import { getConfig } from "../config/configLoader";
+
+// Функция для получения baseURL из конфига или env
+function getBaseURL() {
+    const config = getConfig();
+    return config?.baseURL || process.env.REACT_APP_URL || "";
+}
 
 const axiosInstance = axios.create({
-    baseURL: `${process.env.REACT_APP_URL}`,
+    baseURL: getBaseURL(),
     headers: {
         "Content-Type": "application/json",
         "Cache-Control": "no-cache, no-store, must-revalidate",
@@ -12,9 +19,24 @@ const axiosInstance = axios.create({
     timeout: 30000, // 30 секунд
 });
 
+// Обновляем baseURL при изменении конфига
+export function updateAxiosBaseURL() {
+    const newBaseURL = getBaseURL();
+    if (newBaseURL && axiosInstance.defaults.baseURL !== newBaseURL) {
+        axiosInstance.defaults.baseURL = newBaseURL;
+        console.log("🔄 BaseURL обновлен:", newBaseURL);
+    }
+}
+
 axiosInstance.interceptors.request.use(function (config) {
     const token = Cookies.get('accessToken')
     config.headers.Authorization = `Bearer ${token}`
+    
+    // Обновляем baseURL из конфига при каждом запросе (на случай если конфиг загрузился позже)
+    const currentBaseURL = getBaseURL();
+    if (currentBaseURL && config.baseURL !== currentBaseURL) {
+        config.baseURL = currentBaseURL;
+    }
     
     // Добавляем timestamp для предотвращения кеширования
     if (config.params) {
@@ -70,7 +92,8 @@ axiosInstance.interceptors.response.use(function (response) {
             console.log('[401 Error] Starting refresh token request')
             Cookies.set('refresher', 'true')
 
-            axios.post(`${import.meta.env.REACT_APP_URL}/auth/refresh`, {}, {
+            const baseURL = getBaseURL();
+            axios.post(`${baseURL}/auth/refresh`, {}, {
                 headers: {
                     Authorization: `Bearer ${refreshToken}`
                 }
