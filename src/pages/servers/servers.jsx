@@ -54,18 +54,16 @@ const Servers = () => {
   };
 
   const handleAdd = async (newServer) => {
-    await apiRequests.servers
-      .add(newServer)
-      .then((res) => {
-        return res.data;
-      })
-      .catch((e) => {
-        const detail = e.response.data.detail;
-        if (e.response.code === 400) {
-          alert(detail);
-        }
-      });
-    console.log("Создание:", newServer);
+    try {
+      const response = await apiRequests.servers.add(newServer);
+      alert("Сервер успешно создан!");
+      return response.data;
+    } catch (e) {
+      const detail = e.response?.data?.detail || "Ошибка при создании сервера";
+      console.error("Ошибка создания сервера:", e);
+      alert(detail);
+      throw e;
+    }
   };
 
   return (
