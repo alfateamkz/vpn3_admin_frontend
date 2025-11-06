@@ -38,7 +38,7 @@ export const DevicesTable = ({ devices, onDelete }) => {
         </thead>
         <tbody>
           {devices.map((device) => (
-            <tr key={device.id}>
+            <tr key={device._id || device.id}>
               <td>
                 <div className="user-info">
                   <strong>
@@ -65,7 +65,7 @@ export const DevicesTable = ({ devices, onDelete }) => {
               <td>
                 <button
                   className="delete-btn"
-                  onClick={() => onDelete(device.id)}
+                  onClick={() => onDelete(device._id || device.id)}
                   title="Удалить устройство"
                 >
                   🗑️
