@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { apiRequests } from "../../shared/api/apiRequests";
-import { canExport, canBackup, canViewPayments } from "../../shared/utils/roleUtils";
+import { canExport, canBackup, canViewPayments, canImport } from "../../shared/utils/roleUtils";
 import styles from "./ExportComponent.module.scss";
 
 export const ExportComponent = () => {
   const [loading, setLoading] = useState(false);
   const [statistics, setStatistics] = useState(null);
   const [backups, setBackups] = useState([]);
-  const [activeTab, setActiveTab] = useState("csv"); // csv, backup
+  const [activeTab, setActiveTab] = useState("csv"); // csv, backup, import
+  const [dateRange, setDateRange] = useState({
+    startDate: "",
+    endDate: ""
+  });
+  const [importFile, setImportFile] = useState(null);
+  const [importType, setImportType] = useState("users"); // users, orders
+  const [importResult, setImportResult] = useState(null);
 
   useEffect(() => {
     loadStatistics();
@@ -53,7 +60,14 @@ export const ExportComponent = () => {
 
     setLoading(true);
     try {
-      const response = await apiRequests.export.usersCsv();
+      const params = {};
+      if (dateRange.startDate) params.start_date = new Date(dateRange.startDate).toISOString();
+      if (dateRange.endDate) {
+        const endDate = new Date(dateRange.endDate);
+        endDate.setHours(23, 59, 59, 999); // Конец дня
+        params.end_date = endDate.toISOString();
+      }
+      const response = await apiRequests.export.usersCsv(params);
       downloadFile(response.data, `users_export_${new Date().toISOString().split("T")[0]}.csv`);
       alert("Экспорт пользователей завершен!");
     } catch (error) {
@@ -72,7 +86,14 @@ export const ExportComponent = () => {
 
     setLoading(true);
     try {
-      const response = await apiRequests.export.ordersCsv();
+      const params = {};
+      if (dateRange.startDate) params.start_date = new Date(dateRange.startDate).toISOString();
+      if (dateRange.endDate) {
+        const endDate = new Date(dateRange.endDate);
+        endDate.setHours(23, 59, 59, 999);
+        params.end_date = endDate.toISOString();
+      }
+      const response = await apiRequests.export.ordersCsv(params);
       downloadFile(response.data, `orders_export_${new Date().toISOString().split("T")[0]}.csv`);
       alert("Экспорт заказов завершен!");
     } catch (error) {
@@ -91,7 +112,14 @@ export const ExportComponent = () => {
 
     setLoading(true);
     try {
-      const response = await apiRequests.export.paymentLogsCsv();
+      const params = {};
+      if (dateRange.startDate) params.start_date = new Date(dateRange.startDate).toISOString();
+      if (dateRange.endDate) {
+        const endDate = new Date(dateRange.endDate);
+        endDate.setHours(23, 59, 59, 999);
+        params.end_date = endDate.toISOString();
+      }
+      const response = await apiRequests.export.paymentLogsCsv(params);
       downloadFile(response.data, `payment_logs_export_${new Date().toISOString().split("T")[0]}.csv`);
       alert("Экспорт логов платежей завершен!");
     } catch (error) {
@@ -110,7 +138,14 @@ export const ExportComponent = () => {
 
     setLoading(true);
     try {
-      const response = await apiRequests.export.adminLogsCsv();
+      const params = {};
+      if (dateRange.startDate) params.start_date = new Date(dateRange.startDate).toISOString();
+      if (dateRange.endDate) {
+        const endDate = new Date(dateRange.endDate);
+        endDate.setHours(23, 59, 59, 999);
+        params.end_date = endDate.toISOString();
+      }
+      const response = await apiRequests.export.adminLogsCsv(params);
       downloadFile(response.data, `admin_logs_export_${new Date().toISOString().split("T")[0]}.csv`);
       alert("Экспорт логов администраторов завершен!");
     } catch (error) {
@@ -166,6 +201,44 @@ export const ExportComponent = () => {
     }
   };
 
+  const handleImport = async () => {
+    if (!importFile) {
+      alert("Выберите файл для импорта");
+      return;
+    }
+
+    setLoading(true);
+    setImportResult(null);
+    
+    try {
+      const formData = new FormData();
+      formData.append("file", importFile);
+      formData.append("skip_errors", "true");
+      
+      let response;
+      if (importType === "users") {
+        response = await apiRequests.export.importUsers(formData);
+      } else {
+        response = await apiRequests.export.importOrders(formData);
+      }
+      
+      setImportResult(response.data);
+      alert(`Импорт завершен!\nИмпортировано: ${response.data.imported}\nПропущено: ${response.data.skipped}`);
+      
+      // Очищаем файл
+      setImportFile(null);
+      
+      // Обновляем статистику
+      loadStatistics();
+    } catch (error) {
+      console.error("Ошибка при импорте:", error);
+      const errorMsg = error.response?.data?.detail || "Ошибка при импорте";
+      alert(`Ошибка при импорте: ${errorMsg}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className={styles.exportContainer}>
       <h2>📥 Экспорт и резервное копирование</h2>
@@ -177,6 +250,14 @@ export const ExportComponent = () => {
         >
           Экспорт CSV
         </button>
+        {canImport() && (
+          <button
+            className={activeTab === "import" ? styles.active : ""}
+            onClick={() => setActiveTab("import")}
+          >
+            Импорт CSV
+          </button>
+        )}
         {canBackup() && (
           <button
             className={activeTab === "backup" ? styles.active : ""}
@@ -190,6 +271,36 @@ export const ExportComponent = () => {
       {activeTab === "csv" && (
         <div className={styles.csvSection}>
           <h3>Экспорт данных в CSV</h3>
+
+          <div className={styles.dateRange}>
+            <h4>Период выгрузки (опционально):</h4>
+            <div className={styles.dateInputs}>
+              <label>
+                Дата начала:
+                <input
+                  type="date"
+                  value={dateRange.startDate}
+                  onChange={(e) => setDateRange({ ...dateRange, startDate: e.target.value })}
+                />
+              </label>
+              <label>
+                Дата окончания:
+                <input
+                  type="date"
+                  value={dateRange.endDate}
+                  onChange={(e) => setDateRange({ ...dateRange, endDate: e.target.value })}
+                  min={dateRange.startDate}
+                />
+              </label>
+              <button
+                onClick={() => setDateRange({ startDate: "", endDate: "" })}
+                className={styles.clearButton}
+              >
+                Очистить
+              </button>
+            </div>
+            <small>Если период не указан, будут экспортированы все данные</small>
+          </div>
 
           {statistics && (
             <div className={styles.statistics}>
@@ -294,6 +405,89 @@ export const ExportComponent = () => {
           {backups.length === 0 && (
             <p className={styles.emptyState}>Бэкапов пока нет</p>
           )}
+        </div>
+      )}
+
+      {activeTab === "import" && canImport() && (
+        <div className={styles.importSection}>
+          <h3>Импорт данных из CSV</h3>
+          
+          <div className={styles.importForm}>
+            <div className={styles.importType}>
+              <label>
+                Тип данных:
+                <select
+                  value={importType}
+                  onChange={(e) => setImportType(e.target.value)}
+                >
+                  <option value="users">Пользователи</option>
+                  <option value="orders">Заказы</option>
+                </select>
+              </label>
+            </div>
+            
+            <div className={styles.fileUpload}>
+              <label>
+                Выберите CSV файл:
+                <input
+                  type="file"
+                  accept=".csv"
+                  onChange={(e) => setImportFile(e.target.files[0])}
+                />
+              </label>
+              {importFile && (
+                <p className={styles.fileName}>Выбран файл: {importFile.name}</p>
+              )}
+            </div>
+            
+            <div className={styles.importInfo}>
+              <h4>Формат CSV файла:</h4>
+              {importType === "users" ? (
+                <ul>
+                  <li><strong>Обязательные поля:</strong> Telegram ID</li>
+                  <li><strong>Опциональные поля:</strong> Имя, Фамилия, Username, Страна, Баланс, Заблокирован</li>
+                  <li>Если пользователь с таким Telegram ID уже существует, данные будут обновлены</li>
+                </ul>
+              ) : (
+                <ul>
+                  <li><strong>Обязательные поля:</strong> User ID, Тип, Сумма, Статус</li>
+                  <li><strong>Опциональные поля:</strong> Описание, Дата создания</li>
+                  <li>Тип: money или bonus</li>
+                  <li>Статус: FINISHED, PENDING или CANCELLED</li>
+                </ul>
+              )}
+            </div>
+            
+            <button
+              onClick={handleImport}
+              disabled={loading || !importFile}
+              className={styles.importButton}
+            >
+              📥 Импортировать
+            </button>
+            
+            {importResult && (
+              <div className={styles.importResult}>
+                <h4>Результат импорта:</h4>
+                <p>✅ Импортировано: {importResult.imported}</p>
+                <p>⏭️ Пропущено: {importResult.skipped}</p>
+                <p>📊 Всего строк: {importResult.total_rows}</p>
+                {importResult.errors && importResult.errors.length > 0 && (
+                  <div className={styles.importErrors}>
+                    <h5>Ошибки ({importResult.errors.length}):</h5>
+                    <ul>
+                      {importResult.errors.slice(0, 10).map((error, index) => (
+                        <li key={index}>{error}</li>
+                      ))}
+                      {importResult.errors.length > 10 && (
+                        <li>... и еще {importResult.errors.length - 10} ошибок</li>
+                      )}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       )}
 

@@ -309,25 +309,27 @@ export const apiRequests = {
     statistics: async () => {
       return axiosInstance.get("/export/statistics");
     },
-    usersCsv: async () => {
+    usersCsv: async (params = {}) => {
       return axiosInstance.get("/export/users/csv", {
+        params,
         responseType: "blob",
       });
     },
-    ordersCsv: async () => {
+    ordersCsv: async (params = {}) => {
       return axiosInstance.get("/export/orders/csv", {
+        params,
         responseType: "blob",
       });
     },
-    paymentLogsCsv: async (logType = null) => {
-      const params = logType ? { log_type: logType } : {};
+    paymentLogsCsv: async (params = {}) => {
       return axiosInstance.get("/export/payment-logs/csv", {
         params,
         responseType: "blob",
       });
     },
-    adminLogsCsv: async () => {
+    adminLogsCsv: async (params = {}) => {
       return axiosInstance.get("/export/admin-logs/csv", {
+        params,
         responseType: "blob",
       });
     },
@@ -339,6 +341,20 @@ export const apiRequests = {
     },
     restoreBackup: async (backupFilename) => {
       return axiosInstance.post(`/export/backup/restore/${backupFilename}`);
+    },
+    importUsers: async (formData) => {
+      return axiosInstance.post("/export/users/csv/import", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    },
+    importOrders: async (formData) => {
+      return axiosInstance.post("/export/orders/csv/import", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
     },
   },
   ipWhitelist: {

@@ -225,22 +225,23 @@
                 transition: width 0.3s ease;
               }
 
-            .percentage-text {
-              position: absolute;
-              left: 50%;
-              top: 50%;
-              transform: translate(-50%, -50%);
-              font-size: 12px;
-              font-weight: 600;
-              color: #333;
-              z-index: 1;
+              .percentage-text {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 12px;
+                font-weight: 600;
+                color: #333;
+                z-index: 1;
+              }
             }
-          }
 
-          .platforms-list {
-            font-size: 12px;
-            color: #666;
-            font-style: italic;
+            .platforms-list {
+              font-size: 12px;
+              color: #666;
+              font-style: italic;
+            }
           }
         }
       }

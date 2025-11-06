@@ -112,3 +112,8 @@ export const canManageBalance = () => {
   return checkPermission(getUserRole(), "users.balance");
 };
 
+// Проверка доступа к импорту данных
+export const canImport = () => {
+  return checkPermission(getUserRole(), "export.import");
+};
+
