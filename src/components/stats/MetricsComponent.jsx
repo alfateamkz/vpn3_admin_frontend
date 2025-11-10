@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { formatDateForChart } from "../../shared/utils/dateUtils";
 import "./MetricsComponent.scss";
 
 export const MetricsComponent = ({ getMetrics }) => {
@@ -106,7 +107,7 @@ export const MetricsComponent = ({ getMetrics }) => {
                 <div className="bar-value" style={{ height: `${(day.revenue / Math.max(...metrics.revenue.daily.map(d => d.revenue))) * 100}%` }}>
                   {day.revenue}₽
                 </div>
-                <div className="bar-label">{`${new Date(day.date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' })} UTC`}</div>
+                <div className="bar-label">{formatDateForChart(day.date)}</div>
               </div>
             ))}
           </div>
@@ -252,7 +253,7 @@ export const MetricsComponent = ({ getMetrics }) => {
                   <div className="bar-value error" style={{ height: `${(day.errors / Math.max(...metrics.errors.last_7_days.map(d => d.errors))) * 100}%` }}>
                     {day.errors}
                   </div>
-                  <div className="bar-label">{`${new Date(day.date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' })} UTC`}</div>
+                  <div className="bar-label">{formatDateForChart(day.date)}</div>
                 </div>
               ))}
             </div>

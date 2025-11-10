@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./AlertsComponent.module.scss";
 import { apiRequests } from "../../shared/api/apiRequests";
 import { PaginationControls } from "../pagination/PaginationComponent";
+import { formatDateTimeMoscow } from "../../shared/utils/dateUtils";
 
 const severityColors = {
   low: "#2196F3",
@@ -209,7 +210,7 @@ const AlertsComponent = () => {
 
                   {alert.created_at && (
                     <div className={styles.alertDate}>
-                      Создан: {`${new Date(alert.created_at).toLocaleString("ru-RU")} UTC`}
+                      Создан: {formatDateTimeMoscow(alert.created_at)}
                     </div>
                   )}
                 </div>

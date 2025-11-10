@@ -55,11 +55,41 @@ const AlertSettingsComponent = () => {
   const handleSave = async () => {
     setSaving(true);
     try {
-      await apiRequests.monitoring.updateSettings(settings);
-      alert("Настройки сохранены");
+      // Подготавливаем данные для отправки - только поля из схемы AlertSettingsUpdate
+      const updateData = {
+        churn_enabled: settings.churn_enabled,
+        churn_threshold_percent: settings.churn_threshold_percent,
+        churn_threshold_count: settings.churn_threshold_count,
+        churn_threshold_ratio: settings.churn_threshold_ratio,
+        churn_non_renewal_days: settings.churn_non_renewal_days,
+        suspicious_enabled: settings.suspicious_enabled,
+        suspicious_device_limit: settings.suspicious_device_limit,
+        suspicious_auth_attempts: settings.suspicious_auth_attempts,
+        suspicious_ip_countries: settings.suspicious_ip_countries,
+        suspicious_payment_accounts: settings.suspicious_payment_accounts,
+        suspicious_download_gb: settings.suspicious_download_gb,
+        suspicious_api_requests: settings.suspicious_api_requests,
+        suspicious_events_threshold: settings.suspicious_events_threshold,
+        registration_enabled: settings.registration_enabled,
+        registration_spike_hours: settings.registration_spike_hours,
+        registration_spike_ratio: settings.registration_spike_ratio,
+        registration_per_minute: settings.registration_per_minute,
+        registration_per_hour: settings.registration_per_hour,
+        registration_per_day: settings.registration_per_day,
+        registration_anomaly_ip_percent: settings.registration_anomaly_ip_percent,
+        registration_anomaly_country_percent: settings.registration_anomaly_country_percent,
+        telegram_notifications_enabled: settings.telegram_notifications_enabled,
+        notification_admin_ids: settings.notification_admin_ids || [],
+      };
+      
+      await apiRequests.monitoring.updateSettings(updateData);
+      alert("Настройки успешно сохранены!");
+      // Обновляем настройки после сохранения
+      await fetchSettings();
     } catch (error) {
       console.error("Ошибка при сохранении настроек:", error);
-      alert("Ошибка при сохранении настроек");
+      const errorMsg = error.response?.data?.detail || error.message || "Ошибка при сохранении настроек";
+      alert(`Ошибка при сохранении настроек: ${errorMsg}`);
     } finally {
       setSaving(false);
     }
@@ -224,9 +254,9 @@ const AlertSettingsComponent = () => {
               <input
                 type="number"
                 step="0.1"
-                value={settings.registration_spike_ratio}
+                value={settings.registration_spike_ratio || ""}
                 onChange={(e) =>
-                  handleChange("registration_spike_ratio", parseFloat(e.target.value))
+                  handleChange("registration_spike_ratio", e.target.value ? parseFloat(e.target.value) || 0 : 0)
                 }
                 disabled={!settings.registration_enabled}
               />
@@ -238,9 +268,9 @@ const AlertSettingsComponent = () => {
               Регистраций в минуту (порог):
               <input
                 type="number"
-                value={settings.registration_per_minute}
+                value={settings.registration_per_minute || ""}
                 onChange={(e) =>
-                  handleChange("registration_per_minute", parseInt(e.target.value))
+                  handleChange("registration_per_minute", e.target.value ? parseInt(e.target.value) || 0 : 0)
                 }
                 disabled={!settings.registration_enabled}
               />
@@ -252,9 +282,9 @@ const AlertSettingsComponent = () => {
               Регистраций за час (порог):
               <input
                 type="number"
-                value={settings.registration_per_hour}
+                value={settings.registration_per_hour || ""}
                 onChange={(e) =>
-                  handleChange("registration_per_hour", parseInt(e.target.value))
+                  handleChange("registration_per_hour", e.target.value ? parseInt(e.target.value) || 0 : 0)
                 }
                 disabled={!settings.registration_enabled}
               />
@@ -266,9 +296,9 @@ const AlertSettingsComponent = () => {
               Регистраций за сутки (порог):
               <input
                 type="number"
-                value={settings.registration_per_day}
+                value={settings.registration_per_day || ""}
                 onChange={(e) =>
-                  handleChange("registration_per_day", parseInt(e.target.value))
+                  handleChange("registration_per_day", e.target.value ? parseInt(e.target.value) || 0 : 0)
                 }
                 disabled={!settings.registration_enabled}
               />

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Users.scss";
 import { canEditUsers, canManageBalance } from "../../shared/utils/roleUtils";
+import { formatDateTimeMoscow } from "../../shared/utils/dateUtils";
 
 import { AddBalanceModal } from "../modals/AddBalanceModal";
 
@@ -85,11 +86,11 @@ export const UsersTable = ({ users, onAddBalance, onBlockUser, onUnblockUser, on
               </td>
               <td>
                 {user.sub_end_date
-                  ? `${new Date(user.sub_end_date).toLocaleString()} UTC`
+                  ? formatDateTimeMoscow(user.sub_end_date)
                   : "-"}
               </td>
               <td>{user.balance}</td>
-              <td>{`${new Date(user.created_at).toLocaleString()} UTC`}</td>
+              <td>{formatDateTimeMoscow(user.created_at)}</td>
               <td>
                 <div style={{ display: "flex", gap: "3px", flexWrap: "wrap" }}>
                   {canManageBalance() && (

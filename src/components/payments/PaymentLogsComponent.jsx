@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import styles from "./PaymentLogsComponent.module.scss";
 import { apiRequests } from "../../shared/api/apiRequests";
 import { PaginationControls } from "../pagination/PaginationComponent";
-import { canViewPayments } from "../../shared/utils/roleUtils";
+import { canViewPayments, canExport } from "../../shared/utils/roleUtils";
+import { formatDateTimeMoscow } from "../../shared/utils/dateUtils";
 
 const logTypeLabels = {
   telegram_payment_created: "Создание Telegram платежа",
@@ -82,7 +83,7 @@ const PaymentLogsComponent = () => {
 
   const formatDate = (dateString) => {
     if (!dateString) return "—";
-    return `${new Date(dateString).toLocaleString("ru-RU")} UTC`;
+    return formatDateTimeMoscow(dateString);
   };
 
   // Проверяем права доступа
@@ -98,9 +99,57 @@ const PaymentLogsComponent = () => {
     );
   }
 
+  const handleExportLogs = async () => {
+    if (!canExport()) {
+      alert("Недостаточно прав для экспорта");
+      return;
+    }
+
+    try {
+      const params = {};
+      if (filters.log_type) params.log_type = filters.log_type;
+      
+      const response = await apiRequests.export.paymentLogsCsv(params);
+      // Создаем ссылку для скачивания
+      const blob = new Blob([response.data], { type: "text/csv;charset=utf-8;" });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      const timestamp = new Date().toISOString().split("T")[0];
+      link.setAttribute("download", `payment_logs_export_${timestamp}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+      alert("Экспорт логов платежей завершен!");
+    } catch (error) {
+      console.error("Ошибка при экспорте логов платежей:", error);
+      alert("Ошибка при экспорте логов платежей");
+    }
+  };
+
   return (
     <div className={styles.paymentLogsContainer}>
-      <h2>Логи платежей</h2>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+        <h2>Логи платежей</h2>
+        {canExport() && (
+          <button
+            onClick={handleExportLogs}
+            style={{
+              padding: "10px 20px",
+              backgroundColor: "#4CAF50",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+              fontSize: "14px"
+            }}
+            title="Выгрузить логи платежей в Excel (CSV)"
+          >
+            📥 Выгрузить в Excel
+          </button>
+        )}
+      </div>
 
       <div className={styles.filters}>
         <select

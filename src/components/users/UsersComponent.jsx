@@ -4,7 +4,7 @@ import "./Users.scss";
 import { PaginationControls } from "../pagination/PaginationComponent";
 import { UsersTable } from "./UsersTable";
 import { apiRequests } from "../../shared/api/apiRequests";
-import { canViewUsers } from "../../shared/utils/roleUtils";
+import { canViewUsers, canExport } from "../../shared/utils/roleUtils";
 import { AccessDenied } from "../common/AccessDenied";
 
 export const UsersComponent = ({ getUsers, pushBalance }) => {
@@ -104,10 +104,57 @@ export const UsersComponent = ({ getUsers, pushBalance }) => {
     }
   };
 
+  const handleExportUsers = async () => {
+    if (!canExport()) {
+      alert("Недостаточно прав для экспорта");
+      return;
+    }
+
+    try {
+      const response = await apiRequests.export.usersCsv({});
+      // Создаем ссылку для скачивания
+      const blob = new Blob([response.data], { type: "text/csv;charset=utf-8;" });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      const timestamp = new Date().toISOString().split("T")[0];
+      link.setAttribute("download", `users_export_${timestamp}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+      alert("Экспорт пользователей завершен!");
+    } catch (error) {
+      console.error("Ошибка при экспорте пользователей:", error);
+      alert("Ошибка при экспорте пользователей");
+    }
+  };
+
   return (
     <div className="users-table-container">
-      <h2>Пользователи</h2>
-      <p>Всего записей: {totalCount}</p>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+        <div>
+          <h2>Пользователи</h2>
+          <p>Всего записей: {totalCount}</p>
+        </div>
+        {canExport() && (
+          <button
+            onClick={handleExportUsers}
+            style={{
+              padding: "10px 20px",
+              backgroundColor: "#4CAF50",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+              fontSize: "14px"
+            }}
+            title="Выгрузить пользователей в Excel (CSV)"
+          >
+            📥 Выгрузить в Excel
+          </button>
+        )}
+      </div>
       {/* Поле для поиска */}
       <div className="search-bar">
         <input

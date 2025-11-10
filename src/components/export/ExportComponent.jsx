@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { apiRequests } from "../../shared/api/apiRequests";
 import { canExport, canBackup, canViewPayments, canImport } from "../../shared/utils/roleUtils";
+import { formatDateTimeMoscow } from "../../shared/utils/dateUtils";
 import styles from "./ExportComponent.module.scss";
 
 export const ExportComponent = () => {
@@ -385,7 +386,7 @@ export const ExportComponent = () => {
                     <tr key={backup.filename}>
                       <td>{backup.filename}</td>
                       <td>{backup.size_mb} MB</td>
-                      <td>{`${new Date(backup.created_at).toLocaleString()} UTC`}</td>
+                      <td>{formatDateTimeMoscow(backup.created_at)}</td>
                       <td>
                         <button
                           onClick={() => handleRestoreBackup(backup.filename)}

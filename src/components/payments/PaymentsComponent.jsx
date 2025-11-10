@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { apiRequests } from "../../shared/api/apiRequests";
 import { canViewPayments } from "../../shared/utils/roleUtils";
+import { formatDateTimeMoscow } from "../../shared/utils/dateUtils";
 import Cookies from "js-cookie";
 import "./Payments.scss";
 
@@ -115,7 +116,7 @@ export const PaymentsTable = ({ payments }) => {
               <td>{types[order.type] || order.type}</td>
               <td>{order.amount} ₽</td>
               <td>{order.description}</td>
-              <td>{`${new Date(order.created_at).toLocaleString()} UTC`}</td>
+              <td>{formatDateTimeMoscow(order.created_at)}</td>
               <td>
                 {order.refund_status === "refunded" ? (
                   <span style={{ color: "#4CAF50" }}>✅ Возвращен</span>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./IPWhitelistComponent.scss";
 import { apiRequests } from "../../shared/api/apiRequests";
+import { formatDateTimeMoscow } from "../../shared/utils/dateUtils";
 
 export const IPWhitelistComponent = () => {
   const [ipList, setIpList] = useState([]);
@@ -173,7 +174,7 @@ export const IPWhitelistComponent = () => {
               </td>
               <td>
                 {ip.created_at
-                  ? `${new Date(ip.created_at).toLocaleString()} UTC`
+                  ? formatDateTimeMoscow(ip.created_at)
                   : "—"}
               </td>
               <td>

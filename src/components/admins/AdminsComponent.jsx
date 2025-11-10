@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { apiRequests } from "../../shared/api/apiRequests";
 import { canManageAdmins } from "../../shared/utils/roleUtils";
+import { formatDateTimeMoscow } from "../../shared/utils/dateUtils";
 import styles from "./AdminsComponent.module.scss";
 
 export const AdminsComponent = () => {
@@ -196,7 +197,7 @@ export const AdminsComponent = () => {
                 </td>
                 <td>
                   {admin.last_login
-                    ? `${new Date(admin.last_login).toLocaleString()} UTC`
+                    ? formatDateTimeMoscow(admin.last_login)
                     : "—"}
                 </td>
                 <td>

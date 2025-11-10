@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { PaginationControls } from "../pagination/PaginationComponent";
 import { apiRequests } from "../../shared/api/apiRequests";
+import { formatDateTimeMoscow } from "../../shared/utils/dateUtils";
 import styles from "./PayoutsComponent.module.scss";
 
 const statusLabels = {
@@ -102,7 +103,7 @@ const PayoutsComponent = () => {
 
   const formatDate = (dateString) => {
     if (!dateString) return "—";
-    return `${new Date(dateString).toLocaleString("ru-RU")} UTC`;
+    return formatDateTimeMoscow(dateString);
   };
 
   return (

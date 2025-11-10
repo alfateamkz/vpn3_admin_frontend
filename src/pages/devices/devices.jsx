@@ -6,9 +6,9 @@ import { SideBar } from "../../components/sidebar/SidebarComponent";
 import { DevicesComponent } from "../../components/devices/DevicesComponent";
 
 export const DevicesPage = () => {
-  const getDevices = async (user_id, page, limit) => {
+  const getDevices = async (user_id, activeOnly = true, page, limit) => {
     try {
-      const response = await apiRequests.devices.list(user_id || null, page, limit);
+      const response = await apiRequests.devices.list(user_id || null, activeOnly, page, limit);
       return response.data;
     } catch (e) {
       const detail = e.response?.data?.detail;

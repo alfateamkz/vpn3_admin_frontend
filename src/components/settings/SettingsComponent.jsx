@@ -9,6 +9,18 @@ const settingKeys = {
   moderate_mode: "Режим модерации",
   allow: "Разрешённые версии",
   support_username: "Аккаунт техподдержки",
+  environment: "Окружение",
+};
+
+const settingDescriptions = {
+  referal_amount: "Сумма в рублях, которая начисляется пользователю за приглашение реферала",
+  referal_lifesplan: "Время жизни реферала в месяцах (сколько месяцев действует реферальная связь)",
+  payout_percentage: "Процент от суммы пополнения, который начисляется рефералу (например, 20 = 20%)",
+  trial_period: "Длительность пробного периода в днях (сколько дней пользователь может использовать VPN бесплатно)",
+  moderate_mode: "Включить/выключить режим модерации (требует одобрения новых пользователей)",
+  allow: "Список разрешенных версий приложения (через запятую)",
+  support_username: "Telegram username аккаунта техподдержки (без @, например: MirNetVpn)",
+  environment: "Окружение приложения (dev, staging, production)",
 };
 
 const unitNames = {
@@ -33,20 +45,7 @@ export const SettingsComponent = ({
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [newListItem, setNewListItem] = useState(""); // Для добавления новых элементов в список
-  const [alerts, setAlerts] = useState({
-    "Падение сервера": false,
-    "Превышение нагрузки": false,
-    "Резкий отток пользователей": false,
-    "Новый платёж": false,
-    "Cбой API": false,
-  });
-
-  const handleCheckboxChange = (alertName) => {
-    setAlerts((prev) => ({
-      ...prev,
-      [alertName]: !prev[alertName],
-    }));
-  };
+  // Удаляем состояние alerts, так как оно не используется и не сохраняется
 
   const fetchSettings = useCallback(async () => {
     try {
@@ -188,6 +187,18 @@ export const SettingsComponent = ({
       );
     }
 
+    // Для username типа (support_username) используем специальное поле
+    if (setting.unit === "username") {
+      return (
+        <input
+          type="text"
+          value={editedSettings[setting.key] || ""}
+          onChange={(e) => handleSettingChange(setting.key, e.target.value)}
+          placeholder="Введите username без @"
+        />
+      );
+    }
+
     return (
       <input
         type="text"
@@ -204,6 +215,7 @@ export const SettingsComponent = ({
         <thead>
           <tr>
             <th>Настройка</th>
+            <th>Описание</th>
             <th>Значение</th>
             <th>Единица измерения</th>
             <th>Действие</th>
@@ -212,7 +224,10 @@ export const SettingsComponent = ({
         <tbody>
           {settings.map((setting) => (
             <tr key={setting._id}>
-              <td>{settingKeys[setting.key]}</td>
+              <td>{settingKeys[setting.key] || setting.key}</td>
+              <td style={{ fontSize: "12px", color: "#666", maxWidth: "300px" }}>
+                {settingDescriptions[setting.key] || "—"}
+              </td>
               <td>{renderInputField(setting)}</td>
               <td>{unitNames[setting.unit]}</td>
               <td>
@@ -224,32 +239,6 @@ export const SettingsComponent = ({
           ))}
         </tbody>
       </table>
-
-      <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
-        <h3 style={{ marginBottom: "20px", color: "#333" }}>Алерты телеграм</h3>
-        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-          {Object.keys(alerts).map((alert) => (
-            <label
-              key={alert}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "10px",
-                cursor: "pointer",
-                padding: "2px 0",
-              }}
-            >
-              <input
-                type="checkbox"
-                checked={alerts[alert]}
-                onChange={() => handleCheckboxChange(alert)}
-                style={{ width: "16px", height: "16px" }}
-              />
-              <span>{alert}</span>
-            </label>
-          ))}
-        </div>
-      </div>
 
       <h2>Смена пароля</h2>
       <div className="password-form">

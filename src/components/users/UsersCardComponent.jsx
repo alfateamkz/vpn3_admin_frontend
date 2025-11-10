@@ -6,6 +6,7 @@ import { LogsTable } from "./LogsTable";
 import { UsersTable } from "./UsersTable";
 import PaymentsTableWithFilters from "../payments/PaymentsTableWithFilters"; // Импорт компонента таблицы платежей
 import { canEditUsers } from "../../shared/utils/roleUtils";
+import { formatDateTimeMoscow, formatDateMoscow } from "../../shared/utils/dateUtils";
 
 export const UserCardComponent = ({
   getUser,
@@ -144,15 +145,15 @@ export const UserCardComponent = ({
         </div>
         <div className="info-item">
           <strong>Дата создания:</strong>{" "}
-          {`${new Date(user.created_at).toLocaleString()} UTC`}
+          {formatDateTimeMoscow(user.created_at)}
         </div>
         <div className="info-item">
           <strong>Дата обновления:</strong>{" "}
-          {`${new Date(user.updated_at).toLocaleString()} UTC`}
+          {formatDateTimeMoscow(user.updated_at)}
         </div>
         <div className="info-item">
           <strong>Окончание подписки:</strong>{" "}
-          {`${new Date(user.sub_end_date).toLocaleString()} UTC`}
+          {formatDateTimeMoscow(user.sub_end_date)}
         </div>
         <div className="info-item">
           <strong>Премиум:</strong> {user.is_premium ? "Да" : "Нет"}
@@ -241,7 +242,7 @@ export const UserCardComponent = ({
                   <td>{device.country || "Unknown"}</td>
                   <td>
                     {device.last_activity
-                      ? `${new Date(device.last_activity).toLocaleDateString("ru-RU")} UTC`
+                      ? formatDateMoscow(device.last_activity)
                       : "—"}
                   </td>
                 </tr>

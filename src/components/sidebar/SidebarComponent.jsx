@@ -44,6 +44,7 @@ const getMenuItems = () => {
   }
   
   items.push(
+    { text: "Языки", path: "/languages" },
     { text: "Настройки", path: "/settings" },
     { text: "Выход", path: "/auth" }
   );

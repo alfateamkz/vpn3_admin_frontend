@@ -259,8 +259,8 @@ export const apiRequests = {
     },
   },
   devices: {
-    list: async (username = null, page = 1, limit = 50) => {
-      const params = { page, limit };
+    list: async (username = null, activeOnly = true, page = 1, limit = 50) => {
+      const params = { page, limit, active_only: activeOnly };
       if (username !== null && username.trim() !== "") {
         params.username = username.trim();
       }
@@ -419,6 +419,20 @@ export const apiRequests = {
     },
     check: async () => {
       return axiosInstance.post("/monitoring/check");
+    },
+  },
+  languages: {
+    upload: async (os, formData) => {
+      return axiosInstance.post(`/languages/upload?os=${os}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    },
+    download: async (os) => {
+      return axiosInstance.get(`/languages/download?os=${os}`, {
+        responseType: "blob",
+      });
     },
   },
 };

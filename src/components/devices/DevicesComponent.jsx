@@ -10,12 +10,13 @@ export const DevicesComponent = ({ getDevices }) => {
   const [limit, setLimit] = useState(50);
   const [totalCount, setTotalCount] = useState(0);
   const [usernameSearch, setUsernameSearch] = useState("");
+  const [activeOnly, setActiveOnly] = useState(true);
 
   // Загрузка данных
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getDevices(usernameSearch, currentPage, limit);
+        const data = await getDevices(usernameSearch, activeOnly, currentPage, limit);
         setDevices(data.devices);
         setTotalCount(data.count);
       } catch (error) {
@@ -24,7 +25,7 @@ export const DevicesComponent = ({ getDevices }) => {
     };
 
     fetchData();
-  }, [currentPage, limit, usernameSearch, getDevices]);
+  }, [currentPage, limit, usernameSearch, activeOnly, getDevices]);
 
   const handleUsernameSearchChange = (e) => {
     setUsernameSearch(e.target.value);
@@ -39,10 +40,10 @@ export const DevicesComponent = ({ getDevices }) => {
     try {
       await apiRequests.devices.delete(deviceId);
       // Обновляем список устройств после удаления
-      const data = await getDevices(usernameSearch, currentPage, limit);
+      const data = await getDevices(usernameSearch, activeOnly, currentPage, limit);
       setDevices(data.devices);
       setTotalCount(data.count);
-      alert("Устройство успешно удалено");
+      alert("Устройство успешно отвязано. Токен удален, сессия сброшена.");
     } catch (error) {
       console.error("Ошибка при удалении устройства:", error);
       alert(error.response?.data?.detail || "Ошибка при удалении устройства");
@@ -53,14 +54,26 @@ export const DevicesComponent = ({ getDevices }) => {
     <div className="devices-container">
       <h2>Устройства пользователей</h2>
 
-      {/* Поиск по пользователю */}
-      <div className="search-bar">
+      {/* Фильтры */}
+      <div className="search-bar" style={{ display: "flex", gap: "15px", alignItems: "center", marginBottom: "15px" }}>
         <input
           type="text"
           placeholder="Поиск по username пользователя (оставьте пустым для всех)"
           value={usernameSearch}
           onChange={handleUsernameSearchChange}
+          style={{ flex: 1 }}
         />
+        <label style={{ display: "flex", alignItems: "center", gap: "5px", cursor: "pointer" }}>
+          <input
+            type="checkbox"
+            checked={activeOnly}
+            onChange={(e) => {
+              setActiveOnly(e.target.checked);
+              setCurrentPage(1);
+            }}
+          />
+          <span>Только активные устройства</span>
+        </label>
       </div>
 
       <p className="devices-count">Всего устройств: <strong>{totalCount}</strong></p>

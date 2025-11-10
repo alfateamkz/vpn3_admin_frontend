@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./AdminActionsComponent.scss";
 import { apiRequests } from "../../shared/api/apiRequests";
 import { canEditUsers } from "../../shared/utils/roleUtils";
+import { formatDateTimeMoscow } from "../../shared/utils/dateUtils";
 
 export const AdminActionsComponent = () => {
   const [actions, setActions] = useState([]);
@@ -58,6 +59,52 @@ export const AdminActionsComponent = () => {
     if (action.includes("broadcast")) return "📧";
     if (action.includes("delete")) return "🗑️";
     return "📝";
+  };
+
+  const translateAction = (action) => {
+    const translations = {
+      "block_user": "Блокировка пользователя",
+      "unblock_user": "Разблокировка пользователя",
+      "admin_login_success": "Успешный вход",
+      "admin_login_failed": "Неудачный вход",
+      "broadcast_message": "Массовая рассылка",
+      "delete_server": "Удаление сервера",
+      "create_server": "Создание сервера",
+      "update_server": "Обновление сервера",
+      "export_users_csv": "Экспорт пользователей",
+      "export_orders_csv": "Экспорт заказов",
+      "export_payment_logs_csv": "Экспорт логов платежей",
+      "export_admin_logs_csv": "Экспорт логов администраторов",
+      "update_alert_settings": "Обновление настроек алертов",
+      "approve_payout": "Одобрение вывода средств",
+      "reject_payout": "Отклонение вывода средств",
+      "push_balance": "Пополнение баланса",
+      "remove_balance": "Списание баланса",
+      "remove_premium": "Снятие премиум подписки",
+    };
+    return translations[action] || action;
+  };
+
+  const translateTargetType = (targetType) => {
+    const translations = {
+      "user": "Пользователь",
+      "server": "Сервер",
+      "admin": "Администратор",
+      "export": "Экспорт",
+      "settings": "Настройки",
+      "payout": "Вывод средств",
+    };
+    return translations[targetType] || targetType;
+  };
+
+  const translateRole = (role) => {
+    const translations = {
+      "super_admin": "Супер администратор",
+      "admin": "Администратор",
+      "analyst": "Аналитик",
+      "moderator": "Модератор",
+    };
+    return translations[role] || role;
   };
 
   const getSuccessIcon = (success) => {
@@ -130,18 +177,18 @@ export const AdminActionsComponent = () => {
                 <tr key={action.id}>
                   <td>
                     {action.created_at
-                      ? `${new Date(action.created_at).toLocaleString()} UTC`
+                      ? formatDateTimeMoscow(action.created_at)
                       : "—"}
                   </td>
                   <td>
-                    {getActionIcon(action.action)} {action.action}
+                    {getActionIcon(action.action)} {translateAction(action.action)}
                   </td>
                   <td>{action.admin_email}</td>
-                  <td>{action.admin_role}</td>
+                  <td>{translateRole(action.admin_role)}</td>
                   <td>
                     {action.target_type && (
                       <>
-                        {action.target_type}
+                        {translateTargetType(action.target_type)}
                         {action.target_id && ` (${action.target_id.slice(0, 8)}...)`}
                       </>
                     )}

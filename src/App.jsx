@@ -19,6 +19,7 @@ import { PaymentLogsPage } from "./pages/paymentLogs/paymentLogs.jsx";
 import { PayoutsPage } from "./pages/payouts/payouts.jsx";
 import { ExportPage } from "./pages/export/export.jsx";
 import { AdminsPage } from "./pages/admins/admins.jsx";
+import { LanguagesPage } from "./pages/languages/languages.jsx";
 
 import LayoutPage from "./pages/Layout.jsx";
 
@@ -44,6 +45,7 @@ function App() {
           <Route path="/export" element={<ExportPage />} />
           <Route path="/admins" element={<AdminsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/languages" element={<LanguagesPage />} />
         </Route>
         <Route path="/auth" element={<LoginPage />} />
       </Routes>

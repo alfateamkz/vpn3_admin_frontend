@@ -152,7 +152,31 @@
     &.inactive {
       background: #999;
       color: white;
+  }
+
+  .status-help {
+    cursor: help;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #2196F3 !important;
+      color: white !important;
     }
+  }
+
+  .status-tooltip {
+    position: absolute;
+    background-color: #333;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    max-width: 250px;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    pointer-events: none;
+    white-space: normal;
+    word-wrap: break-word;
   }
 }
 

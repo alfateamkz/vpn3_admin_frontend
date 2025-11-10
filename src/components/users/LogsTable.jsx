@@ -1,4 +1,5 @@
 import "./Users.scss";
+import { formatDateTimeMoscow } from "../../shared/utils/dateUtils";
 
 export const LogsTable = ({ logs }) => {
   return (
@@ -16,7 +17,7 @@ export const LogsTable = ({ logs }) => {
             <tr key={log._id}>
               <td>{log._id}</td>
               <td>{log.country}</td>
-              <td>{`${new Date(log.timestamp).toLocaleString()} UTC`}</td>
+              <td>{formatDateTimeMoscow(log.timestamp)}</td>
             </tr>
           ))}
         </tbody>
