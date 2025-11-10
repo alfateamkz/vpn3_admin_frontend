@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styles from "./PaymentLogsComponent.module.scss";
 import { apiRequests } from "../../shared/api/apiRequests";
 import { PaginationControls } from "../pagination/PaginationComponent";
@@ -49,11 +49,7 @@ const PaymentLogsComponent = () => {
   const [loading, setLoading] = useState(false);
   const [selectedLog, setSelectedLog] = useState(null);
 
-  useEffect(() => {
-    fetchLogs();
-  }, [currentPage, limit, filters]);
-
-  const fetchLogs = async () => {
+  const fetchLogs = useCallback(async () => {
     setLoading(true);
     try {
       const response = await apiRequests.payments.logs(
@@ -73,7 +69,11 @@ const PaymentLogsComponent = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentPage, limit, filters]);
+
+  useEffect(() => {
+    fetchLogs();
+  }, [fetchLogs]);
 
   const formatAmount = (amount, currency) => {
     if (amount === null || amount === undefined) return "—";

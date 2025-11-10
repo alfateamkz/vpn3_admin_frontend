@@ -86,16 +86,18 @@
       cursor: pointer;
       transition: all 0.2s;
       font-size: 14px;
+      color: #333;
 
       &:hover {
         border-color: #1890ff;
         background: #f0f8ff;
+        color: #333;
       }
 
       &.active {
         border-color: #1890ff;
         background: #e6f7ff;
-        color: #1890ff;
+        color: #333;
         font-weight: 500;
       }
 

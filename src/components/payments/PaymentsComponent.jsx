@@ -50,7 +50,7 @@ export const PaymentsTable = ({ payments }) => {
     setLoading(true);
     try {
       const amount = refundAmount ? parseFloat(refundAmount) : null;
-      const response = await apiRequests.payments.refund(
+      await apiRequests.payments.refund(
         refundModal._id,
         finalPaymentId || null, // Передаем null если пусто, бэкенд использует сохраненный
         amount

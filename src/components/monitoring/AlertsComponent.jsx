@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styles from "./AlertsComponent.module.scss";
 import { apiRequests } from "../../shared/api/apiRequests";
 import { PaginationControls } from "../pagination/PaginationComponent";
@@ -42,11 +42,7 @@ const AlertsComponent = () => {
   });
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    fetchAlerts();
-  }, [currentPage, limit, filters]);
-
-  const fetchAlerts = async () => {
+  const fetchAlerts = useCallback(async () => {
     setLoading(true);
     try {
       const response = await apiRequests.monitoring.alerts(
@@ -64,7 +60,11 @@ const AlertsComponent = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentPage, limit, filters]);
+
+  useEffect(() => {
+    fetchAlerts();
+  }, [fetchAlerts]);
 
   const handleResolve = async (alertId) => {
     try {
