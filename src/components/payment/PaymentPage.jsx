@@ -14,7 +14,6 @@ const PaymentPage = () => {
   const [referalCode, setReferalCode] = useState('');
   const [error, setError] = useState('');
   const [processing, setProcessing] = useState(false);
-  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     fetchSubs();
