@@ -137,8 +137,6 @@ const UserDevices = () => {
     { id: 'android', name: 'Android', icon: '📱' },
     { id: 'ios', name: 'iOS', icon: '🍎' },
     { id: 'windows', name: 'Windows', icon: '🪟' },
-    { id: 'macos', name: 'macOS', icon: '💻' },
-    { id: 'linux', name: 'Linux', icon: '🐧' },
   ];
 
   if (loading) {
