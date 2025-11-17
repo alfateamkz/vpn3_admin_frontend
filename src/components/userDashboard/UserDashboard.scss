@@ -1,0 +1,168 @@
+// Цвета из PaymentPage
+$primary-blue: #1E3A8A;
+$accent-blue: #3B82F6;
+$white: #FFFFFF;
+$light-gray: #E5E7EB;
+$dark-gray: #6B7280;
+$error-red: #EF4444;
+$success-green: #10B981;
+
+.user-dashboard {
+  min-height: 100vh;
+  background: linear-gradient(135deg, $primary-blue 0%, #1E40AF 100%);
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.dashboard-header {
+  max-width: 1200px;
+  margin: 0 auto 30px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 24px 32px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    h1 {
+      color: $white;
+      font-size: 28px;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+
+      .user-email {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 14px;
+      }
+
+      .logout-btn {
+        padding: 8px 16px;
+        background: rgba(239, 68, 68, 0.2);
+        border: 1px solid $error-red;
+        border-radius: 8px;
+        color: $white;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: rgba(239, 68, 68, 0.3);
+        }
+      }
+    }
+  }
+}
+
+.dashboard-tabs {
+  max-width: 1200px;
+  margin: 0 auto 24px;
+  display: flex;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+
+  .tab {
+    flex: 1;
+    padding: 12px 24px;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: $white;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    &.active {
+      background: $accent-blue;
+      color: $white;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+    }
+  }
+}
+
+.dashboard-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  min-height: 400px;
+}
+
+.loading {
+  text-align: center;
+  color: $white;
+  font-size: 18px;
+  padding: 60px 20px;
+}
+
+.error-message {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid $error-red;
+  color: $white;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+// Адаптивность
+@media (max-width: 768px) {
+  .user-dashboard {
+    padding: 16px;
+  }
+
+  .dashboard-header {
+    padding: 20px;
+
+    .header-content {
+      flex-direction: column;
+      align-items: flex-start;
+
+      h1 {
+        font-size: 24px;
+      }
+    }
+  }
+
+  .dashboard-tabs {
+    flex-direction: column;
+    gap: 4px;
+
+    .tab {
+      width: 100%;
+    }
+  }
+
+  .dashboard-content {
+    padding: 20px;
+  }
+}
+

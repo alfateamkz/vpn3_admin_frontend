@@ -21,6 +21,8 @@ import { ExportPage } from "./pages/export/export.jsx";
 import { AdminsPage } from "./pages/admins/admins.jsx";
 import { LanguagesPage } from "./pages/languages/languages.jsx";
 import PaymentPage from "./components/payment/PaymentPage.jsx";
+import UserLoginPage from "./components/userLogin/UserLoginPage.jsx";
+import UserDashboard from "./components/userDashboard/UserDashboard.jsx";
 
 import LayoutPage from "./pages/Layout.jsx";
 
@@ -50,6 +52,8 @@ function App() {
         </Route>
         <Route path="/auth" element={<LoginPage />} />
         <Route path="/payment" element={<PaymentPage />} />
+        <Route path="/login" element={<UserLoginPage />} />
+        <Route path="/dashboard" element={<UserDashboard />} />
       </Routes>
     </>
   );
