@@ -25,7 +25,29 @@ const PaymentPage = () => {
       const data = await response.json();
       if (data.status === 'success') {
         setSubs(data.subs);
-        if (data.subs.length > 0) {
+        
+        // Проверяем, есть ли сумма из GET-параметра
+        const urlParams = new URLSearchParams(window.location.search);
+        const priceParam = urlParams.get('price');
+        
+        if (priceParam) {
+          // Пытаемся найти тариф по сумме
+          const price = parseFloat(priceParam);
+          if (!isNaN(price)) {
+            const foundSub = data.subs.find(sub => Math.abs(sub.price - price) < 0.01);
+            if (foundSub) {
+              // Если тариф с такой суммой найден, выбираем его
+              setSelectedSub(foundSub.id);
+            } else if (data.subs.length > 0) {
+              // Если не найден, выбираем первый тариф
+              setSelectedSub(data.subs[0].id);
+            }
+          } else if (data.subs.length > 0) {
+            // Если price не число, выбираем первый тариф
+            setSelectedSub(data.subs[0].id);
+          }
+        } else if (data.subs.length > 0) {
+          // Если параметра нет, выбираем первый тариф
           setSelectedSub(data.subs[0].id);
         }
       }
@@ -128,6 +150,11 @@ const PaymentPage = () => {
                 </div>
               ))}
             </div>
+            {subs.length === 0 && (
+              <div className="no-subs-message">
+                Тарифы временно недоступны
+              </div>
+            )}
           </div>
 
           <div className="form-section">
