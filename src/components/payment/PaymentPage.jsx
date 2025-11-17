@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './PaymentPage.scss';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://api.mirnet.site/api';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://mirnet.site/api';
 
 const PaymentPage = () => {
   const [subs, setSubs] = useState([]);
