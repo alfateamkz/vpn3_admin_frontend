@@ -20,6 +20,7 @@ import { PayoutsPage } from "./pages/payouts/payouts.jsx";
 import { ExportPage } from "./pages/export/export.jsx";
 import { AdminsPage } from "./pages/admins/admins.jsx";
 import { LanguagesPage } from "./pages/languages/languages.jsx";
+import PaymentPage from "./components/payment/PaymentPage.jsx";
 
 import LayoutPage from "./pages/Layout.jsx";
 
@@ -48,6 +49,7 @@ function App() {
           <Route path="/languages" element={<LanguagesPage />} />
         </Route>
         <Route path="/auth" element={<LoginPage />} />
+        <Route path="/payment" element={<PaymentPage />} />
       </Routes>
     </>
   );
