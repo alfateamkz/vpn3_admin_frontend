@@ -4,6 +4,43 @@ $error-red: #EF4444;
 $light-gray: rgba(255, 255, 255, 0.1);
 
 .user-devices {
+  .devices-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    h2 {
+      color: $white;
+      font-size: 24px;
+      margin: 0;
+    }
+
+    .add-device-btn {
+      padding: 10px 20px;
+      background: $accent-blue;
+      border: none;
+      border-radius: 8px;
+      color: $white;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover:not(:disabled) {
+        background: #2563EB;
+        transform: translateY(-1px);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+  }
+
   h2 {
     color: $white;
     font-size: 24px;
@@ -25,6 +62,16 @@ $light-gray: rgba(255, 255, 255, 0.1);
     margin-bottom: 20px;
   }
 
+  .limit-warning {
+    background: rgba(245, 158, 11, 0.2);
+    border: 1px solid #F59E0B;
+    color: $white;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
   .empty-state {
     text-align: center;
     padding: 60px 20px;
@@ -32,7 +79,25 @@ $light-gray: rgba(255, 255, 255, 0.1);
 
     p {
       font-size: 16px;
-      margin: 0;
+      margin: 0 0 24px 0;
+    }
+
+    .add-device-btn-primary {
+      padding: 12px 24px;
+      background: $accent-blue;
+      border: none;
+      border-radius: 8px;
+      color: $white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: #2563EB;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+      }
     }
   }
 
@@ -118,8 +183,254 @@ $light-gray: rgba(255, 255, 255, 0.1);
   }
 }
 
+  // Модальное окно
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+  }
+
+  .modal-content {
+    background: linear-gradient(135deg, #1E3A8A 0%, #1E40AF 100%);
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+
+      h3 {
+        color: $white;
+        font-size: 24px;
+        margin: 0;
+      }
+
+      .close-btn {
+        background: transparent;
+        border: none;
+        color: $white;
+        font-size: 32px;
+        cursor: pointer;
+        line-height: 1;
+        padding: 0;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.1);
+        }
+      }
+    }
+
+    .platform-selection {
+      p {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 16px;
+        margin: 0 0 24px 0;
+        text-align: center;
+      }
+
+      .platforms-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 16px;
+
+        .platform-btn {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 8px;
+          padding: 20px;
+          background: $light-gray;
+          border: 2px solid rgba(255, 255, 255, 0.2);
+          border-radius: 12px;
+          color: $white;
+          font-size: 14px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.3s ease;
+
+          &:hover {
+            border-color: $accent-blue;
+            background: rgba(59, 130, 246, 0.2);
+            transform: translateY(-2px);
+          }
+
+          .platform-icon-large {
+            font-size: 48px;
+          }
+        }
+      }
+    }
+
+    .device-link-section {
+      .instructions {
+        background: $light-gray;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 24px;
+
+        h4 {
+          color: $white;
+          font-size: 16px;
+          margin: 0 0 12px 0;
+        }
+
+        .instructions-text {
+          color: rgba(255, 255, 255, 0.9);
+          font-size: 14px;
+          line-height: 1.8;
+          margin: 0;
+
+          p {
+            margin: 0 0 8px 0;
+
+            &:last-child {
+              margin-bottom: 0;
+            }
+          }
+        }
+      }
+
+      .qr-section {
+        text-align: center;
+        margin-bottom: 24px;
+
+        .qr-code {
+          display: inline-block;
+          background: $white;
+          padding: 16px;
+          border-radius: 12px;
+          margin-bottom: 12px;
+
+          img {
+            display: block;
+            width: 200px;
+            height: 200px;
+          }
+        }
+
+        .qr-hint {
+          color: rgba(255, 255, 255, 0.7);
+          font-size: 14px;
+          margin: 0;
+        }
+      }
+
+      .link-section {
+        margin-bottom: 24px;
+
+        label {
+          display: block;
+          color: rgba(255, 255, 255, 0.9);
+          font-size: 14px;
+          margin-bottom: 8px;
+        }
+
+        .link-input-group {
+          display: flex;
+          gap: 8px;
+
+          .link-input {
+            flex: 1;
+            padding: 10px 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: $white;
+            font-size: 12px;
+            font-family: monospace;
+            word-break: break-all;
+          }
+
+          .copy-btn {
+            padding: 10px 16px;
+            background: $accent-blue;
+            border: none;
+            border-radius: 8px;
+            color: $white;
+            font-size: 14px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+
+            &:hover {
+              background: #2563EB;
+            }
+          }
+        }
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+
+        .back-btn,
+        .close-modal-btn {
+          padding: 10px 20px;
+          border: none;
+          border-radius: 8px;
+          font-size: 14px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .back-btn {
+          background: $light-gray;
+          color: $white;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.2);
+          }
+        }
+
+        .close-modal-btn {
+          background: $accent-blue;
+          color: $white;
+
+          &:hover {
+            background: #2563EB;
+          }
+        }
+      }
+    }
+  }
+}
+
 @media (max-width: 768px) {
   .user-devices {
+    .devices-header {
+      flex-direction: column;
+      align-items: stretch;
+
+      .add-device-btn {
+        width: 100%;
+      }
+    }
+
     .device-card {
       .device-header {
         flex-direction: column;
@@ -132,6 +443,38 @@ $light-gray: rgba(255, 255, 255, 0.1);
 
       .device-details {
         grid-template-columns: 1fr;
+      }
+    }
+
+    .modal-content {
+      padding: 24px;
+      max-height: 95vh;
+
+      .platform-selection {
+        .platforms-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      .device-link-section {
+        .link-section {
+          .link-input-group {
+            flex-direction: column;
+
+            .copy-btn {
+              width: 100%;
+            }
+          }
+        }
+
+        .modal-actions {
+          flex-direction: column;
+
+          .back-btn,
+          .close-modal-btn {
+            width: 100%;
+          }
+        }
       }
     }
   }
