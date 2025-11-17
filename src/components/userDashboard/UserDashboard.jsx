@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './UserDashboard.scss';
 import UserDevices from './UserDevices';
-import UserConfigs from './UserConfigs';
 import UserSubscription from './UserSubscription';
 import UserPayments from './UserPayments';
 
@@ -100,12 +99,6 @@ const UserDashboard = () => {
           Устройства
         </button>
         <button
-          className={`tab ${activeTab === 'configs' ? 'active' : ''}`}
-          onClick={() => setActiveTab('configs')}
-        >
-          Конфигурации VPN
-        </button>
-        <button
           className={`tab ${activeTab === 'subscription' ? 'active' : ''}`}
           onClick={() => setActiveTab('subscription')}
         >
@@ -123,7 +116,6 @@ const UserDashboard = () => {
         {error && <div className="error-message">{error}</div>}
         
         {activeTab === 'devices' && <UserDevices />}
-        {activeTab === 'configs' && <UserConfigs />}
         {activeTab === 'subscription' && <UserSubscription userInfo={userInfo} />}
         {activeTab === 'payments' && <UserPayments />}
       </div>
