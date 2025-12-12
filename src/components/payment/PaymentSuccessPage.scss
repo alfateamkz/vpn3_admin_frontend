@@ -1,0 +1,276 @@
+.payment-success-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+}
+
+.payment-success-container {
+  max-width: 800px;
+  width: 100%;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+}
+
+.loading {
+  text-align: center;
+  font-size: 18px;
+  color: #666;
+  padding: 40px;
+}
+
+.error-message {
+  text-align: center;
+  padding: 40px;
+  
+  h2 {
+    color: #e74c3c;
+    margin-bottom: 20px;
+  }
+  
+  p {
+    color: #666;
+    margin-bottom: 30px;
+  }
+  
+  button {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+    
+    &:hover {
+      background: #5568d3;
+    }
+  }
+}
+
+.success-content {
+  text-align: center;
+}
+
+.success-icon {
+  font-size: 80px;
+  margin-bottom: 20px;
+}
+
+.success-content h1 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-size: 32px;
+}
+
+.success-message {
+  color: #666;
+  font-size: 18px;
+  margin-bottom: 40px;
+  line-height: 1.6;
+  
+  strong {
+    color: #667eea;
+  }
+}
+
+.instructions {
+  text-align: left;
+  margin: 40px 0;
+  padding: 30px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.instructions h2 {
+  color: #2c3e50;
+  margin-bottom: 30px;
+  text-align: center;
+  font-size: 24px;
+}
+
+.instruction-step {
+  display: flex;
+  margin-bottom: 30px;
+  align-items: flex-start;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.step-number {
+  width: 40px;
+  height: 40px;
+  background: #667eea;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 20px;
+  flex-shrink: 0;
+  margin-right: 20px;
+}
+
+.step-content {
+  flex: 1;
+  
+  h3 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-size: 20px;
+  }
+  
+  p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 10px;
+    
+    strong {
+      color: #2c3e50;
+    }
+  }
+  
+  .note {
+    color: #e67e22;
+    font-size: 14px;
+    font-style: italic;
+  }
+  
+  ul, ol {
+    color: #666;
+    line-height: 1.8;
+    margin-left: 20px;
+    margin-top: 10px;
+  }
+  
+  li {
+    margin-bottom: 8px;
+  }
+}
+
+.login-button {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: background 0.3s;
+  
+  &:hover {
+    background: #5568d3;
+  }
+}
+
+.support-info {
+  margin-top: 40px;
+  padding: 25px;
+  background: #e8f4f8;
+  border-radius: 8px;
+  text-align: center;
+  
+  h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+  }
+  
+  p {
+    color: #666;
+    margin-bottom: 10px;
+  }
+  
+  .support-link {
+    font-size: 18px;
+    
+    a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: bold;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 40px;
+  flex-wrap: wrap;
+}
+
+.primary-button,
+.secondary-button {
+  padding: 14px 30px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: none;
+}
+
+.primary-button {
+  background: #667eea;
+  color: white;
+  
+  &:hover {
+    background: #5568d3;
+  }
+}
+
+.secondary-button {
+  background: #e0e0e0;
+  color: #2c3e50;
+  
+  &:hover {
+    background: #d0d0d0;
+  }
+}
+
+@media (max-width: 768px) {
+  .payment-success-container {
+    padding: 20px;
+  }
+  
+  .success-content h1 {
+    font-size: 24px;
+  }
+  
+  .instructions {
+    padding: 20px;
+  }
+  
+  .instruction-step {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .step-number {
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
+  
+  .actions {
+    flex-direction: column;
+  }
+  
+  .primary-button,
+  .secondary-button {
+    width: 100%;
+  }
+}
+

@@ -12,6 +12,12 @@ const statuses = {
   error: "Ошибка",
 };
 
+const statusDescriptions = {
+  actived: "Сервер активен и используется для подключения пользователей",
+  inactived: "Сервер неактивен и не используется для подключения",
+  error: "Ошибка подключения к серверу или получения статистики",
+};
+
 const ServersTable = ({ getServers, onEdit, onDelete, onSave, onCreate }) => {
   const [servers, setServers] = useState({ count: 0, documents: [] });
   const [editableRow, setEditableRow] = useState(null);
@@ -176,7 +182,20 @@ const ServersTable = ({ getServers, onEdit, onDelete, onSave, onCreate }) => {
             <th>URL панели</th>
             <th>Логин</th>
             <th>Пароль</th>
-            <th>Статус</th>
+            <th>
+              Статус
+              <span 
+                title="actived - сервер активен и используется\ninactived - сервер неактивен\nerror - ошибка подключения"
+                style={{ 
+                  cursor: "help", 
+                  marginLeft: "5px", 
+                  color: "#666",
+                  fontSize: "14px"
+                }}
+              >
+                ❓
+              </span>
+            </th>
             <th>Выгружено</th>
             <th>Загружено</th>
             <th>Действия</th>
@@ -256,7 +275,9 @@ const ServersTable = ({ getServers, onEdit, onDelete, onSave, onCreate }) => {
                     <option value="inactived">Не активный</option>
                   </select>
                 ) : (
-                  statuses[server.status]
+                  <span title={statusDescriptions[server.status] || "Статус сервера"}>
+                    {statuses[server.status]}
+                  </span>
                 )}
               </td>
               <td>

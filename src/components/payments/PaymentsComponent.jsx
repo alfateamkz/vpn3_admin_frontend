@@ -10,6 +10,13 @@ const statuses = {
   PENDING: "Ожидание",
   CANCELED: "Оменено",
 };
+
+const statusDescriptions = {
+  FINISHED: "Платеж успешно завершен, средства получены, подписка активирована",
+  PENDING: "Платеж ожидает обработки или подтверждения от платежной системы",
+  CANCELED: "Платеж отменен пользователем или платежной системой",
+};
+
 const types = { bonus: "Бонусный", money: "Реальный", crypto: "Криптовалюта" };
 
 export const PaymentsTable = ({ payments }) => {
@@ -98,7 +105,20 @@ export const PaymentsTable = ({ payments }) => {
       <table className="payments-table">
         <thead>
           <tr>
-            <th>Статус</th>
+            <th>
+              Статус
+              <span 
+                title="FINISHED - платеж завершен, подписка активирована\nPENDING - платеж ожидает обработки\nCANCELED - платеж отменен"
+                style={{ 
+                  cursor: "help", 
+                  marginLeft: "5px", 
+                  color: "#666",
+                  fontSize: "14px"
+                }}
+              >
+                ❓
+              </span>
+            </th>
             <th>Тестовый</th>
             <th>Тип</th>
             <th>Сумма</th>
@@ -111,7 +131,11 @@ export const PaymentsTable = ({ payments }) => {
         <tbody>
           {payments.map((order) => (
             <tr key={order._id}>
-              <td>{statuses[order.status] || order.status}</td>
+              <td>
+                <span title={statusDescriptions[order.status] || "Статус платежа"}>
+                  {statuses[order.status] || order.status}
+                </span>
+              </td>
               <td>{order.testing ? "Да" : "Нет"}</td>
               <td>{types[order.type] || order.type}</td>
               <td>{order.amount} ₽</td>

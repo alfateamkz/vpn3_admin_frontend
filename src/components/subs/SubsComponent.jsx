@@ -9,6 +9,11 @@ const statuses = {
   actived: "Активный",
 };
 
+const statusDescriptions = {
+  actived: "Подписка активна и доступна для покупки пользователями",
+  deactivated: "Подписка неактивна и не отображается пользователям для покупки",
+};
+
 const SubsTable = ({ getData, onEdit, onDelete, onSave, onCreate }) => {
   const [items, setItems] = useState({ count: 0, documents: [] });
   const [editableRow, setEditableRow] = useState(null);
@@ -118,7 +123,20 @@ const SubsTable = ({ getData, onEdit, onDelete, onSave, onCreate }) => {
           <tr>
             <th>Длительность в месяцах</th>
             <th>Цена подписки</th>
-            <th>Статус</th>
+            <th>
+              Статус
+              <span 
+                title="actived - подписка активна и доступна для покупки\ndeactivated - подписка неактивна и скрыта от пользователей"
+                style={{ 
+                  cursor: "help", 
+                  marginLeft: "5px", 
+                  color: "#666",
+                  fontSize: "14px"
+                }}
+              >
+                ❓
+              </span>
+            </th>
             <th>Действия</th>
           </tr>
         </thead>
@@ -157,7 +175,9 @@ const SubsTable = ({ getData, onEdit, onDelete, onSave, onCreate }) => {
                     <option value="deactivated">Не активный</option>
                   </select>
                 ) : (
-                  statuses[item.status]
+                  <span title={statusDescriptions[item.status] || "Статус подписки"}>
+                    {statuses[item.status]}
+                  </span>
                 )}
               </td>
               <td>

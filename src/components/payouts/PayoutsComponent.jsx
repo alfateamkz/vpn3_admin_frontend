@@ -11,6 +11,13 @@ const statusLabels = {
   paid: "Выплачено",
 };
 
+const statusDescriptions = {
+  pending: "Заявка на вывод средств ожидает обработки администратором",
+  approved: "Заявка одобрена администратором, ожидается выплата средств",
+  rejected: "Заявка отклонена администратором (смотрите причину отклонения)",
+  paid: "Средства успешно выплачены пользователю",
+};
+
 const statusColors = {
   pending: "#FF9800",
   approved: "#4CAF50",
@@ -141,7 +148,20 @@ const PayoutsComponent = () => {
                   <th>Telegram ID</th>
                   <th>Сумма</th>
                   <th>Способ</th>
-                  <th>Статус</th>
+                  <th>
+                    Статус
+                    <span 
+                      title="pending - заявка ожидает обработки\napproved - заявка одобрена\nrejected - заявка отклонена\npaid - средства выплачены"
+                      style={{ 
+                        cursor: "help", 
+                        marginLeft: "5px", 
+                        color: "#666",
+                        fontSize: "14px"
+                      }}
+                    >
+                      ❓
+                    </span>
+                  </th>
                   <th>Действия</th>
                 </tr>
               </thead>
@@ -165,6 +185,7 @@ const PayoutsComponent = () => {
                         style={{
                           backgroundColor: statusColors[payout.status] || "#ccc",
                         }}
+                        title={statusDescriptions[payout.status] || "Статус заявки на вывод"}
                       >
                         {statusLabels[payout.status] || payout.status}
                       </span>
