@@ -41,7 +41,7 @@ const UserSubscription = ({ userInfo }) => {
           <div className="subscription-info">
             <div className="info-item">
               <span className="label">Статус:</span>
-              <span className="value success">Активна</span>
+              <span className="value success">{userInfo.is_trial ? 'Пробный период' : 'Активна'}</span>
             </div>
 
             {userInfo.sub_end_date && (

@@ -29,6 +29,9 @@ $light-gray: rgba(255, 255, 255, 0.1);
 
     .subscription-header {
       margin-bottom: 20px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
 
       .status-badge {
         display: inline-block;
@@ -36,6 +39,7 @@ $light-gray: rgba(255, 255, 255, 0.1);
         border-radius: 12px;
         font-size: 14px;
         font-weight: 500;
+        white-space: nowrap;
 
         &.active {
           background: rgba(16, 185, 129, 0.2);
@@ -57,8 +61,10 @@ $light-gray: rgba(255, 255, 255, 0.1);
       .info-item {
         display: flex;
         justify-content: space-between;
+        align-items: center;
         padding: 12px 0;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        gap: 16px;
 
         &:last-child {
           border-bottom: none;
@@ -67,12 +73,16 @@ $light-gray: rgba(255, 255, 255, 0.1);
         .label {
           color: rgba(255, 255, 255, 0.7);
           font-size: 14px;
+          flex-shrink: 0;
         }
 
         .value {
           color: $white;
           font-size: 14px;
           font-weight: 500;
+          text-align: right;
+          word-break: break-word;
+          flex: 1;
 
           &.success {
             color: $success-green;
