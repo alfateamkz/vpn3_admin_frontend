@@ -79,6 +79,92 @@
   }
 }
 
+.credentials-box {
+  background-color: #f3f4f6;
+  border-left: 4px solid #2563eb;
+  padding: 20px;
+  border-radius: 6px;
+  margin: 25px 0;
+  text-align: left;
+  
+  h3 {
+    color: #1f2937;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 15px;
+  }
+}
+
+.credential-item {
+  margin-bottom: 15px;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.credential-label {
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.credential-value {
+  font-size: 16px;
+  color: #1f2937;
+  font-weight: 600;
+  word-break: break-all;
+}
+
+.password-box {
+  background-color: #fef3c7;
+  border: 1px solid #fbbf24;
+  border-radius: 6px;
+  padding: 12px;
+  font-family: 'Courier New', monospace;
+  font-size: 18px;
+  font-weight: 600;
+  color: #92400e;
+  text-align: center;
+  letter-spacing: 2px;
+  margin-top: 5px;
+}
+
+.button-container {
+  text-align: center;
+  margin: 30px 0;
+}
+
+.subscription-info {
+  background-color: #ecfdf5;
+  border: 1px solid #10b981;
+  border-radius: 6px;
+  padding: 15px;
+  margin: 20px 0;
+  text-align: left;
+  
+  p {
+    color: #065f46;
+    font-size: 15px;
+    margin: 5px 0;
+  }
+}
+
+.note-message {
+  color: #666;
+  font-size: 14px;
+  margin: 20px 0;
+  padding: 15px;
+  background-color: #fff3cd;
+  border-left: 4px solid #ffc107;
+  border-radius: 6px;
+  
+  strong {
+    color: #856404;
+  }
+}
+
 .instructions {
   text-align: left;
   margin: 40px 0;

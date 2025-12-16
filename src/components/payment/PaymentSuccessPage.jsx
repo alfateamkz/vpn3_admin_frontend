@@ -11,6 +11,8 @@ const PaymentSuccessPage = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [duration, setDuration] = useState('');
 
   useEffect(() => {
     const emailParam = searchParams.get('email');
@@ -33,6 +35,11 @@ const PaymentSuccessPage = () => {
       
       if (data.status === 'success') {
         setSuccess(true);
+        setEmail(data.email || email);
+        // Пароль возвращается только если он был только что сгенерирован
+        if (data.password) {
+          setPassword(data.password);
+        }
       } else {
         setError(data.detail || 'Ошибка проверки оплаты');
       }
@@ -71,12 +78,48 @@ const PaymentSuccessPage = () => {
     return (
       <div className="payment-success-page">
         <div className="payment-success-container">
-          <div className="success-content">
+            <div className="success-content">
             <div className="success-icon">✅</div>
-            <h1>Оплата успешно завершена!</h1>
+            <h1>Здравствуйте!</h1>
             <p className="success-message">
-              Ваша подписка активирована. Мы отправили вам письмо на <strong>{email}</strong> с данными для входа в личный кабинет.
+              Ваша оплата успешно обработана. Ваша подписка активирована и готова к использованию.
             </p>
+            
+            {password && (
+              <div className="credentials-box">
+                <h3>📧 Ваши данные для входа в личный кабинет:</h3>
+                <div className="credential-item">
+                  <div className="credential-label">Email:</div>
+                  <div className="credential-value">{email}</div>
+                </div>
+                <div className="credential-item">
+                  <div className="credential-label">Пароль:</div>
+                  <div className="password-box">{password}</div>
+                </div>
+              </div>
+            )}
+            
+            <div className="button-container">
+              <button 
+                className="login-button"
+                onClick={() => navigate('/login')}
+              >
+                Войти в личный кабинет
+              </button>
+            </div>
+            
+            {password && (
+              <div className="subscription-info">
+                <p><strong>📅 Подписка активна на:</strong> 1 месяцев</p>
+              </div>
+            )}
+            
+            {!password && (
+              <p className="note-message">
+                Мы отправили вам письмо на <strong>{email}</strong> с данными для входа в личный кабинет.
+                ⚠️ Если письмо не пришло, проверьте папку "Спам".
+              </p>
+            )}
             
             <div className="instructions">
               <h2>Что делать дальше?</h2>
