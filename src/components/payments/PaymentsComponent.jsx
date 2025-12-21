@@ -80,14 +80,29 @@ export const PaymentsTable = ({ payments }) => {
   };
 
   const canRefund = (order) => {
-    // Можно рефандить только завершенные платежи типа "money", которые еще не были рефаннуты
+    // Можно рефандить только завершенные платежи типа "money" (из бота) или "yookassa" (с сайта)
+    // которые еще не были рефаннуты и имеют payment_id или telegram_payment_id
     // И только если есть права на редактирование платежей (только админ)
     if (!canEditPayments()) return false;
-    return (
-      order.status === "FINISHED" &&
-      order.type === "money" &&
-      order.refund_status !== "refunded"
-    );
+    
+    // Проверяем статус и что платеж еще не был рефаннут
+    if (order.status !== "FINISHED" || order.refund_status === "refunded") {
+      return false;
+    }
+    
+    // Проверяем тип платежа - можно рефандить только YooKassa платежи
+    const isYooKassaPayment = order.type === "money" || order.type === "yookassa";
+    if (!isYooKassaPayment) {
+      return false;
+    }
+    
+    // Проверяем наличие payment_id или telegram_payment_id для создания рефанда
+    const hasPaymentId = order.payment_id || order.telegram_payment_id;
+    if (!hasPaymentId) {
+      return false;
+    }
+    
+    return true;
   };
   
   // Если нет доступа к финансовым данным, скрываем таблицу

@@ -253,8 +253,8 @@ export const apiRequests = {
       return axiosInstance.put(`/referals/payouts/${payout_id}/approve`);
     },
     rejectPayout: async (payout_id, reason = "Причина не указана") => {
-      return axiosInstance.put(`/referals/payouts/${payout_id}/reject`, null, {
-        params: { reason },
+      return axiosInstance.put(`/referals/payouts/${payout_id}/reject`, {
+        reason: reason,
       });
     },
   },
