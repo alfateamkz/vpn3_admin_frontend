@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
 
 import Cookies from "js-cookie";
@@ -13,7 +12,8 @@ import Cookies from "js-cookie";
 const LayoutPage = (props) => {
   // const dispatch = useDispatch();
   const isLoading = false;
-  const { mainSlice } = useSelector((state) => state);
+  // Исправляем селектор - не используем весь state
+  // const { mainSlice } = useSelector((state) => state);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -40,7 +40,7 @@ const LayoutPage = (props) => {
       }
     };
     getData();
-  }, [mainSlice.isAuth, navigate]);
+  }, [navigate]);
 
   if (isLoading) {
     return <div>'Идёт загрузка...'</div>;

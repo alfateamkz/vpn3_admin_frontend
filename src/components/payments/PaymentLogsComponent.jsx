@@ -4,6 +4,8 @@ import { apiRequests } from "../../shared/api/apiRequests";
 import { PaginationControls } from "../pagination/PaginationComponent";
 import { canViewPayments, canExport } from "../../shared/utils/roleUtils";
 import { formatDateTimeMoscow } from "../../shared/utils/dateUtils";
+import { PaymentsTable } from "./PaymentsComponent";
+import PaymentsTableWithFilters from "./PaymentsTableWithFilters";
 
 const logTypeLabels = {
   telegram_payment_created: "Создание Telegram платежа",
@@ -35,6 +37,7 @@ const statusColors = {
 };
 
 const PaymentLogsComponent = () => {
+  const [activeTab, setActiveTab] = useState("logs"); // "logs" или "payments"
   const [logs, setLogs] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -128,11 +131,22 @@ const PaymentLogsComponent = () => {
     }
   };
 
+  // Функция для получения платежей
+  const getPayments = async (page, limit, type, user_id = null) => {
+    try {
+      const response = await apiRequests.payments.all(page, limit, type, user_id);
+      return response.data;
+    } catch (error) {
+      console.error("Ошибка при загрузке платежей:", error);
+      throw error;
+    }
+  };
+
   return (
     <div className={styles.paymentLogsContainer}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-        <h2>Логи платежей</h2>
-        {canExport() && (
+        <h2>Платежи</h2>
+        {canExport() && activeTab === "logs" && (
           <button
             onClick={handleExportLogs}
             style={{
@@ -150,6 +164,55 @@ const PaymentLogsComponent = () => {
           </button>
         )}
       </div>
+
+      {/* Вкладки для переключения между логами и платежами */}
+      <div style={{ 
+        display: "flex", 
+        gap: "10px", 
+        marginBottom: "20px",
+        borderBottom: "2px solid #e0e0e0"
+      }}>
+        <button
+          onClick={() => setActiveTab("logs")}
+          style={{
+            padding: "10px 20px",
+            backgroundColor: activeTab === "logs" ? "#6db1f3" : "transparent",
+            color: activeTab === "logs" ? "white" : "#666",
+            border: "none",
+            borderBottom: activeTab === "logs" ? "3px solid #6db1f3" : "3px solid transparent",
+            cursor: "pointer",
+            fontSize: "14px",
+            fontWeight: activeTab === "logs" ? "600" : "400",
+            transition: "all 0.3s"
+          }}
+        >
+          📋 Логи платежей
+        </button>
+        <button
+          onClick={() => setActiveTab("payments")}
+          style={{
+            padding: "10px 20px",
+            backgroundColor: activeTab === "payments" ? "#6db1f3" : "transparent",
+            color: activeTab === "payments" ? "white" : "#666",
+            border: "none",
+            borderBottom: activeTab === "payments" ? "3px solid #6db1f3" : "3px solid transparent",
+            cursor: "pointer",
+            fontSize: "14px",
+            fontWeight: activeTab === "payments" ? "600" : "400",
+            transition: "all 0.3s"
+          }}
+        >
+          💳 Платежи (с возвратом)
+        </button>
+      </div>
+
+      {activeTab === "payments" ? (
+        <PaymentsTableWithFilters 
+          getPayments={getPayments} 
+          userId={null}
+        />
+      ) : (
+        <>
 
       <div className={styles.filters}>
         <select
@@ -342,6 +405,8 @@ const PaymentLogsComponent = () => {
             setLimit={setLimit}
             totalCount={totalCount}
           />
+        </>
+      )}
         </>
       )}
     </div>
