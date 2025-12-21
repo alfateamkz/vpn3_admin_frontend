@@ -83,25 +83,37 @@ export const PaymentsTable = ({ payments }) => {
     // Можно рефандить только завершенные платежи типа "money" (из бота) или "yookassa" (с сайта)
     // которые еще не были рефаннуты и имеют payment_id или telegram_payment_id
     // И только если есть права на редактирование платежей (только админ)
-    if (!canEditPayments()) return false;
+    if (!canEditPayments()) {
+      console.log("[REFUND] Нет прав на редактирование платежей");
+      return false;
+    }
     
     // Проверяем статус и что платеж еще не был рефаннут
-    if (order.status !== "FINISHED" || order.refund_status === "refunded") {
+    if (order.status !== "FINISHED") {
+      console.log(`[REFUND] Платеж не завершен: status=${order.status}`);
+      return false;
+    }
+    
+    if (order.refund_status === "refunded") {
+      console.log(`[REFUND] Платеж уже возвращен: refund_status=${order.refund_status}`);
       return false;
     }
     
     // Проверяем тип платежа - можно рефандить только YooKassa платежи
     const isYooKassaPayment = order.type === "money" || order.type === "yookassa";
     if (!isYooKassaPayment) {
+      console.log(`[REFUND] Не YooKassa платеж: type=${order.type}`);
       return false;
     }
     
     // Проверяем наличие payment_id или telegram_payment_id для создания рефанда
     const hasPaymentId = order.payment_id || order.telegram_payment_id;
     if (!hasPaymentId) {
+      console.log(`[REFUND] Нет payment_id: payment_id=${order.payment_id}, telegram_payment_id=${order.telegram_payment_id}`);
       return false;
     }
     
+    console.log(`[REFUND] ✅ Можно вернуть: order_id=${order._id}, type=${order.type}, payment_id=${order.payment_id || order.telegram_payment_id}`);
     return true;
   };
   
@@ -144,39 +156,68 @@ export const PaymentsTable = ({ payments }) => {
           </tr>
         </thead>
         <tbody>
-          {payments.map((order) => (
-            <tr key={order._id}>
-              <td>
-                <span title={statusDescriptions[order.status] || "Статус платежа"}>
-                  {statuses[order.status] || order.status}
-                </span>
-              </td>
-              <td>{order.testing ? "Да" : "Нет"}</td>
-              <td>{types[order.type] || order.type}</td>
-              <td>{order.amount} ₽</td>
-              <td>{order.description}</td>
-              <td>{formatDateTimeMoscow(order.created_at)}</td>
-              <td>
-                {order.refund_status === "refunded" ? (
-                  <span style={{ color: "#4CAF50" }}>✅ Возвращен</span>
-                ) : (
-                  "—"
-                )}
-              </td>
-              <td>
-                {canRefund(order) ? (
-                  <button
-                    onClick={() => setRefundModal(order)}
-                    className="refund-button"
-                  >
-                    Вернуть
-                  </button>
-                ) : (
-                  "—"
-                )}
-              </td>
-            </tr>
-          ))}
+          {payments.map((order) => {
+            const canRefundOrder = canRefund(order);
+            return (
+              <tr key={order._id}>
+                <td>
+                  <span title={statusDescriptions[order.status] || "Статус платежа"}>
+                    {statuses[order.status] || order.status}
+                  </span>
+                </td>
+                <td>{order.testing ? "Да" : "Нет"}</td>
+                <td>{types[order.type] || order.type}</td>
+                <td>{order.amount} ₽</td>
+                <td>{order.description}</td>
+                <td>{formatDateTimeMoscow(order.created_at)}</td>
+                <td>
+                  {order.refund_status === "refunded" ? (
+                    <span style={{ color: "#4CAF50" }}>✅ Возвращен</span>
+                  ) : (
+                    "—"
+                  )}
+                </td>
+                <td style={{ minWidth: "120px" }}>
+                  {canRefundOrder ? (
+                    <button
+                      onClick={() => {
+                        console.log("[REFUND] Открываем модальное окно для заказа:", order);
+                        setRefundModal(order);
+                        // Устанавливаем payment_id по умолчанию, если есть
+                        if (order.payment_id) {
+                          setPaymentId(order.payment_id);
+                        } else if (order.telegram_payment_id) {
+                          setPaymentId(order.telegram_payment_id);
+                        }
+                      }}
+                      className="refund-button"
+                      style={{ 
+                        padding: "6px 12px",
+                        backgroundColor: "#f44336",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                        fontSize: "14px",
+                        display: "inline-block",
+                        fontWeight: "500"
+                      }}
+                    >
+                      🔄 Вернуть
+                    </button>
+                  ) : (
+                    <span style={{ color: "#999", fontSize: "11px", display: "inline-block" }}>
+                      {!canEditPayments() ? "Нет прав" :
+                       order.status !== "FINISHED" ? "Не завершен" : 
+                       order.refund_status === "refunded" ? "Возвращен" :
+                       (order.type !== "money" && order.type !== "yookassa") ? `Тип: ${order.type}` :
+                       !(order.payment_id || order.telegram_payment_id) ? "Нет ID" : "—"}
+                    </span>
+                  )}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
 
