@@ -1,9 +1,19 @@
 @use "sass:color"; // Импортируем модуль color для использования новых функций
 
-.content {
+.contentSettings {
   display: flex;
   flex-direction: column;
   padding: 20px;
+  position: relative;
+  z-index: 1;
+  
+  input, select, button {
+    pointer-events: auto;
+  }
+  
+  input[type="text"], input[type="password"] {
+    cursor: text;
+  }
 
   h2 {
     font-size: 24px;
@@ -82,4 +92,10 @@
     color: red;
     margin-bottom: 15px;
   }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
 }
