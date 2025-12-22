@@ -24,6 +24,7 @@ export const PaymentsTable = ({ payments }) => {
   const [paymentId, setPaymentId] = useState("");
   const [refundAmount, setRefundAmount] = useState("");
   const [loading, setLoading] = useState(false);
+  const [tooltipStatus, setTooltipStatus] = useState(null);
   
   // Проверяем права доступа
   const hasPaymentAccess = canViewPayments();
@@ -133,18 +134,52 @@ export const PaymentsTable = ({ payments }) => {
         <thead>
           <tr>
             <th>
-              Статус
-              <span 
-                title="FINISHED - платеж завершен, подписка активирована\nPENDING - платеж ожидает обработки\nCANCELED - платеж отменен"
-                style={{ 
-                  cursor: "help", 
-                  marginLeft: "5px", 
-                  color: "#666",
-                  fontSize: "14px"
-                }}
-              >
-                ❓
-              </span>
+              <div style={{ display: "flex", alignItems: "center", gap: "5px", position: "relative" }}>
+                Статус
+                <span 
+                  onMouseEnter={() => setTooltipStatus("status-header")}
+                  onMouseLeave={() => setTooltipStatus(null)}
+                  style={{ 
+                    cursor: "help", 
+                    color: "#666",
+                    fontSize: "14px",
+                    display: "inline-block",
+                    width: "18px",
+                    height: "18px",
+                    borderRadius: "50%",
+                    backgroundColor: "#e0e0e0",
+                    textAlign: "center",
+                    lineHeight: "18px",
+                    flexShrink: 0,
+                  }}
+                >
+                  ❓
+                </span>
+                {tooltipStatus === "status-header" && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      backgroundColor: "#333",
+                      color: "#fff",
+                      padding: "8px 12px",
+                      borderRadius: "4px",
+                      fontSize: "12px",
+                      maxWidth: "300px",
+                      zIndex: 1000,
+                      top: "100%",
+                      left: "0",
+                      marginTop: "5px",
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+                      whiteSpace: "normal",
+                      wordWrap: "break-word",
+                    }}
+                  >
+                    <div>FINISHED - платеж завершен, подписка активирована</div>
+                    <div>PENDING - платеж ожидает обработки</div>
+                    <div>CANCELED - платеж отменен</div>
+                  </div>
+                )}
+              </div>
             </th>
             <th>Тестовый</th>
             <th>Тип</th>
@@ -161,9 +196,56 @@ export const PaymentsTable = ({ payments }) => {
             return (
               <tr key={order._id}>
                 <td>
-                  <span title={statusDescriptions[order.status] || "Статус платежа"}>
-                    {statuses[order.status] || order.status}
-                  </span>
+                  <div style={{ display: "flex", alignItems: "center", gap: "5px", position: "relative" }}>
+                    <span>
+                      {statuses[order.status] || order.status}
+                    </span>
+                    {statusDescriptions[order.status] && (
+                      <>
+                        <span
+                          onMouseEnter={() => setTooltipStatus(`status-${order._id}`)}
+                          onMouseLeave={() => setTooltipStatus(null)}
+                          style={{
+                            cursor: "help",
+                            color: "#666",
+                            fontSize: "12px",
+                            display: "inline-block",
+                            width: "16px",
+                            height: "16px",
+                            borderRadius: "50%",
+                            backgroundColor: "#e0e0e0",
+                            textAlign: "center",
+                            lineHeight: "16px",
+                            flexShrink: 0,
+                          }}
+                        >
+                          ?
+                        </span>
+                        {tooltipStatus === `status-${order._id}` && (
+                          <div
+                            style={{
+                              position: "absolute",
+                              backgroundColor: "#333",
+                              color: "#fff",
+                              padding: "8px 12px",
+                              borderRadius: "4px",
+                              fontSize: "12px",
+                              maxWidth: "250px",
+                              zIndex: 1000,
+                              top: "100%",
+                              left: "0",
+                              marginTop: "5px",
+                              boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+                              whiteSpace: "normal",
+                              wordWrap: "break-word",
+                            }}
+                          >
+                            {statusDescriptions[order.status]}
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
                 </td>
                 <td>{order.testing ? "Да" : "Нет"}</td>
                 <td>{types[order.type] || order.type}</td>

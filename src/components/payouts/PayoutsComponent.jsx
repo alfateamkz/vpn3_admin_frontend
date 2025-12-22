@@ -35,6 +35,7 @@ const PayoutsComponent = () => {
   const [selectedPayout, setSelectedPayout] = useState(null);
   const [rejectReason, setRejectReason] = useState("");
   const [processing, setProcessing] = useState(false);
+  const [tooltipStatus, setTooltipStatus] = useState(null);
 
   useEffect(() => {
     fetchPayouts();
@@ -149,18 +150,53 @@ const PayoutsComponent = () => {
                   <th>Сумма</th>
                   <th>Способ</th>
                   <th>
-                    Статус
-                    <span 
-                      title="pending - заявка ожидает обработки\napproved - заявка одобрена\nrejected - заявка отклонена\npaid - средства выплачены"
-                      style={{ 
-                        cursor: "help", 
-                        marginLeft: "5px", 
-                        color: "#666",
-                        fontSize: "14px"
-                      }}
-                    >
-                      ❓
-                    </span>
+                    <div style={{ display: "flex", alignItems: "center", gap: "5px", position: "relative" }}>
+                      Статус
+                      <span 
+                        onMouseEnter={() => setTooltipStatus("status-header")}
+                        onMouseLeave={() => setTooltipStatus(null)}
+                        style={{ 
+                          cursor: "help", 
+                          color: "#666",
+                          fontSize: "14px",
+                          display: "inline-block",
+                          width: "18px",
+                          height: "18px",
+                          borderRadius: "50%",
+                          backgroundColor: "#e0e0e0",
+                          textAlign: "center",
+                          lineHeight: "18px",
+                          flexShrink: 0,
+                        }}
+                      >
+                        ❓
+                      </span>
+                      {tooltipStatus === "status-header" && (
+                        <div
+                          style={{
+                            position: "absolute",
+                            backgroundColor: "#333",
+                            color: "#fff",
+                            padding: "8px 12px",
+                            borderRadius: "4px",
+                            fontSize: "12px",
+                            maxWidth: "300px",
+                            zIndex: 1000,
+                            top: "100%",
+                            left: "0",
+                            marginTop: "5px",
+                            boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+                            whiteSpace: "normal",
+                            wordWrap: "break-word",
+                          }}
+                        >
+                          <div>pending - заявка ожидает обработки</div>
+                          <div>approved - заявка одобрена</div>
+                          <div>rejected - заявка отклонена</div>
+                          <div>paid - средства выплачены</div>
+                        </div>
+                      )}
+                    </div>
                   </th>
                   <th>Действия</th>
                 </tr>
@@ -180,15 +216,61 @@ const PayoutsComponent = () => {
                     <td className={styles.amount}>{payout.amount}₽</td>
                     <td>{payout.payment_method || "—"}</td>
                     <td>
-                      <span
-                        className={styles.statusBadge}
-                        style={{
-                          backgroundColor: statusColors[payout.status] || "#ccc",
-                        }}
-                        title={statusDescriptions[payout.status] || "Статус заявки на вывод"}
-                      >
-                        {statusLabels[payout.status] || payout.status}
-                      </span>
+                      <div style={{ display: "flex", alignItems: "center", gap: "5px", position: "relative" }}>
+                        <span
+                          className={styles.statusBadge}
+                          style={{
+                            backgroundColor: statusColors[payout.status] || "#ccc",
+                          }}
+                        >
+                          {statusLabels[payout.status] || payout.status}
+                        </span>
+                        {statusDescriptions[payout.status] && (
+                          <>
+                            <span
+                              onMouseEnter={() => setTooltipStatus(`status-${payout.id}`)}
+                              onMouseLeave={() => setTooltipStatus(null)}
+                              style={{
+                                cursor: "help",
+                                color: "#666",
+                                fontSize: "12px",
+                                display: "inline-block",
+                                width: "16px",
+                                height: "16px",
+                                borderRadius: "50%",
+                                backgroundColor: "#e0e0e0",
+                                textAlign: "center",
+                                lineHeight: "16px",
+                                flexShrink: 0,
+                              }}
+                            >
+                              ?
+                            </span>
+                            {tooltipStatus === `status-${payout.id}` && (
+                              <div
+                                style={{
+                                  position: "absolute",
+                                  backgroundColor: "#333",
+                                  color: "#fff",
+                                  padding: "8px 12px",
+                                  borderRadius: "4px",
+                                  fontSize: "12px",
+                                  maxWidth: "250px",
+                                  zIndex: 1000,
+                                  top: "100%",
+                                  left: "0",
+                                  marginTop: "5px",
+                                  boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+                                  whiteSpace: "normal",
+                                  wordWrap: "break-word",
+                                }}
+                              >
+                                {statusDescriptions[payout.status]}
+                              </div>
+                            )}
+                          </>
+                        )}
+                      </div>
                     </td>
                     <td>
                       {payout.status === "pending" && (

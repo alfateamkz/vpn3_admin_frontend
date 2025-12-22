@@ -22,6 +22,7 @@ const SubsTable = ({ getData, onEdit, onDelete, onSave, onCreate }) => {
   const [limit, setLimit] = useState(10); // Количество записей на странице
   const [totalCount, setTotalCount] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [tooltipStatus, setTooltipStatus] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -124,18 +125,51 @@ const SubsTable = ({ getData, onEdit, onDelete, onSave, onCreate }) => {
             <th>Длительность в месяцах</th>
             <th>Цена подписки</th>
             <th>
-              Статус
-              <span 
-                title="actived - подписка активна и доступна для покупки\ndeactivated - подписка неактивна и скрыта от пользователей"
-                style={{ 
-                  cursor: "help", 
-                  marginLeft: "5px", 
-                  color: "#666",
-                  fontSize: "14px"
-                }}
-              >
-                ❓
-              </span>
+              <div style={{ display: "flex", alignItems: "center", gap: "5px", position: "relative" }}>
+                Статус
+                <span 
+                  onMouseEnter={() => setTooltipStatus("status-header")}
+                  onMouseLeave={() => setTooltipStatus(null)}
+                  style={{ 
+                    cursor: "help", 
+                    color: "#666",
+                    fontSize: "14px",
+                    display: "inline-block",
+                    width: "18px",
+                    height: "18px",
+                    borderRadius: "50%",
+                    backgroundColor: "#e0e0e0",
+                    textAlign: "center",
+                    lineHeight: "18px",
+                    flexShrink: 0,
+                  }}
+                >
+                  ❓
+                </span>
+                {tooltipStatus === "status-header" && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      backgroundColor: "#333",
+                      color: "#fff",
+                      padding: "8px 12px",
+                      borderRadius: "4px",
+                      fontSize: "12px",
+                      maxWidth: "300px",
+                      zIndex: 1000,
+                      top: "100%",
+                      left: "0",
+                      marginTop: "5px",
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+                      whiteSpace: "normal",
+                      wordWrap: "break-word",
+                    }}
+                  >
+                    <div>actived - подписка активна и доступна для покупки</div>
+                    <div>deactivated - подписка неактивна и скрыта от пользователей</div>
+                  </div>
+                )}
+              </div>
             </th>
             <th>Действия</th>
           </tr>
@@ -175,9 +209,56 @@ const SubsTable = ({ getData, onEdit, onDelete, onSave, onCreate }) => {
                     <option value="deactivated">Не активный</option>
                   </select>
                 ) : (
-                  <span title={statusDescriptions[item.status] || "Статус подписки"}>
-                    {statuses[item.status]}
-                  </span>
+                  <div style={{ display: "flex", alignItems: "center", gap: "5px", position: "relative" }}>
+                    <span>
+                      {statuses[item.status]}
+                    </span>
+                    {statusDescriptions[item.status] && (
+                      <>
+                        <span
+                          onMouseEnter={() => setTooltipStatus(`status-${item._id}`)}
+                          onMouseLeave={() => setTooltipStatus(null)}
+                          style={{
+                            cursor: "help",
+                            color: "#666",
+                            fontSize: "12px",
+                            display: "inline-block",
+                            width: "16px",
+                            height: "16px",
+                            borderRadius: "50%",
+                            backgroundColor: "#e0e0e0",
+                            textAlign: "center",
+                            lineHeight: "16px",
+                            flexShrink: 0,
+                          }}
+                        >
+                          ?
+                        </span>
+                        {tooltipStatus === `status-${item._id}` && (
+                          <div
+                            style={{
+                              position: "absolute",
+                              backgroundColor: "#333",
+                              color: "#fff",
+                              padding: "8px 12px",
+                              borderRadius: "4px",
+                              fontSize: "12px",
+                              maxWidth: "250px",
+                              zIndex: 1000,
+                              top: "100%",
+                              left: "0",
+                              marginTop: "5px",
+                              boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+                              whiteSpace: "normal",
+                              wordWrap: "break-word",
+                            }}
+                          >
+                            {statusDescriptions[item.status]}
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
                 )}
               </td>
               <td>
