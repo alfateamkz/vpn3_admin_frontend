@@ -42,9 +42,10 @@ $light-gray: rgba(255, 255, 255, 0.1);
         white-space: nowrap;
 
         &.active {
-          background: rgba(16, 185, 129, 0.2);
-          color: $success-green;
+          background: $success-green;
+          color: $white;
           border: 1px solid $success-green;
+          font-weight: 600;
         }
 
         &.inactive {
@@ -85,7 +86,8 @@ $light-gray: rgba(255, 255, 255, 0.1);
           flex: 1;
 
           &.success {
-            color: $success-green;
+            color: #34D399; // Более светлый зеленый для лучшей читаемости
+            font-weight: 600;
           }
 
           &.warning {
