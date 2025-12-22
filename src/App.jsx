@@ -21,7 +21,7 @@ import { ExportPage } from "./pages/export/export.jsx";
 import { AdminsPage } from "./pages/admins/admins.jsx";
 import { LanguagesPage } from "./pages/languages/languages.jsx";
 import PaymentPage from "./components/payment/PaymentPage.jsx";
-import PaymentSuccessPage from "./components/payment/PaymentSuccessPage.jsx";
+import cessPage from "./components/payment/PaymentSuccessPage.jsx";
 import UserLoginPage from "./components/userLogin/UserLoginPage.jsx";
 import UserDashboard from "./components/userDashboard/UserDashboard.jsx";
 
