@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Users.scss";
 import { canEditUsers, canManageBalance } from "../../shared/utils/roleUtils";
@@ -10,6 +10,8 @@ export const UsersTable = ({ users, onAddBalance, onBlockUser, onUnblockUser, on
   const [selectedUser, setSelectedUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [tooltipStatus, setTooltipStatus] = useState(null);
+  const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
+  const tooltipRefs = useRef({});
 
   const statusDescriptions = {
     active: "Активен - пользователь может использовать VPN и все функции сервиса",
@@ -72,7 +74,12 @@ export const UsersTable = ({ users, onAddBalance, onBlockUser, onUnblockUser, on
               <div style={{ display: "flex", alignItems: "center", gap: "5px", position: "relative", zIndex: 1 }}>
                 Статус
                 <span 
-                  onMouseEnter={() => setTooltipStatus("status-header")}
+                  ref={(el) => tooltipRefs.current["status-header"] = el}
+                  onMouseEnter={(e) => {
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    setTooltipPosition({ top: rect.bottom + 5, left: rect.left });
+                    setTooltipStatus("status-header");
+                  }}
                   onMouseLeave={() => setTooltipStatus(null)}
                   style={{ 
                     cursor: "help", 
@@ -93,20 +100,20 @@ export const UsersTable = ({ users, onAddBalance, onBlockUser, onUnblockUser, on
                 {tooltipStatus === "status-header" && (
                   <div
                     style={{
-                      position: "absolute",
+                      position: "fixed",
                       backgroundColor: "#333",
                       color: "#fff",
                       padding: "8px 12px",
                       borderRadius: "4px",
                       fontSize: "12px",
                       maxWidth: "300px",
-                      zIndex: 9999,
-                      top: "100%",
-                      left: "0",
-                      marginTop: "5px",
+                      zIndex: 99999,
+                      top: `${tooltipPosition.top}px`,
+                      left: `${tooltipPosition.left}px`,
                       boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
                       whiteSpace: "normal",
                       wordWrap: "break-word",
+                      pointerEvents: "none",
                     }}
                   >
                     <div>Активен - пользователь может использовать VPN и все функции сервиса</div>
@@ -137,7 +144,12 @@ export const UsersTable = ({ users, onAddBalance, onBlockUser, onUnblockUser, on
                     {user.blocked ? "🚫 Заблокирован" : "✅ Активен"}
                   </span>
                   <span
-                    onMouseEnter={() => setTooltipStatus(`status-${user._id}`)}
+                    ref={(el) => tooltipRefs.current[`status-${user._id}`] = el}
+                    onMouseEnter={(e) => {
+                      const rect = e.currentTarget.getBoundingClientRect();
+                      setTooltipPosition({ top: rect.bottom + 5, left: rect.left });
+                      setTooltipStatus(`status-${user._id}`);
+                    }}
                     onMouseLeave={() => setTooltipStatus(null)}
                     style={{
                       cursor: "help",
@@ -158,20 +170,20 @@ export const UsersTable = ({ users, onAddBalance, onBlockUser, onUnblockUser, on
                   {tooltipStatus === `status-${user._id}` && (
                     <div
                       style={{
-                        position: "absolute",
+                        position: "fixed",
                         backgroundColor: "#333",
                         color: "#fff",
                         padding: "8px 12px",
                         borderRadius: "4px",
                         fontSize: "12px",
                         maxWidth: "250px",
-                        zIndex: 9999,
-                        top: "100%",
-                        left: "0",
-                        marginTop: "5px",
+                        zIndex: 99999,
+                        top: `${tooltipPosition.top}px`,
+                        left: `${tooltipPosition.left}px`,
                         boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
                         whiteSpace: "normal",
                         wordWrap: "break-word",
+                        pointerEvents: "none",
                       }}
                     >
                       {user.blocked ? statusDescriptions.blocked : statusDescriptions.active}

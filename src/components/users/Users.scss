@@ -103,6 +103,13 @@
       font-size: 11px;
     }
 
+    // Ячейки со статусами не должны обрезать тултипы
+    th:nth-child(6),
+    td:nth-child(6) {
+      overflow: visible;
+      position: relative;
+    }
+
     th {
       background-color: #000;
       color: #fff;
