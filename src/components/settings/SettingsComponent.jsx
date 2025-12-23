@@ -294,7 +294,7 @@ export const SettingsComponent = ({
           {settings
             .filter((setting) => {
               // Скрываем служебные настройки, которые не должны редактироваться через UI
-              const hiddenSettings = ["admin_migration_completed", "environment"];
+              const hiddenSettings = ["admin_migration_completed", "environment", "allow"];
               return !hiddenSettings.includes(setting.key);
             })
             .map((setting) => (
