@@ -84,6 +84,35 @@ const PaymentLogsComponent = () => {
     fetchLogs();
   }, [fetchLogs]);
 
+  // Функция для получения заказа по order_id
+  const fetchOrderData = useCallback(async (orderId) => {
+    if (!orderId) {
+      setOrderData(null);
+      return;
+    }
+    
+    try {
+      // Получаем список платежей и ищем нужный заказ по _id
+      // Пробуем найти в первых 100 записях
+      const response = await apiRequests.payments.all(1, 100, "all", null);
+      let order = response.data.documents.find(o => o._id === orderId);
+      
+      // Если не нашли, пробуем поиск по строковому представлению
+      if (!order) {
+        order = response.data.documents.find(o => String(o._id) === String(orderId));
+      }
+      
+      setOrderData(order || null);
+      
+      if (!order) {
+        console.warn(`Заказ с ID ${orderId} не найден в первых 100 записях`);
+      }
+    } catch (error) {
+      console.error("Ошибка при загрузке данных заказа:", error);
+      setOrderData(null);
+    }
+  }, []);
+
   const formatAmount = (amount, currency) => {
     if (amount === null || amount === undefined) return "—";
     const currencySymbol = currency === "USD" ? "$" : "₽";
@@ -188,35 +217,6 @@ const PaymentLogsComponent = () => {
     
     return true;
   };
-
-  // Функция для получения заказа по order_id
-  const fetchOrderData = useCallback(async (orderId) => {
-    if (!orderId) {
-      setOrderData(null);
-      return;
-    }
-    
-    try {
-      // Получаем список платежей и ищем нужный заказ по _id
-      // Пробуем найти в первых 100 записях
-      const response = await apiRequests.payments.all(1, 100, "all", null);
-      let order = response.data.documents.find(o => o._id === orderId);
-      
-      // Если не нашли, пробуем поиск по строковому представлению
-      if (!order) {
-        order = response.data.documents.find(o => String(o._id) === String(orderId));
-      }
-      
-      setOrderData(order || null);
-      
-      if (!order) {
-        console.warn(`Заказ с ID ${orderId} не найден в первых 100 записях`);
-      }
-    } catch (error) {
-      console.error("Ошибка при загрузке данных заказа:", error);
-      setOrderData(null);
-    }
-  }, []);
 
   // Обработчик открытия деталей лога
   const handleLogDetails = (log) => {
