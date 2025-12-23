@@ -9,6 +9,12 @@ import { AddBalanceModal } from "../modals/AddBalanceModal";
 export const UsersTable = ({ users, onAddBalance, onBlockUser, onUnblockUser, onRemovePremium, onRemoveBalance }) => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [tooltipStatus, setTooltipStatus] = useState(null);
+
+  const statusDescriptions = {
+    active: "Активен - пользователь может использовать VPN и все функции сервиса",
+    blocked: "Заблокирован - пользователю запрещен доступ к VPN и функциям сервиса",
+  };
 
   const handleAddBalance = (user) => {
     setSelectedUser(user);
@@ -62,7 +68,53 @@ export const UsersTable = ({ users, onAddBalance, onBlockUser, onUnblockUser, on
             <th>Имя</th>
             <th>Фамилия</th>
             <th>Премиум</th>
-            <th>Статус</th>
+            <th>
+              <div style={{ display: "flex", alignItems: "center", gap: "5px", position: "relative" }}>
+                Статус
+                <span 
+                  onMouseEnter={() => setTooltipStatus("status-header")}
+                  onMouseLeave={() => setTooltipStatus(null)}
+                  style={{ 
+                    cursor: "help", 
+                    color: "#666",
+                    fontSize: "14px",
+                    display: "inline-block",
+                    width: "18px",
+                    height: "18px",
+                    borderRadius: "50%",
+                    backgroundColor: "#e0e0e0",
+                    textAlign: "center",
+                    lineHeight: "18px",
+                    flexShrink: 0,
+                  }}
+                >
+                  ❓
+                </span>
+                {tooltipStatus === "status-header" && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      backgroundColor: "#333",
+                      color: "#fff",
+                      padding: "8px 12px",
+                      borderRadius: "4px",
+                      fontSize: "12px",
+                      maxWidth: "300px",
+                      zIndex: 1000,
+                      top: "100%",
+                      left: "0",
+                      marginTop: "5px",
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+                      whiteSpace: "normal",
+                      wordWrap: "break-word",
+                    }}
+                  >
+                    <div>Активен - пользователь может использовать VPN и все функции сервиса</div>
+                    <div>Заблокирован - пользователю запрещен доступ к VPN и функциям сервиса</div>
+                  </div>
+                )}
+              </div>
+            </th>
             <th>Окончание подписки</th>
             <th>Баланс</th>
             <th>Дата создания</th>
@@ -80,9 +132,52 @@ export const UsersTable = ({ users, onAddBalance, onBlockUser, onUnblockUser, on
               <td>{user.last_name || "—"}</td>
               <td>{user.is_premium ? "Да" : "Нет"}</td>
               <td>
-                <span className={user.blocked ? "status-blocked" : "status-active"}>
-                  {user.blocked ? "🚫 Заблокирован" : "✅ Активен"}
-                </span>
+                <div style={{ display: "flex", alignItems: "center", gap: "5px", position: "relative" }}>
+                  <span className={user.blocked ? "status-blocked" : "status-active"}>
+                    {user.blocked ? "🚫 Заблокирован" : "✅ Активен"}
+                  </span>
+                  <span
+                    onMouseEnter={() => setTooltipStatus(`status-${user._id}`)}
+                    onMouseLeave={() => setTooltipStatus(null)}
+                    style={{
+                      cursor: "help",
+                      color: "#666",
+                      fontSize: "12px",
+                      display: "inline-block",
+                      width: "16px",
+                      height: "16px",
+                      borderRadius: "50%",
+                      backgroundColor: "#e0e0e0",
+                      textAlign: "center",
+                      lineHeight: "16px",
+                      flexShrink: 0,
+                    }}
+                  >
+                    ?
+                  </span>
+                  {tooltipStatus === `status-${user._id}` && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        backgroundColor: "#333",
+                        color: "#fff",
+                        padding: "8px 12px",
+                        borderRadius: "4px",
+                        fontSize: "12px",
+                        maxWidth: "250px",
+                        zIndex: 1000,
+                        top: "100%",
+                        left: "0",
+                        marginTop: "5px",
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+                        whiteSpace: "normal",
+                        wordWrap: "break-word",
+                      }}
+                    >
+                      {user.blocked ? statusDescriptions.blocked : statusDescriptions.active}
+                    </div>
+                  )}
+                </div>
               </td>
               <td>
                 {user.sub_end_date

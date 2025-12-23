@@ -18,7 +18,7 @@ const settingDescriptions = {
   payout_percentage: "Процент от суммы пополнения, который начисляется рефералу (например, 20 = 20%)",
   trial_period: "Длительность пробного периода в днях (сколько дней пользователь может использовать VPN бесплатно)",
   moderate_mode: "Включить/выключить режим модерации (требует одобрения новых пользователей)",
-  allow: "Список разрешенных версий приложения для AppStore (через запятую). Версии, которые могут быть установлены через AppStore.",
+  allow: "Список разрешенных версий приложения для AppStore. Версии, которые могут быть установлены через AppStore (через запятую).",
   support_username: "Telegram username аккаунта техподдержки (без @, например: MirNetVpn)",
   environment: "Окружение приложения (dev, staging, production)",
 };
@@ -53,7 +53,19 @@ export const SettingsComponent = ({
       setSettings(data);
       // Инициализируем editedSettings с текущими значениями настроек
       const initialEditedSettings = data.reduce((acc, setting) => {
-        acc[setting.key] = setting.value;
+        // Для полей типа "list" убеждаемся, что значение - массив
+        if (setting.unit === "list") {
+          if (Array.isArray(setting.value)) {
+            acc[setting.key] = setting.value;
+          } else if (typeof setting.value === "string" && setting.value.trim()) {
+            // Если значение - строка, разбиваем по запятой
+            acc[setting.key] = setting.value.split(",").map(item => item.trim()).filter(item => item);
+          } else {
+            acc[setting.key] = [];
+          }
+        } else {
+          acc[setting.key] = setting.value;
+        }
         return acc;
       }, {});
       setEditedSettings(initialEditedSettings);
@@ -97,12 +109,29 @@ export const SettingsComponent = ({
 
   const handleSaveSetting = async (key) => {
     try {
-      await editSettings({ key, value: editedSettings[key] });
+      // Получаем настройку для определения типа
+      const setting = settings.find(s => s.key === key);
+      let valueToSave = editedSettings[key];
+      
+      // Для полей типа "list" убеждаемся, что отправляем массив
+      if (setting && setting.unit === "list") {
+        if (!Array.isArray(valueToSave)) {
+          // Если значение не массив, преобразуем в массив
+          if (typeof valueToSave === "string" && valueToSave.trim()) {
+            valueToSave = valueToSave.split(",").map(item => item.trim()).filter(item => item);
+          } else {
+            valueToSave = [];
+          }
+        }
+      }
+      
+      await editSettings({ key, value: valueToSave });
       fetchSettings(); // Обновляем настройки после сохранения
       alert("Успешно сохранено!"); // Добавляем уведомление
     } catch (e) {
       console.error("Не удалось сохранить настройку", e);
-      alert("Ошибка при сохранении!" + e);
+      const errorMessage = e.response?.data?.detail || e.message || "Неизвестная ошибка";
+      alert("Ошибка при сохранении: " + errorMessage);
     }
   };
 
@@ -153,33 +182,73 @@ export const SettingsComponent = ({
     }
 
     if (setting.unit === "list") {
-      const currentValues = Array.isArray(editedSettings[setting.key])
-        ? editedSettings[setting.key]
-        : [];
+      // Получаем текущие значения, убеждаясь что это массив
+      let currentValues = [];
+      if (Array.isArray(editedSettings[setting.key])) {
+        currentValues = editedSettings[setting.key];
+      } else if (editedSettings[setting.key] !== undefined && editedSettings[setting.key] !== null) {
+        // Если значение не массив, пытаемся преобразовать
+        if (typeof editedSettings[setting.key] === "string" && editedSettings[setting.key].trim()) {
+          currentValues = editedSettings[setting.key].split(",").map(item => item.trim()).filter(item => item);
+        }
+      }
 
       return (
-        <div>
+        <div style={{ minWidth: "300px" }}>
           <div style={{ marginBottom: "10px" }}>
-            {currentValues.map((item) => (
-              <div
-                key={item}
-                style={{ display: "flex", alignItems: "center", gap: "5px" }}
-              >
-                <span>{item}</span>
-                <button onClick={() => handleRemoveListItem(setting.key, item)}>
-                  ×
-                </button>
+            {currentValues.length > 0 ? (
+              currentValues.map((item, index) => (
+                <div
+                  key={`${item}-${index}`}
+                  style={{ display: "flex", alignItems: "center", gap: "5px", marginBottom: "5px" }}
+                >
+                  <span style={{ flex: 1 }}>{item}</span>
+                  <button 
+                    onClick={() => handleRemoveListItem(setting.key, item)}
+                    style={{ 
+                      padding: "2px 8px",
+                      cursor: "pointer",
+                      backgroundColor: "#dc3545",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "3px"
+                    }}
+                  >
+                    ×
+                  </button>
+                </div>
+              ))
+            ) : (
+              <div style={{ color: "#999", fontSize: "12px", fontStyle: "italic" }}>
+                Список пуст. Добавьте значения.
               </div>
-            ))}
+            )}
           </div>
           <div style={{ display: "flex", gap: "5px" }}>
             <input
               type="text"
               value={newListItem}
               onChange={(e) => setNewListItem(e.target.value)}
+              onKeyPress={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handleAddListItem(setting.key);
+                }
+              }}
               placeholder="Новое значение"
+              style={{ flex: 1, padding: "5px" }}
             />
-            <button onClick={() => handleAddListItem(setting.key)}>
+            <button 
+              onClick={() => handleAddListItem(setting.key)}
+              style={{
+                padding: "5px 10px",
+                cursor: "pointer",
+                backgroundColor: "#28a745",
+                color: "white",
+                border: "none",
+                borderRadius: "3px"
+              }}
+            >
               + Добавить
             </button>
           </div>
