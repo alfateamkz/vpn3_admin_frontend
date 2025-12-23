@@ -16,6 +16,19 @@
     color: #28a745;
     font-weight: bold;
   }
+
+  // Стили для тултипов статусов
+  .users-table {
+    th, td {
+      div[style*="position: relative"] {
+        z-index: 1;
+      }
+      
+      div[style*="zIndex: 9999"] {
+        z-index: 9999 !important;
+      }
+    }
+  }
   .header-bar {
     display: flex;
     justify-content: space-between;

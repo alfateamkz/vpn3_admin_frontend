@@ -69,7 +69,7 @@ export const UsersTable = ({ users, onAddBalance, onBlockUser, onUnblockUser, on
             <th>Фамилия</th>
             <th>Премиум</th>
             <th>
-              <div style={{ display: "flex", alignItems: "center", gap: "5px", position: "relative" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "5px", position: "relative", zIndex: 1 }}>
                 Статус
                 <span 
                   onMouseEnter={() => setTooltipStatus("status-header")}
@@ -100,7 +100,7 @@ export const UsersTable = ({ users, onAddBalance, onBlockUser, onUnblockUser, on
                       borderRadius: "4px",
                       fontSize: "12px",
                       maxWidth: "300px",
-                      zIndex: 1000,
+                      zIndex: 9999,
                       top: "100%",
                       left: "0",
                       marginTop: "5px",
@@ -132,7 +132,7 @@ export const UsersTable = ({ users, onAddBalance, onBlockUser, onUnblockUser, on
               <td>{user.last_name || "—"}</td>
               <td>{user.is_premium ? "Да" : "Нет"}</td>
               <td>
-                <div style={{ display: "flex", alignItems: "center", gap: "5px", position: "relative" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "5px", position: "relative", zIndex: 1 }}>
                   <span className={user.blocked ? "status-blocked" : "status-active"}>
                     {user.blocked ? "🚫 Заблокирован" : "✅ Активен"}
                   </span>
@@ -165,7 +165,7 @@ export const UsersTable = ({ users, onAddBalance, onBlockUser, onUnblockUser, on
                         borderRadius: "4px",
                         fontSize: "12px",
                         maxWidth: "250px",
-                        zIndex: 1000,
+                        zIndex: 9999,
                         top: "100%",
                         left: "0",
                         marginTop: "5px",
