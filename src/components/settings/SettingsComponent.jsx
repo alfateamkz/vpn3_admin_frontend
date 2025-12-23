@@ -291,21 +291,27 @@ export const SettingsComponent = ({
           </tr>
         </thead>
         <tbody>
-          {settings.map((setting) => (
-            <tr key={setting._id}>
-              <td>{settingKeys[setting.key] || setting.key}</td>
-              <td style={{ fontSize: "12px", color: "#666", maxWidth: "300px" }}>
-                {settingDescriptions[setting.key] || "—"}
-              </td>
-              <td>{renderInputField(setting)}</td>
-              <td>{unitNames[setting.unit]}</td>
-              <td>
-                <button onClick={() => handleSaveSetting(setting.key)}>
-                  Сохранить
-                </button>
-              </td>
-            </tr>
-          ))}
+          {settings
+            .filter((setting) => {
+              // Скрываем служебные настройки, которые не должны редактироваться через UI
+              const hiddenSettings = ["admin_migration_completed", "environment"];
+              return !hiddenSettings.includes(setting.key);
+            })
+            .map((setting) => (
+              <tr key={setting._id}>
+                <td>{settingKeys[setting.key] || setting.key}</td>
+                <td style={{ fontSize: "12px", color: "#666", maxWidth: "300px" }}>
+                  {settingDescriptions[setting.key] || "—"}
+                </td>
+                <td>{renderInputField(setting)}</td>
+                <td>{unitNames[setting.unit]}</td>
+                <td>
+                  <button onClick={() => handleSaveSetting(setting.key)}>
+                    Сохранить
+                  </button>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
 
