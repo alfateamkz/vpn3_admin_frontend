@@ -463,6 +463,13 @@ export const PushNotificationsComponent = () => {
                       <pre>{JSON.stringify(selectedLog.data, null, 2)}</pre>
                     </div>
                   )}
+
+                  {selectedLog.errors && (
+                    <div className={styles.detailsSection}>
+                      <strong>Errors:</strong>
+                      <pre>{JSON.stringify(selectedLog.errors, null, 2)}</pre>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
