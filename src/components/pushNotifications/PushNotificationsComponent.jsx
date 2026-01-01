@@ -24,6 +24,7 @@ export const PushNotificationsComponent = () => {
   const [sendMode, setSendMode] = useState("broadcast");
   const [userId, setUserId] = useState("");
   const [activeOnly, setActiveOnly] = useState(true);
+  const [sendTelegram, setSendTelegram] = useState(true);
   const [sendLoading, setSendLoading] = useState(false);
 
   const [logs, setLogs] = useState([]);
@@ -136,11 +137,16 @@ export const PushNotificationsComponent = () => {
           title: title.trim(),
           body: body.trim(),
           data: data || undefined,
+          send_telegram: !!sendTelegram,
         });
 
         const stats = response.data?.stats;
+        const telegram = response.data?.telegram;
+        const telegramText = telegram?.enabled
+          ? `\nTelegram: sent=${telegram?.sent ?? 0}, failed=${telegram?.failed ?? 0}${telegram?.skipped_reason ? `, reason=${telegram.skipped_reason}` : ""}`
+          : "\nTelegram: отключено";
         alert(
-          `Push отправлен пользователю!\nОтправлено: ${stats?.sent ?? 0}\nОшибок: ${stats?.failed ?? 0}\nВсего: ${stats?.total ?? 0}`
+          `Push отправлен пользователю!\nОтправлено: ${stats?.sent ?? 0}\nОшибок: ${stats?.failed ?? 0}\nВсего: ${stats?.total ?? 0}${telegramText}`
         );
       } else {
         const response = await apiRequests.pushNotifications.broadcast({
@@ -148,11 +154,16 @@ export const PushNotificationsComponent = () => {
           body: body.trim(),
           data: data || undefined,
           active_only: !!activeOnly,
+          send_telegram: !!sendTelegram,
         });
 
         const stats = response.data?.stats;
+        const telegram = response.data?.telegram;
+        const telegramText = telegram?.enabled
+          ? `\nTelegram: queued=${telegram?.queued ? "yes" : "no"}`
+          : "\nTelegram: отключено";
         alert(
-          `Push-рассылка завершена!\nОтправлено: ${stats?.sent ?? 0}\nОшибок: ${stats?.failed ?? 0}\nВсего: ${stats?.total ?? 0}`
+          `Push-рассылка завершена!\nОтправлено: ${stats?.sent ?? 0}\nОшибок: ${stats?.failed ?? 0}\nВсего: ${stats?.total ?? 0}${telegramText}`
         );
       }
 
@@ -160,6 +171,7 @@ export const PushNotificationsComponent = () => {
       setBody("");
       setDataJson("");
       setUserId("");
+      setSendTelegram(true);
 
       fetchFirebaseStatus();
     } catch (error) {
@@ -270,6 +282,18 @@ export const PushNotificationsComponent = () => {
               />
             </div>
           )}
+
+          <div className={styles.formRow}>
+            <label>
+              <input
+                type="checkbox"
+                checked={sendTelegram}
+                onChange={(e) => setSendTelegram(e.target.checked)}
+                disabled={sendLoading}
+              />
+              Отправлять также в Telegram
+            </label>
+          </div>
 
           {sendMode === "broadcast" && (
             <div className={styles.formRow}>
