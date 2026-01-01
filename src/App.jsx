@@ -20,6 +20,7 @@ import { PayoutsPage } from "./pages/payouts/payouts.jsx";
 import { ExportPage } from "./pages/export/export.jsx";
 import { AdminsPage } from "./pages/admins/admins.jsx";
 import { LanguagesPage } from "./pages/languages/languages.jsx";
+import { PushNotificationsPage } from "./pages/pushNotifications/pushNotifications.jsx";
 import PaymentPage from "./components/payment/PaymentPage.jsx";
 import PaymentSuccessPage from "./components/payment/PaymentSuccessPage.jsx";
 import UserLoginPage from "./components/userLogin/UserLoginPage.jsx";
@@ -46,6 +47,7 @@ function App() {
           <Route path="/monitoring" element={<MonitoringPage />} />
           <Route path="/payment-logs" element={<PaymentLogsPage />} />
           <Route path="/payouts" element={<PayoutsPage />} />
+          <Route path="/push-notifications" element={<PushNotificationsPage />} />
           <Route path="/export" element={<ExportPage />} />
           <Route path="/admins" element={<AdminsPage />} />
           <Route path="/settings" element={<SettingsPage />} />

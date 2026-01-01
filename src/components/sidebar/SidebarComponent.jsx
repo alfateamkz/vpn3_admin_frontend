@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
-import { canViewPayments, canManageAdmins, canExport, canEditUsers } from "../../shared/utils/roleUtils";
+import { canViewPayments, canManageAdmins, canExport, canEditUsers, canViewUsers } from "../../shared/utils/roleUtils";
 
 import styles from "./SidebarComponent.module.scss";
 
@@ -25,6 +25,10 @@ const getMenuItems = () => {
     { text: "Рассылка", path: "/broadcast" },
     { text: "IP Белый список", path: "/ip-whitelist" }
   );
+
+  if (canViewUsers()) {
+    items.push({ text: "Push-уведомления", path: "/push-notifications" });
+  }
   
   // Логи действий доступны только админам
   if (canEditUsers()) {

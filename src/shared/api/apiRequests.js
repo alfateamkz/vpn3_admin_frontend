@@ -305,6 +305,23 @@ export const apiRequests = {
       });
     },
   },
+  pushNotifications: {
+    status: async () => {
+      return axiosInstance.get("/push-notifications/status");
+    },
+    sendToUser: async (payload) => {
+      return axiosInstance.post("/push-notifications/send-to-user", payload);
+    },
+    broadcast: async (payload) => {
+      return axiosInstance.post("/push-notifications/broadcast", payload);
+    },
+    logs: async (page = 1, limit = 50, targetType = null, targetId = null) => {
+      const params = { page, limit };
+      if (targetType) params.target_type = targetType;
+      if (targetId) params.target_id = targetId;
+      return axiosInstance.get("/push-notifications/logs", { params });
+    },
+  },
   export: {
     statistics: async () => {
       return axiosInstance.get("/export/statistics");
